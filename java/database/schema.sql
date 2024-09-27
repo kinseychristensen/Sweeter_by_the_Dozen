@@ -57,6 +57,7 @@ CREATE TABLE recipe_steps (
 
 CREATE TABLE recipe_ingredients (
     recipe_id int,
+    order_num int,
     amount real,
    quantifier text,
    ingredient text,

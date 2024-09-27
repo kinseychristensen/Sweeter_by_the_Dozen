@@ -7,12 +7,12 @@ public class Recipe {
     private String title;
     private String description;
     private int userId;
+    private String writer;
     private String attribute;
     private List<Ingredient> ingredientList;
     private List<RecipeStep> recipeStepList;
     private List<RecipePic> recipePicList;
     private List<Tag> recipeTagList;
-    private List<Comment> recipeCommentList;
 
     public int getRecipeId() {
         return recipeId;
@@ -20,6 +20,14 @@ public class Recipe {
 
     public void setRecipeId(int recipeId) {
         this.recipeId = recipeId;
+    }
+
+    public String getWriter() {
+        return writer;
+    }
+
+    public void setWriter(String writer) {
+        this.writer = writer;
     }
 
     public String getTitle() {
@@ -86,11 +94,4 @@ public class Recipe {
         this.recipeTagList = recipeTagList;
     }
 
-    public List<Comment> getRecipeCommentList() {
-        return recipeCommentList;
-    }
-
-    public void setRecipeCommentList(List<Comment> recipeCommentList) {
-        this.recipeCommentList = recipeCommentList;
-    }
 }

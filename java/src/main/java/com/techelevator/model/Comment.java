@@ -5,6 +5,7 @@ public class Comment {
     private int recipeId;
     private String comment;
     private int userId;
+    private String writer;
     private boolean reported;
 
     public int getCommentId() {
@@ -13,6 +14,14 @@ public class Comment {
 
     public void setCommentId(int commentId) {
         this.commentId = commentId;
+    }
+
+    public String getWriter() {
+        return writer;
+    }
+
+    public void setWriter(String writer) {
+        this.writer = writer;
     }
 
     public int getRecipeId() {

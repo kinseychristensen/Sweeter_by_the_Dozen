@@ -7,6 +7,15 @@ public class Ingredient {
     private int ingredientNum;
     private String quantifier;
     private String ingredientText;
+    private int recipeId;
+
+    public int getRecipeId() {
+        return recipeId;
+    }
+
+    public void setRecipeId(int recipeId) {
+        this.recipeId = recipeId;
+    }
 
     public BigDecimal getAmount() {
         return amount;
