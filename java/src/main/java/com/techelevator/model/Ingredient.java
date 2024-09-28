@@ -8,9 +8,18 @@ public class Ingredient {
     private String quantifier;
     private String ingredientText;
     private int recipeId;
+    private String unitType;
 
     public int getRecipeId() {
         return recipeId;
+    }
+
+    public String getUnitType() {
+        return unitType;
+    }
+
+    public void setUnitType(String unitType) {
+        this.unitType = unitType;
     }
 
     public void setRecipeId(int recipeId) {

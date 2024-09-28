@@ -59,6 +59,7 @@ CREATE TABLE recipe_ingredients (
     recipe_id int,
     order_num int,
     amount real,
+    unit_type text,
    quantifier text,
    ingredient text,
     CONSTRAINT FK_recipe_id FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id)
