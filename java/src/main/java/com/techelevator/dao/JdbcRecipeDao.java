@@ -8,17 +8,19 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class JdbcRecipeDao {
+public class JdbcRecipeDao implements RecipeDao{
 
     private final JdbcTemplate jdbcTemplate;
 
     public JdbcRecipeDao(JdbcTemplate jdbcTemplate) {this.jdbcTemplate = jdbcTemplate;}
 
-    List<Recipe> getRecipesByUser (int userId){
-        List<Recipe> recipes = null;
+    @Override
+    public List<Recipe> getRecipesByUser (int userId){
+        List<Recipe> recipes = new ArrayList<>();
         String sql = "SELECT * FROM recipes WHERE user_id = ?;";
         SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, userId);
         while(rs.next()){
@@ -26,13 +28,22 @@ public class JdbcRecipeDao {
             recipe = mapRowToRecipe(rs);
             recipes.add(recipe);
         }
+        for(Recipe recipe : recipes){
+           Recipe fullRecipe = getRecipeDetails(recipe.getRecipeId());
+           recipe.setRecipePicList(fullRecipe.getRecipePicList());
+           recipe.setRecipeTagList(fullRecipe.getRecipeTagList());
+           recipe.setRecipeStepList(fullRecipe.getRecipeStepList());
+           recipe.setIngredientList(fullRecipe.getIngredientList());
+
+        }
         return recipes;
     }
 
+    @Override
     public int createRecipe(Recipe recipe){
         String sql = "INSERT INTO recipes (user_id, recipe_title, recipe_description, " +
                 "attribution) VALUES (?, ?, ?, ?)" +
-                "RETURNING user_id;";
+                "RETURNING recipe_id;";
 
         try{
            int newRecipeId = jdbcTemplate.queryForObject(sql, Integer.class, recipe.getUserId(),
@@ -77,19 +88,19 @@ public class JdbcRecipeDao {
 
 
 
-
-    Recipe getRecipeDetails (int recipeId){
+@Override
+public Recipe getRecipeDetails (int recipeId){
         Recipe recipe = new Recipe();
         try {
-            String sql = "SELECT * from recipes WHERE recipe_id = ?;";
+            String sql = "SELECT * FROM recipes WHERE recipe_id = ?;";
             SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, recipeId);
 
             if(rs.next()){
                 recipe = mapRowToRecipe(rs);
 
-                sql = "SELECT * from recipe_ingredients WHERE recipe_id  ?;";
+                sql = "SELECT * from recipe_ingredients WHERE recipe_id = ?;";
                 rs = jdbcTemplate.queryForRowSet(sql, recipeId);
-                List<Ingredient> ingredients = null;
+                List<Ingredient> ingredients = new ArrayList<>();
                 while(rs.next()){
                     Ingredient ingredient = new Ingredient();
                     ingredient = mapRowToIngredient(rs);
@@ -99,7 +110,7 @@ public class JdbcRecipeDao {
 
                 sql = "SELECT * from recipe_steps WHERE recipe_id = ?;";
                 rs = jdbcTemplate.queryForRowSet(sql, recipeId);
-                List<RecipeStep> steps = null;
+                List<RecipeStep> steps = new ArrayList<>();
                while(rs.next()){
                    RecipeStep step = new RecipeStep();
                    step = mapRowToStep(rs);
@@ -112,7 +123,7 @@ public class JdbcRecipeDao {
                        "LEFT JOIN tags ON tags.tag_id = recipe_to_tags.tag_id " +
                        "WHERE recipe_to_tags.recipe_id = ?;";
                rs = jdbcTemplate.queryForRowSet(sql, recipeId);
-               List<Tag> tags = null;
+               List<Tag> tags = new ArrayList<>();
                while(rs.next()){
                    Tag tag = new Tag();
                    tag = mapRowToTag(rs);
@@ -122,12 +133,13 @@ public class JdbcRecipeDao {
 
                sql = "SELECT * FROM recipe_pictures WHERE recipe_id = ?;";
                rs = jdbcTemplate.queryForRowSet(sql, recipeId);
-               List<RecipePic> pics = null;
+               List<RecipePic> pics = new ArrayList<>();
                while(rs.next()) {
                    RecipePic pic = new RecipePic();
                    pic = mapRowToRecipePic(rs);
                    pics.add(pic);
                }
+               recipe.setRecipePicList(pics);
             }
         }catch(CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
