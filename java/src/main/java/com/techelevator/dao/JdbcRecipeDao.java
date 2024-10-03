@@ -43,6 +43,18 @@ public class JdbcRecipeDao implements RecipeDao{
     }
 
     @Override
+    public List<Recipe> getRecipesByTag (int tagId, int offset){
+        List<Recipe> recipes = new ArrayList<>();
+        String sql = "SELECT recipe_id FROM recipe_to_tags WHERE tag_id = ? LIMIT 25 OFFSET ?;";
+        SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, tagId, offset);
+        while(rs.next()){
+            int recipeId = rs.getInt("recipe_id");
+            recipes.add(getRecipeDetails(recipeId));
+        }
+        return recipes;
+    }
+
+    @Override
     public int createRecipe(Recipe recipe){
         String sql = "INSERT INTO recipes (user_id, recipe_title, recipe_description, " +
                 "attribution) VALUES (?, ?, ?, ?)" +
@@ -200,6 +212,25 @@ public Recipe getRecipeDetails (int recipeId){
             throw new DaoException("Data integrity violation", e);
         }
         return recipes;
+   }
+
+   @Override
+   public List<Tag> getAllTags(){
+       List<Tag> tags = new ArrayList<>();
+        try{
+            String sql = "SELECT * from tags";
+            SqlRowSet rs = jdbcTemplate.queryForRowSet(sql);
+
+            while(rs.next()){
+                Tag tag = mapRowToTag(rs);
+                tags.add(tag);
+            }
+
+        }catch(CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        } return tags;
    }
 
 

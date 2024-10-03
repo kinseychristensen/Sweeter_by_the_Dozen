@@ -3,6 +3,7 @@ package com.techelevator.controller;
 import com.techelevator.dao.RecipeDao;
 import com.techelevator.dao.UserDao;
 import com.techelevator.model.Recipe;
+import com.techelevator.model.Tag;
 import com.techelevator.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -72,4 +73,20 @@ public class RecipeController {
      User user= userDao.getUserByUsername(userName);
    return recipeDao.getSavedRecipes(user.getId());
     }
+
+    @RequestMapping(path = "/recipes/search-tag/{tagId}/page/{offset}", method = RequestMethod.GET)
+    public List<Recipe> getRecipesByTag (@PathVariable int tagId, @PathVariable int offset){
+        return recipeDao.getRecipesByTag(tagId, offset);
+    }
+
+    @RequestMapping(path = "/tags")
+    public List<Tag> getAllTags(){
+        return recipeDao.getAllTags();
+
+    }
+
+
+
+
+
         }

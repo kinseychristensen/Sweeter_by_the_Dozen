@@ -1,6 +1,7 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.Recipe;
+import com.techelevator.model.Tag;
 
 import java.util.List;
 
@@ -12,4 +13,6 @@ public interface RecipeDao {
     int getNumOfRecipes();
     boolean saveRecipe (int recipeId, int userId);
     List<Recipe> getSavedRecipes (int userId);
+    List<Recipe> getRecipesByTag (int tagId, int offset);
+    List<Tag> getAllTags();
 }
