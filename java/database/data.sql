@@ -19,14 +19,14 @@ INSERT INTO recipe_steps (recipe_id, instructions, step)
 INSERT INTO recipe_steps (recipe_id, instructions, step)
 	VALUES (1, 'For extra fun use cookie cutters to slice the bread in festive shapes before toasting.', 5);
 
-INSERT INTO recipe_ingredients (recipe_id, order_num, amount, unit_type, quantifier, ingredient)
-	VALUES (1, 1, 2, 'tablespoons', 'softened', 'butter');
-INSERT INTO recipe_ingredients (recipe_id, order_num, amount, unit_type, ingredient)
+INSERT INTO recipe_ingredients (recipe_id, order_num, amount_numerator, amount_denominator, unit_type, quantifier, ingredient)
+	VALUES (1, 1, 2, 1, 'tablespoons', 'softened', 'butter');
+INSERT INTO recipe_ingredients (recipe_id, order_num,  amount_numerator, unit_type, ingredient)
 	VALUES (1, 2, 4, 'slices', 'bread');
-INSERT INTO recipe_ingredients (recipe_id, order_num, amount, unit_type, quantifier, ingredient)
-	VALUES (1, 3, 2, 'tablespoons', 'or so', 'sugar');
-INSERT INTO recipe_ingredients (recipe_id, order_num, amount, unit_type, quantifier, ingredient)
-	VALUES (1, 4, 2, 'teaspoons', 'or so', 'cinnamon');
+INSERT INTO recipe_ingredients (recipe_id, order_num,  amount_numerator, amount_denominator, unit_type, quantifier, ingredient)
+	VALUES (1, 3, 2, 1, 'tablespoons', 'or so', 'sugar');
+INSERT INTO recipe_ingredients (recipe_id, order_num,  amount_numerator, amount_denominator, unit_type, ingredient)
+	VALUES (1, 4, 3, 2, 'teaspoons', 'cinnamon');
 
 INSERT INTO tags (tag) VALUES ('breakfast');
 INSERT INTO tags (tag) VALUES ('easy');

@@ -1,9 +1,9 @@
 package com.techelevator.model;
 
-import java.math.BigDecimal;
-
 public class Ingredient {
-    private BigDecimal amount;
+
+    private int amountNumerator;
+    private int amountDenominator;
     private int ingredientNum;
     private String quantifier;
     private String ingredientText;
@@ -18,6 +18,22 @@ public class Ingredient {
         return unitType;
     }
 
+    public int getAmountNumerator() {
+        return amountNumerator;
+    }
+
+    public void setAmountNumerator(int amountNumerator) {
+        this.amountNumerator = amountNumerator;
+    }
+
+    public int getAmountDenominator() {
+        return amountDenominator;
+    }
+
+    public void setAmountDenominator(int amountDenominator) {
+        this.amountDenominator = amountDenominator;
+    }
+
     public void setUnitType(String unitType) {
         this.unitType = unitType;
     }
@@ -26,13 +42,6 @@ public class Ingredient {
         this.recipeId = recipeId;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
 
     public int getIngredientNum() {
         return ingredientNum;

@@ -44,6 +44,7 @@ CREATE TABLE recipe_comments (
 CREATE TABLE saved_recipes (
     recipe_id int,
     user_id int,
+    PRIMARY KEY (recipe_id, user_id),
     CONSTRAINT FK_recipe_id FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id),
     CONSTRAINT FK_user_id FOREIGN KEY (user_id) REFERENCES users(user_id)
     );
@@ -58,7 +59,8 @@ CREATE TABLE recipe_steps (
 CREATE TABLE recipe_ingredients (
     recipe_id int,
     order_num int,
-    amount real,
+    amount_numerator int default 0,
+    amount_denominator int default 1,
     unit_type text,
    quantifier text,
    ingredient text,

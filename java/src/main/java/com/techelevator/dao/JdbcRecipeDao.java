@@ -15,8 +15,11 @@ import java.util.List;
 public class JdbcRecipeDao implements RecipeDao{
 
     private final JdbcTemplate jdbcTemplate;
+    private final UserDao userDao;
 
-    public JdbcRecipeDao(JdbcTemplate jdbcTemplate) {this.jdbcTemplate = jdbcTemplate;}
+    public JdbcRecipeDao(JdbcTemplate jdbcTemplate, UserDao userDao) {this.jdbcTemplate = jdbcTemplate;
+        this.userDao = userDao;
+    }
 
     @Override
     public List<Recipe> getRecipesByUser (int userId){
@@ -64,10 +67,10 @@ public class JdbcRecipeDao implements RecipeDao{
             }
             if(!recipe.getIngredientList().isEmpty()) {
                 for (Ingredient ingredient : recipe.getIngredientList()) {
-                    sql = "INSERT INTO recipe_ingredients (recipe_id, order_num, amount, unit_type," +
-                            "quantifier, ingredient) VALUES (?, ?, ?, ?, ?, ?);";
-                    jdbcTemplate.update(sql, recipe.getRecipeId(), ingredient.getIngredientNum(), ingredient.getAmount(),
-                    ingredient.getUnitType(), ingredient.getQuantifier(), ingredient.getIngredientText());
+                    sql = "INSERT INTO recipe_ingredients (recipe_id, order_num, amount_numerator, amount_denominator, unit_type," +
+                            "quantifier, ingredient) VALUES (?, ?, ?, ?, ?, ?, ?);";
+                    jdbcTemplate.update(sql, recipe.getRecipeId(), ingredient.getIngredientNum(), ingredient.getAmountNumerator(),
+                    ingredient.getAmountDenominator(), ingredient.getUnitType(), ingredient.getQuantifier(), ingredient.getIngredientText());
                 }
             }
             if(!recipe.getRecipeTagList().isEmpty()) {
@@ -97,6 +100,8 @@ public Recipe getRecipeDetails (int recipeId){
 
             if(rs.next()){
                 recipe = mapRowToRecipe(rs);
+                User writer = userDao.getUserById(recipe.getUserId());
+                recipe.setWriter(writer.getUsername());
 
                 sql = "SELECT * from recipe_ingredients WHERE recipe_id = ?;";
                 rs = jdbcTemplate.queryForRowSet(sql, recipeId);
@@ -149,7 +154,53 @@ public Recipe getRecipeDetails (int recipeId){
         return recipe;
     }
 
+ public int getNumOfRecipes(){
+        int count = 0;
+        try {
+            String sql = "SELECT COUNT(recipe_id) FROM recipes;";
+            int newCount = jdbcTemplate.queryForObject(sql, Integer.class);
+            if (newCount >0){
+                count = newCount;
+            }
+        }catch(CannotGetJdbcConnectionException e) {
+        throw new DaoException("Unable to connect to server or database", e);
+    } catch (DataIntegrityViolationException e) {
+        throw new DaoException("Data integrity violation", e);
+    }
+    return count;
+    }
 
+   public boolean saveRecipe (int recipeId, int userId){
+        try {
+            String sql = "INSERT INTO saved_recipes (recipe_id, user_id) VALUES (?, ?);";
+            jdbcTemplate.update(sql, recipeId, userId);
+
+        }catch(CannotGetJdbcConnectionException e) {
+        throw new DaoException("Unable to connect to server or database", e);
+    } catch (DataIntegrityViolationException e) {
+        throw new DaoException("Data integrity violation", e);
+    } return true;
+   }
+
+
+   public List<Recipe> getSavedRecipes (int userId){
+        List<Recipe> recipes = new ArrayList<>();
+
+        try {
+            String sql = "SELECT recipe_id FROM saved_recipes WHERE user_id = ?;";
+            SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, userId);
+            while (rs.next()){
+               int recipeId = rs.getInt("recipe_id");
+               Recipe recipe = getRecipeDetails(recipeId);
+               recipes.add(recipe);
+            }
+        }catch(CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+        return recipes;
+   }
 
 
     private Recipe mapRowToRecipe(SqlRowSet rs){
@@ -166,7 +217,8 @@ public Recipe getRecipeDetails (int recipeId){
     private Ingredient mapRowToIngredient(SqlRowSet rs){
         Ingredient ingredient = new Ingredient();
         ingredient.setRecipeId(rs.getInt("recipe_id"));
-        ingredient.setAmount(rs.getBigDecimal("amount"));
+        ingredient.setAmountNumerator(rs.getInt("amount_numerator"));
+        ingredient.setAmountDenominator(rs.getInt("amount_denominator"));
         ingredient.setQuantifier(rs.getString("quantifier"));
         ingredient.setIngredientText(rs.getString("ingredient"));
         ingredient.setIngredientNum(rs.getInt("order_num"));
