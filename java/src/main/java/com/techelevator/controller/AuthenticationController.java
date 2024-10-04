@@ -70,5 +70,14 @@ public class AuthenticationController {
         }
     }
 
+    @RequestMapping(path="/update-user", method=RequestMethod.PUT)
+    public boolean updateUserDetails(@RequestBody User user) {
+        return userDao.updateUserDetails(user);
+    }
+
+    @RequestMapping(path="/update-password", method=RequestMethod.PUT)
+    public boolean updateUserPassword(@RequestBody User user){
+        return userDao.updateUserPassword(user);
+    }
 }
 

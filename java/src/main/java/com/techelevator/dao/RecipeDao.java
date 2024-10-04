@@ -15,4 +15,7 @@ public interface RecipeDao {
     List<Recipe> getSavedRecipes (int userId);
     List<Recipe> getRecipesByTag (int tagId, int offset);
     List<Tag> getAllTags();
+    boolean deleteRecipe(int recipeId);
+    boolean removeFromSaves (int recipeId, int userId);
+
 }

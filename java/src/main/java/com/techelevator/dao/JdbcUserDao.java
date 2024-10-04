@@ -74,11 +74,11 @@ public class JdbcUserDao implements UserDao {
     @Override
     public User createUser(RegisterUserDto user) {
         User newUser = null;
-        String insertUserSql = "INSERT INTO users (username, password_hash, role) values (LOWER(TRIM(?)), ?, ?) RETURNING user_id";
+        String insertUserSql = "INSERT INTO users (username, email, password_hash, role) values (LOWER(TRIM(?)), ?, ?, ?) RETURNING user_id";
         String password_hash = new BCryptPasswordEncoder().encode(user.getPassword());
         String ssRole = user.getRole().toUpperCase().startsWith("ROLE_") ? user.getRole().toUpperCase() : "ROLE_" + user.getRole().toUpperCase();
         try {
-            int newUserId = jdbcTemplate.queryForObject(insertUserSql, int.class, user.getUsername(), password_hash, ssRole);
+            int newUserId = jdbcTemplate.queryForObject(insertUserSql, int.class, user.getUsername(), user.getEmail(), password_hash, ssRole);
             newUser = getUserById(newUserId);
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -88,13 +88,45 @@ public class JdbcUserDao implements UserDao {
         return newUser;
     }
 
+    public boolean updateUserDetails(User user) {
+        try {
+            String sql = "UPDATE users SET email = ?, username = ?, flagged_comments = ?, restricted = ? " +
+                    "WHERE user_id = ?;";
+            jdbcTemplate.update(sql, user.getEmail(), user.getUsername(), user.getFlaggedComments(),
+                    user.isRestricted(), user.getId());
+
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+        return true;
+    }
+
+    public boolean updateUserPassword(User user){
+   try{
+        String password_hash = new BCryptPasswordEncoder().encode(user.getPassword());
+        String sql = "UPDATE users SET password_hash = ? WHERE user_id = ?;";
+        jdbcTemplate.update(sql, password_hash, user.getId());
+    }catch(CannotGetJdbcConnectionException e){
+       throw new DaoException("Unable to connect to server or database", e);
+    } catch(DataIntegrityViolationException e){
+        throw new DaoException("Data integrity violation", e);
+    }
+   return true;
+}
+
+
+
     private User mapRowToUser(SqlRowSet rs) {
         User user = new User();
         user.setId(rs.getInt("user_id"));
         user.setUsername(rs.getString("username"));
         user.setPassword(rs.getString("password_hash"));
         user.setAuthorities(Objects.requireNonNull(rs.getString("role")));
-        user.setActivated(true);
+        user.setEmail(rs.getString("email"));
+        user.setFlaggedComments(rs.getInt("flagged_comments"));
+        user.setRestricted(rs.getBoolean("restricted"));
         return user;
     }
 }

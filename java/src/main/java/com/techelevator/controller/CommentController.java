@@ -1,20 +1,24 @@
 package com.techelevator.controller;
 
 import com.techelevator.dao.CommentDao;
+import com.techelevator.dao.UserDao;
 import com.techelevator.model.Comment;
+import com.techelevator.model.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.Path;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
 @CrossOrigin
 public class CommentController {
     private final CommentDao commentDao;
+    private final UserDao userDao;
 
-
-    public CommentController(CommentDao commentDao) {
+    public CommentController(CommentDao commentDao, UserDao userDao) {
         this.commentDao = commentDao;
+        this.userDao = userDao;
     }
 
     @RequestMapping(path="/recipe/{recipeId}/comments", method = RequestMethod.GET)
@@ -23,7 +27,10 @@ public class CommentController {
     }
 
     @RequestMapping(path="/new-comment", method = RequestMethod.POST)
-    boolean createComment(@RequestBody Comment comment){
+    boolean createComment(@RequestBody Comment comment, Principal principal){
+        String userName = principal.getName();
+        User user = userDao.getUserByUsername(userName);
+        comment.setUserId(user.getId());
         return commentDao.createComment(comment);
     }
 
@@ -31,8 +38,12 @@ public class CommentController {
     boolean reportComment (@PathVariable int commentId){
         return commentDao.reportComment(commentId);
     }
+    @RequestMapping(path="/comment/{commentId}", method = RequestMethod.POST)
+    boolean unreportComment (@PathVariable int commentId){
+        return commentDao.unreportComment(commentId);
+    }
 
-    @RequestMapping(path="/comment/{commentId]", method = RequestMethod.DELETE)
+    @RequestMapping(path="/comment/{commentId}", method = RequestMethod.DELETE)
     boolean deleteComment (@PathVariable int commentId){
         return commentDao.deleteComment(commentId);
     }
@@ -42,7 +53,7 @@ public class CommentController {
         return commentDao.getReportedComments();
     }
 
-    
+
 
 
 

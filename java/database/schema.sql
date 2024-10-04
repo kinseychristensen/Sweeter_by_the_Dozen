@@ -1,6 +1,6 @@
 BEGIN TRANSACTION;
 
-DROP TABLE IF EXISTS pending_recipes, recipe_to_tags, tags, recipe_ingredients, recipe_steps, saved_recipes,
+DROP TABLE IF EXISTS pending_recipe_pics, pending_recipes, recipe_to_tags, tags, recipe_ingredients, recipe_steps, saved_recipes,
 recipe_pictures, recipes, users;
 
 CREATE TABLE users (
@@ -27,6 +27,7 @@ CREATE TABLE recipes (
 CREATE TABLE recipe_pictures (
     recipe_id int,
     picture_url text,
+    alt_text text,
     CONSTRAINT FK_recipe_id FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id)
     );
 
@@ -89,7 +90,13 @@ CREATE TABLE pending_recipes (
     tags text,
     attribution text,
     CONSTRAINT PK_pending_recipes PRIMARY KEY (pending_recipe_id),
-    CONSTRAINT FK_user_id FOREIGN KEY (user_id) REFERENCES users(user_id)
+    CONSTRAINT FK_user_id FOREIGN KEY (use******r_id) REFERENCES users(user_id)
+    );
+
+CREATE TABLE pending_recipe_pics (
+    pending_recipe_id int,
+    picture_url text,
+    CONSTRAINT FK_pending_recipe_id FOREIGN KEY (pending_recipe_id) REFERENCES pending_recipe(pending_recipe_id)
     );
 
 

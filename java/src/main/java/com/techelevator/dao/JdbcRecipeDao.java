@@ -67,8 +67,8 @@ public class JdbcRecipeDao implements RecipeDao{
 
             if(!recipe.getRecipePicList().isEmpty()) {
                 for (RecipePic pic : recipe.getRecipePicList()) {
-                    sql = "INSERT INTO recipe_pictures (recipe_id, picture_url) VALUES (?, ?);";
-                    jdbcTemplate.update(sql, recipe.getRecipeId(), pic.getPicUrl());
+                    sql = "INSERT INTO recipe_pictures (recipe_id, picture_url, alt_text) VALUES (?, ?, ?);";
+                    jdbcTemplate.update(sql, recipe.getRecipeId(), pic.getPicUrl(), pic.getAltText());
                 }
             }
             if(!recipe.getRecipeStepList().isEmpty()) {
@@ -233,6 +233,44 @@ public Recipe getRecipeDetails (int recipeId){
         } return tags;
    }
 
+   @Override
+   public boolean deleteRecipe(int recipeId){
+       try{
+           String sql = "DELETE FROM recipe_to_tags WHERE recipe_id = ?;";
+           jdbcTemplate.update(sql, recipeId);
+           sql = "DELETE FROM recipe_ingredients WHERE recipe_id = ?;";
+           jdbcTemplate.update(sql, recipeId);
+           sql = "DELETE FROM recipe_steps WHERE recipe_id = ?;";
+           jdbcTemplate.update(sql, recipeId);
+           sql = "DELETE FROM recipe_comments WHERE recipe_id = ?;";
+           jdbcTemplate.update(sql, recipeId);
+           sql = "DELETE FROM recipe_pictures WHERE recipe_id = ?;";
+           jdbcTemplate.update(sql, recipeId);
+           sql = "DELETE FROM saved_recipes WHERE recipe_id = ?;";
+           jdbcTemplate.update(sql, recipeId);
+           sql = "DELETE FROM recipes WHERE recipe_id = ?;";
+           jdbcTemplate.update(sql, recipeId);
+
+       }catch(CannotGetJdbcConnectionException e) {
+           throw new DaoException("Unable to connect to server or database", e);
+       } catch (DataIntegrityViolationException e) {
+           throw new DaoException("Data integrity violation", e);
+       } return true;
+   }
+
+   public boolean removeFromSaves (int recipeId, int userId){
+        try {
+            String sql = "DELETE FROM saved_recipes WHERE recipe_id = ? AND user_id = ?;";
+            jdbcTemplate.update(sql, recipeId, userId);
+
+        }catch(CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        } return true;
+   }
+
+
 
     private Recipe mapRowToRecipe(SqlRowSet rs){
         Recipe recipe = new Recipe();
@@ -270,6 +308,7 @@ public Recipe getRecipeDetails (int recipeId){
         RecipePic pic = new RecipePic();
         pic.setPicUrl(rs.getString("picture_url"));
         pic.setRecipeId(rs.getInt("recipe_id"));
+        pic.setAltText(rs.getString("alt_text"));
 
         return pic;
     }

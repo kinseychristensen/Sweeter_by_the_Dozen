@@ -1,15 +1,35 @@
 package com.techelevator.model;
 
+import java.util.List;
+
 public class PendingRecipe {
     private int userId;
+    private int id;
     private String recipeText;
     private String title;
     private String tags;
     private String attribution;
     private String description;
+    private List<RecipePic> pics;
 
     public int getUserId() {
         return userId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public List<RecipePic> getPics() {
+        return pics;
+    }
+
+    public void setPics(List<RecipePic> pics) {
+        this.pics = pics;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setUserId(int userId) {

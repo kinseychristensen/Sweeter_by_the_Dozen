@@ -36,9 +36,6 @@ public class UserModelDetailsService implements UserDetailsService {
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String login, User user) {
-        if (!user.isActivated()) {
-            throw new UserNotActivatedException("User " + login + " was not activated");
-        }
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         Set<Authority> userAuthorities = user.getAuthorities();

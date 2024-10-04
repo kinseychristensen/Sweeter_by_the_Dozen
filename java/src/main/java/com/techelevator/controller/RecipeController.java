@@ -82,7 +82,18 @@ public class RecipeController {
     @RequestMapping(path = "/tags")
     public List<Tag> getAllTags(){
         return recipeDao.getAllTags();
+    }
 
+    @RequestMapping(path = "/recipe/{recipeId}", method = RequestMethod.DELETE)
+        public boolean deleteRecipe(@PathVariable int recipeId) {
+        return recipeDao.deleteRecipe(recipeId);
+    }
+
+    @RequestMapping(path="/recipe/{recipeId}/save", method = RequestMethod.DELETE)
+    public boolean removeFromSaves (@PathVariable int recipeId, Principal principal){
+        String userName = principal.getName();
+        User user= userDao.getUserByUsername(userName);
+        return recipeDao.removeFromSaves(recipeId, user.getId());
     }
 
 

@@ -14,4 +14,9 @@ public interface UserDao {
     User getUserByUsername(String username);
 
     User createUser(RegisterUserDto user);
+
+    boolean updateUserDetails(User user);
+
+    boolean updateUserPassword(User user);
+
 }
