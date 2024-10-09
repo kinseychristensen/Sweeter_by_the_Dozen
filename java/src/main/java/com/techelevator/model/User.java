@@ -13,7 +13,7 @@ public class User {
    @JsonIgnore
    private String password;
    private boolean restricted;
-   private String email;
+   private String displayName;
    private int flaggedComments;
    private Set<Authority> authorities = new HashSet<>();
 
@@ -23,7 +23,7 @@ public class User {
       this.id = id;
       this.username = username;
       this.password = password;
-      this.email = email;
+      this.displayName = displayName;
       if (authorities != null) this.setAuthorities(authorities);
    }
 
@@ -35,12 +35,12 @@ public class User {
       this.restricted = restricted;
    }
 
-   public String getEmail() {
-      return email;
+   public String getDisplayName() {
+      return displayName;
    }
 
-   public void setEmail(String email) {
-      this.email = email;
+   public void setDisplayName(String displayName) {
+      this.displayName = displayName;
    }
 
    public int getFlaggedComments() {

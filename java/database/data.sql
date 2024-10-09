@@ -1,10 +1,10 @@
 BEGIN TRANSACTION;
 
-INSERT INTO users (username,password_hash,role, email) VALUES ('kinsey','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_USER', 'kit.the.avenger@gmail.com');
-INSERT INTO users (username,password_hash,role, email) VALUES ('admin','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_ADMIN', 'kittheavenger@gmail.com');
+INSERT INTO users (username,password_hash,role, display_name) VALUES ('kit.the.avenger@gmail.com','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_USER', 'kinsey');
+INSERT INTO users (username,password_hash,role, display_name) VALUES ('kittheavenger@gmail.com','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_ADMIN', 'admin');
 
 INSERT INTO recipes (user_id, recipe_title, recipe_description)
-	VALUES (1, 'Cinnamon Toast', 'Make breakfast a snap with this quick and tasty snack.');
+	VALUES (1, 'CINNAMON TOAST', 'Make breakfast a snap with this quick and tasty snack.');
 
 INSERT INTO recipe_pictures (recipe_id, picture_url) VALUES (1, 'TEST');
 

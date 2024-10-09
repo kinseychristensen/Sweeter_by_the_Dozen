@@ -79,5 +79,12 @@ public class AuthenticationController {
     public boolean updateUserPassword(@RequestBody User user){
         return userDao.updateUserPassword(user);
     }
+
+    @RequestMapping(path = "/user/{userId}/make-admin", method = RequestMethod.PUT)
+    public boolean makeUserAdmin(int userId){
+        return userDao.makeUserAdmin(userId);
+    }
+
+
 }
 

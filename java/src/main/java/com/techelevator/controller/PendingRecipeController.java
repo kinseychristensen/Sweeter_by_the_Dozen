@@ -3,6 +3,7 @@ package com.techelevator.controller;
 import com.techelevator.dao.PendingRecipeDao;
 import com.techelevator.dao.UserDao;
 import com.techelevator.model.PendingRecipe;
+import com.techelevator.model.RecipePic;
 import com.techelevator.model.User;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +41,6 @@ public class PendingRecipeController {
         return pendingRecipeDao.deletePendingRecipe(recipeId);
     }
 
-
     @RequestMapping(path="/my-pending-recipes", method = RequestMethod.GET)
     List<PendingRecipe> getPendingRecipesByUser(Principal principal){
         String userName = principal.getName();
@@ -48,6 +48,20 @@ public class PendingRecipeController {
         return pendingRecipeDao.getPendingRecipesByUser(user.getId());
     }
 
+    @RequestMapping(path="/pending-pics", method = RequestMethod.GET)
+    List<RecipePic> getPendingPics(){
+        return pendingRecipeDao.getPendingPics();
+    }
+
+    @RequestMapping(path="/pending-pics", method = RequestMethod.PUT)
+      boolean approvePendingPics(@RequestBody List<RecipePic> pics){
+        return pendingRecipeDao.approvePendingPics(pics);
+    }
+
+    @RequestMapping(path="/pending-pics/delete", method = RequestMethod.PUT)
+    boolean deletePendingPics(@RequestBody List<RecipePic> pics){
+        return pendingRecipeDao.deletePendingPics(pics);
+    }
 
 
 

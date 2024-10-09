@@ -10,12 +10,14 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Component
 public class JdbcRecipeDao implements RecipeDao{
 
     private final JdbcTemplate jdbcTemplate;
     private final UserDao userDao;
+    private final int RECIPES_PER_PAGE = 25;
 
     public JdbcRecipeDao(JdbcTemplate jdbcTemplate, UserDao userDao) {this.jdbcTemplate = jdbcTemplate;
         this.userDao = userDao;
@@ -59,10 +61,11 @@ public class JdbcRecipeDao implements RecipeDao{
         String sql = "INSERT INTO recipes (user_id, recipe_title, recipe_description, " +
                 "attribution) VALUES (?, ?, ?, ?)" +
                 "RETURNING recipe_id;";
+        String titleLower = recipe.getTitle().toUpperCase(Locale.ROOT).strip();
 
         try{
            int newRecipeId = jdbcTemplate.queryForObject(sql, Integer.class, recipe.getUserId(),
-            recipe.getTitle(), recipe.getDescription(), recipe.getAttribute());
+            titleLower, recipe.getDescription(), recipe.getAttribute());
             recipe.setRecipeId(newRecipeId);
 
             if(!recipe.getRecipePicList().isEmpty()) {
@@ -81,8 +84,9 @@ public class JdbcRecipeDao implements RecipeDao{
                 for (Ingredient ingredient : recipe.getIngredientList()) {
                     sql = "INSERT INTO recipe_ingredients (recipe_id, order_num, amount_numerator, amount_denominator, unit_type," +
                             "quantifier, ingredient) VALUES (?, ?, ?, ?, ?, ?, ?);";
+                    String ingredientLower = ingredient.getIngredientText().toLowerCase().strip();
                     jdbcTemplate.update(sql, recipe.getRecipeId(), ingredient.getIngredientNum(), ingredient.getAmountNumerator(),
-                    ingredient.getAmountDenominator(), ingredient.getUnitType(), ingredient.getQuantifier(), ingredient.getIngredientText());
+                    ingredient.getAmountDenominator(), ingredient.getUnitType(), ingredient.getQuantifier(), ingredientLower);
                 }
             }
             if(!recipe.getRecipeTagList().isEmpty()) {
@@ -268,6 +272,64 @@ public Recipe getRecipeDetails (int recipeId){
         } catch (DataIntegrityViolationException e) {
             throw new DaoException("Data integrity violation", e);
         } return true;
+   }
+
+   @Override
+   public List<Recipe> searchByKeyword (String keyword, int pageNum){
+        List<Recipe> recipes = new ArrayList<>();
+        String searchWordUpper = "%" + keyword.toUpperCase().strip() + "%";
+        String searchWordLower = "%" + keyword.toLowerCase().strip() + "%";
+        int offset = pageNum * RECIPES_PER_PAGE;
+
+
+        try {
+            String sql = "SELECT * FROM recipes \n" +
+                    "WHERE recipe_title LIKE ? \n" +
+                    "ORDER BY recipe_id LIMIT ? OFFSET ?;";
+
+            SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, searchWordUpper, RECIPES_PER_PAGE, offset);
+
+            while(rs.next()){
+                Recipe recipe = mapRowToRecipe(rs);
+                recipe = getRecipeDetails(recipe.getRecipeId());
+                recipes.add(recipe);
+            }
+
+            if(recipes.size()< RECIPES_PER_PAGE){
+                if(recipes.isEmpty() && pageNum != 1) {
+                    sql = "SELECT COUNT (recipe_id) FROM recipes WHERE recipe_title LIKE ?;";
+                    int numRecipes = jdbcTemplate.queryForObject(sql, int.class, searchWordUpper);
+                    int page = numRecipes / RECIPES_PER_PAGE;//example if we are on pageNum 4 and there were 51 recipes then 2 whole pages were recipes
+                    int adjustedPage = pageNum - page; //4 - 2 = 2 we are on page two of searching for ingredients
+                    offset = adjustedPage * RECIPES_PER_PAGE; // 2 * 25 = 50 so our offset should be 50 since we are on page 2
+                    if (numRecipes % RECIPES_PER_PAGE > 0) {//1 one left over recipe was on the third page so we need to adjust the offset
+                        offset = offset - (numRecipes % RECIPES_PER_PAGE); //offset is reduced by the amount of leftover recipes.
+
+                    }
+                }else {
+                      offset = 0;  //if there is a recipe, then that means we are doing the first page of ingredient searching so offset is 0
+                    }
+               int listLimit = RECIPES_PER_PAGE - recipes.size(); //list should only return 25 items, so this will make sure to not go over.
+
+                sql = "SELECT recipe_id FROM recipe_ingredients \n" +
+                            "WHERE ingredient LIKE ? \n" +
+                            "ORDER BY recipe_id LIMIT ? OFFSET ?;";
+
+                rs = jdbcTemplate.queryForRowSet(sql, searchWordLower, listLimit, offset);
+                while (rs.next()){
+                    Recipe recipe = getRecipeDetails(rs.getInt("recipe_id"));
+                    recipes.add(recipe);
+                }
+
+            }
+
+        }catch(CannotGetJdbcConnectionException e) {
+        throw new DaoException("Unable to connect to server or database", e);
+    } catch (DataIntegrityViolationException e) {
+        throw new DaoException("Data integrity violation", e);
+    }
+        return recipes;
+
    }
 
 

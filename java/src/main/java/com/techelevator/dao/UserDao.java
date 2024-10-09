@@ -19,4 +19,6 @@ public interface UserDao {
 
     boolean updateUserPassword(User user);
 
+    boolean makeUserAdmin(int userId);
+
 }

@@ -96,6 +96,10 @@ public class RecipeController {
         return recipeDao.removeFromSaves(recipeId, user.getId());
     }
 
+    @RequestMapping(path="/search/{keyWord}/page/{pageNum]", method = RequestMethod.GET)
+    public List<Recipe> searchByKeyword (@PathVariable String keyword, @PathVariable int pageNum){
+        return recipeDao.searchByKeyword(keyword, pageNum);
+    }
 
 
 

@@ -1,6 +1,7 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.PendingRecipe;
+import com.techelevator.model.RecipePic;
 
 import java.util.List;
 
@@ -10,4 +11,9 @@ public interface PendingRecipeDao {
     List<PendingRecipe> getPendingRecipes();
     boolean deletePendingRecipe (int recipeId);
     List<PendingRecipe> getPendingRecipesByUser(int userId);
+    List<RecipePic> getPendingPics();
+    boolean approvePendingPics(List<RecipePic> pics);
+    boolean deletePendingPics(List<RecipePic> pics);
+
+
 }

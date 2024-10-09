@@ -8,7 +8,7 @@ CREATE TABLE users (
 	username varchar(50) NOT NULL UNIQUE,
 	password_hash varchar(200) NOT NULL,
 	role varchar(50) NOT NULL,
-	email text NOT NULL UNIQUE,
+	display_name varchar(30) NOT NULL UNIQUE,
 	flagged_comments int default 0,
 	restricted boolean default false,
 	CONSTRAINT PK_user PRIMARY KEY (user_id)
@@ -90,13 +90,13 @@ CREATE TABLE pending_recipes (
     tags text,
     attribution text,
     CONSTRAINT PK_pending_recipes PRIMARY KEY (pending_recipe_id),
-    CONSTRAINT FK_user_id FOREIGN KEY (use******r_id) REFERENCES users(user_id)
+    CONSTRAINT FK_user_id FOREIGN KEY (user_id) REFERENCES users(user_id)
     );
 
 CREATE TABLE pending_recipe_pics (
     pending_recipe_id int,
     picture_url text,
-    CONSTRAINT FK_pending_recipe_id FOREIGN KEY (pending_recipe_id) REFERENCES pending_recipe(pending_recipe_id)
+    CONSTRAINT FK_pending_recipe_id FOREIGN KEY (pending_recipe_id) REFERENCES pending_recipes(pending_recipe_id)
     );
 
 

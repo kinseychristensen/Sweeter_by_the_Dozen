@@ -121,6 +121,58 @@ public class JdbcPendingRecipeDao implements PendingRecipeDao{
         return recipes;
     }
 
+    @Override
+    public List<RecipePic> getPendingPics(){
+        List<RecipePic> pics = new ArrayList<>();
+        try {
+            String sql = "SELECT * FROM pending_recipe_pics;";
+            SqlRowSet rs = jdbcTemplate.queryForRowSet(sql);
+
+            while(rs.next()){
+                RecipePic pic = mapRowToPic(rs);
+                pics.add(pic);
+            }
+         }catch (CannotGetJdbcConnectionException e) {
+        throw new DaoException("Unable to connect to server or database", e);
+    } catch (DataIntegrityViolationException e) {
+        throw new DaoException("Data integrity violation", e);
+    }
+        return pics;
+}
+
+@Override
+public boolean approvePendingPics(List<RecipePic> pics){
+        try {
+            String sql1 = "INSERT INTO recipe_pics (recipe_id, picture_url, alt_text) VALUES (?,?,?);";
+            String sql2 = "DELETE FROM pending_recipe_pics WHERE recipe_id = ? AND picture_url = ?;";
+            for(RecipePic pic : pics) {
+            jdbcTemplate.update(sql1, pic.getRecipeId(), pic.getPicUrl(), pic.getAltText());
+            jdbcTemplate.update(sql2, pic.getRecipeId(), pic.getPicUrl());
+            }
+        }catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+        return true;
+}
+
+@Override
+public boolean deletePendingPics(List<RecipePic> pics){
+        try {
+            String sql = "DELETE FROM pending_recipe_pics WHERE recipe_id = ? AND picture_url = ?;";
+            for(RecipePic pic : pics) {
+                jdbcTemplate.update(sql, pic.getRecipeId(), pic.getPicUrl());
+            }
+
+        }catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+    return true;
+}
+
 private PendingRecipe mapRowToPendingRecipe (SqlRowSet rs){
         PendingRecipe recipe = new PendingRecipe();
         recipe.setUserId(rs.getInt("user_id"));
