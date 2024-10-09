@@ -1,0 +1,1 @@
+Creating a limited use cookbook website.  Users will be allowed to post comments, images, and recipes with admin approval.  Backend built with PostgreSQL and Java.  Front end currently has Vue skeleton but may be switching to React.
