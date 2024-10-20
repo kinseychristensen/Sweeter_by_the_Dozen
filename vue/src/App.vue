@@ -3,12 +3,33 @@
   <div id="capstone-app">
     <div id="nav">
       
-      <router-link v-bind:to="{ name: 'home' }" v-if="$store.state.token != ''">Home</router-link>&nbsp;&nbsp;
+      <router-link v-bind:to="{ name: 'home' }">Home</router-link>
       <router-link v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
+      <router-link v-bind:to="{ name: 'login' }" v-else>Login</router-link>
+
+      <Login v-if="$store.state.token == ''"/>
+
+      <Register v-if="$store.state.token == ''"/>
+
     </div>
     <router-view />
   </div>
 </template>
+
+<script>
+import Login from './components/Login.vue';
+import Register from './components/Register.vue';
+
+  
+export default {
+    name: 'MyRecipesView',
+    components: {
+     Login,
+     Register
+  }
+  }
+
+</script>
 
 <style scoped>
 

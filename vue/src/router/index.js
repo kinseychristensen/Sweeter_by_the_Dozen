@@ -6,6 +6,8 @@ import HomeView from '../views/HomeView.vue';
 import LoginView from '../views/LoginView.vue';
 import LogoutView from '../views/LogoutView.vue';
 import RegisterView from '../views/RegisterView.vue';
+import MyRecipesView from '../views/MyRecipesView.vue';
+import UserSettingsView from '../views/UserSettingsView.vue';
 
 
 
@@ -34,6 +36,27 @@ const routes = [
     component: RegisterView,
     
   },
+  {
+    path: "/my-recipes",
+    name: "my-recipes",
+    component: MyRecipesView,
+    meta: {
+      requiresAuth: true
+    }
+    
+  },
+  {
+    path: "/settings",
+    name: "settings",
+    component: UserSettingsView,
+    meta: {
+      requiresAuth: true
+    }
+    
+  },
+
+
+  
   
 ];
 

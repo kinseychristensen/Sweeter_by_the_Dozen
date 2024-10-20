@@ -13,6 +13,8 @@ public interface UserDao {
 
     User getUserByUsername(String username);
 
+    User getUserByDisplayName(String displayName);
+
     User createUser(RegisterUserDto user);
 
     boolean updateUserDetails(User user);

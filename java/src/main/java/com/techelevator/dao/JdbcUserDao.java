@@ -27,7 +27,7 @@ public class JdbcUserDao implements UserDao {
     @Override
     public User getUserById(int userId) {
         User user = null;
-        String sql = "SELECT user_id, display_name, username, password_hash, role FROM users WHERE user_id = ?";
+        String sql = "SELECT * FROM users WHERE user_id = ?";
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
             if (results.next()) {
@@ -42,7 +42,7 @@ public class JdbcUserDao implements UserDao {
     @Override
     public List<User> getUsers() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT user_id, username, display_name, role FROM users";
+        String sql = "SELECT * FROM users";
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
             while (results.next()) {
@@ -58,8 +58,8 @@ public class JdbcUserDao implements UserDao {
     @Override
     public User getUserByUsername(String username) {
         if (username == null) throw new IllegalArgumentException("Username cannot be null");
-        User user = null;
-        String sql = "SELECT user_id, username, password_hash, display_name, role FROM users WHERE username = LOWER(TRIM(?));";
+        User user = new User();
+        String sql = "SELECT * FROM users WHERE username = LOWER(TRIM(?));";
         try {
             SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, username);
             if (rowSet.next()) {
@@ -72,9 +72,26 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
+    public User getUserByDisplayName(String displayName) {
+        if (displayName == null) throw new IllegalArgumentException("Username cannot be null");
+        User user = new User();
+        String sql = "SELECT * FROM users WHERE display_name = LOWER(TRIM(?));";
+        try {
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, displayName);
+            if (rowSet.next()) {
+                user = mapRowToUser(rowSet);
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+        return user;
+    }
+
+
+    @Override
     public User createUser(RegisterUserDto user) {
         User newUser = null;
-        String insertUserSql = "INSERT INTO users (username, display_name, password_hash, role) values (LOWER(TRIM(?)), ?, ?, ?) RETURNING user_id";
+        String insertUserSql = "INSERT INTO users (username, display_name, password_hash, role) values (LOWER(TRIM(?)), ?, ?, ?) RETURNING user_id;";
         String password_hash = new BCryptPasswordEncoder().encode(user.getPassword());
         String ssRole = user.getRole().toUpperCase().startsWith("ROLE_") ? user.getRole().toUpperCase() : "ROLE_" + user.getRole().toUpperCase();
         try {
