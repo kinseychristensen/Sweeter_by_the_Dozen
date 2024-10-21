@@ -45,13 +45,79 @@ public class JdbcRecipeDao implements RecipeDao{
     }
 
     @Override
-    public List<Recipe> getRecipesByTag (int tagId, int offset){
+    public List<Recipe> getRecipesByKeywordAndTag (List<Tag> tags, String keyword, int pageNum){
         List<Recipe> recipes = new ArrayList<>();
-        String sql = "SELECT recipe_id FROM recipe_to_tags WHERE tag_id = ? LIMIT 25 OFFSET ?;";
-        SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, tagId, offset);
-        while(rs.next()){
-            int recipeId = rs.getInt("recipe_id");
-            recipes.add(getRecipeDetails(recipeId));
+        String searchWordUpper = "%" + keyword.toUpperCase().strip() + "%";
+        String searchWordLower = "%" + keyword.toLowerCase().strip() + "%";
+        int offset = pageNum * RECIPES_PER_PAGE;
+        int numTags = tags.size();
+        if(numTags != 1){ numTags = 2;}
+
+        StringBuilder tagString = new StringBuilder();
+        for(Tag tag : tags){
+            if(tagString.length() == 0){
+                tagString = new StringBuilder("(").append(String.valueOf(tag.getTagId()));
+            }else {
+                tagString.append(", ").append(String.valueOf(tag.getTagId()));
+            }
+            tagString.append(")");
+        }
+
+        try {
+            String sql = "SELECT recipe_to_tags.recipe_id FROM recipe_to_tags \n" +
+                    "\tLEFT JOIN recipes ON recipes.recipe_id = recipe_to_tags.recipe_id\n" +
+                    "WHERE recipe_to_tags.tag_id IN ? AND recipes.recipe_title LIKE ?\n" +
+                    "GROUP BY recipe_to_tags.recipe_id\n" +
+                    "HAVING COUNT (DISTINCT tag_id) >= ?\n" +
+                    "\tLIMIT ? OFFSET ?;";
+
+            SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, tagString.toString(), searchWordUpper, numTags, RECIPES_PER_PAGE, offset);
+
+            while(rs.next()){
+                Recipe recipe = mapRowToRecipe(rs);
+                recipe = getRecipeDetails(recipe.getRecipeId());
+                recipes.add(recipe);
+            }
+
+            if(recipes.size()< RECIPES_PER_PAGE){
+                if(recipes.isEmpty() && pageNum != 1) {
+                    sql = "SELECT COUNT (recipe_id) FROM recipe_to_tags \n" +
+                            "\tLEFT JOIN recipes ON recipes.recipe_id = recipe_to_tags.recipe_id\n" +
+                            "WHERE recipe_to_tags.tag_id IN ? AND recipes.recipe_title LIKE ?\n" +
+                            "GROUP BY recipe_to_tags.recipe_id\n" +
+                            "HAVING COUNT (DISTINCT tag_id) >= ?;";
+                    int numRecipes = jdbcTemplate.queryForObject(sql, int.class, tagString.toString(), searchWordUpper, numTags);
+                    int page = numRecipes / RECIPES_PER_PAGE;//example if we are on pageNum 4 and there were 51 recipes then 2 whole pages were recipes
+                    int adjustedPage = pageNum - page; //4 - 2 = 2 we are on page two of searching for ingredients
+                    offset = adjustedPage * RECIPES_PER_PAGE; // 2 * 25 = 50 so our offset should be 50 since we are on page 2
+                    if (numRecipes % RECIPES_PER_PAGE > 0) {//1 one left over recipe was on the third page so we need to adjust the offset
+                        offset = offset - (numRecipes % RECIPES_PER_PAGE); //offset is reduced by the amount of leftover recipes.
+
+                    }
+                }else {
+                    offset = 0;  //if there is a recipe, then that means we are doing the first page of ingredient searching so offset is 0
+                }
+                int listLimit = RECIPES_PER_PAGE - recipes.size(); //list should only return 25 items, so this will make sure to not go over.
+
+                sql = "SELECT recipe_to_tags.recipe_id FROM recipe_to_tags \n" +
+                        "\tLEFT JOIN recipes ON recipes.recipe_id = recipe_to_tags.recipe_id\n" +
+                        "WHERE recipe_to_tags.tag_id IN ? AND recipes.ingredient LIKE ?\n" +
+                        "GROUP BY recipe_to_tags.recipe_id\n" +
+                        "HAVING COUNT (DISTINCT tag_id) >= ?\n" +
+                        "\tLIMIT ? OFFSET ?;";
+
+                rs = jdbcTemplate.queryForRowSet(sql, tagString.toString(), searchWordLower, numTags, listLimit, offset);
+                while (rs.next()){
+                    Recipe recipe = getRecipeDetails(rs.getInt("recipe_id"));
+                    recipes.add(recipe);
+                }
+
+            }
+
+        }catch(CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
         }
         return recipes;
     }

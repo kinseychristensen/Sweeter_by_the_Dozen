@@ -2,15 +2,15 @@ import axios from 'axios';
 
 export default {
 
+getRecipeDetails (recipeId){
+    return axios.get(`/recipe/${recipeId}`)
+ },
  getRecipesByUser (userId){
     return axios.get(`/${userId}/recipes`)
  },
 
   createRecipe(recipe){
     return axios.post('/recipes/new', recipe)
- },
- getRecipeDetails (recipeId){
-    return axios.get(`/recipe/${recipeId}`)
  },
 getNumOfRecipes(){
     return axios.get('/recipes/number')
@@ -25,9 +25,6 @@ saveRecipe (recipeId){
 getSavedRecipes (){
     return axios.get('/recipes/my-saves')
  },
-getRecipesByTag (tagId, offset){ 
-    return axios.get(`/recipes/search-tag/${tagId}/page/${offset}`)
- },
 getAllTags(){
     return axios.get('/tags')
  },
@@ -39,6 +36,9 @@ removeFromSaves (recipeId){
  },
  searchByKeyword (keyword, pageNum){
     return axios.get(`/search/${keyword}/page/${pageNum}`)
+ },
+ searchByKeywordAndTags (keyword, pageNum, tags){
+    return axios.put(`/search/${keyword}/page/${pageNum}`, tags)
  },
 
 }

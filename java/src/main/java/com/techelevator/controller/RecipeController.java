@@ -8,7 +8,6 @@ import com.techelevator.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
 import java.util.List;
 import java.util.Random;
@@ -32,7 +31,6 @@ public class RecipeController {
     public Recipe getRecipeDetails (@PathVariable int recipeId){
         return recipeDao.getRecipeDetails(recipeId);
     }
-
 
     @RequestMapping(path = "/{userId}/recipes", method= RequestMethod.GET)
     public List<Recipe> getRecipesByUser (@PathVariable int userId){
@@ -74,11 +72,6 @@ public class RecipeController {
    return recipeDao.getSavedRecipes(user.getId());
     }
 
-    @RequestMapping(path = "/recipes/search-tag/{tagId}/page/{offset}", method = RequestMethod.GET)
-    public List<Recipe> getRecipesByTag (@PathVariable int tagId, @PathVariable int offset){
-        return recipeDao.getRecipesByTag(tagId, offset);
-    }
-
     @RequestMapping(path = "/tags")
     public List<Tag> getAllTags(){
         return recipeDao.getAllTags();
@@ -101,6 +94,13 @@ public class RecipeController {
         return recipeDao.searchByKeyword(keyword, pageNum);
     }
 
+    @RequestMapping(path="/search/{keyWord}/page/{pageNum]", method = RequestMethod.PUT)
+    public List<Recipe> searchByKeywordAndTags (@PathVariable String keyword, @PathVariable int pageNum, @RequestBody List<Tag> tags){
+        if(tags.isEmpty()){
+            return recipeDao.searchByKeyword(keyword, pageNum);
+        }
+        return recipeDao.getRecipesByKeywordAndTag(tags, keyword, pageNum);
+    }
 
 
 

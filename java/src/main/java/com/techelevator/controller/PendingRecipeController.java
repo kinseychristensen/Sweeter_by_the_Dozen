@@ -6,7 +6,6 @@ import com.techelevator.model.PendingRecipe;
 import com.techelevator.model.RecipePic;
 import com.techelevator.model.User;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
 import java.util.List;
 
