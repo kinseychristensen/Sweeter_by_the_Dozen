@@ -1,22 +1,18 @@
 <template>
     <div class="home-container">
-my recipes
-
-        <Results/>
+submit recipe
     </div>
   </template>
   
   
   
   <script>
-  import Results from '../components/Results.vue';
-
   
   
   export default {
-    name: 'MyRecipesView',
+    name: 'SubmitRecipe',
     components: {
-     Results
+     
   }
   }
   </script>

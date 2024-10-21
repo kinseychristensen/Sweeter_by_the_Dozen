@@ -1,8 +1,9 @@
 <template>
     <div class="home-container">
-my recipes
+search
 
-        <Results/>
+<Tags />
+<Results/>
     </div>
   </template>
   
@@ -10,13 +11,14 @@ my recipes
   
   <script>
   import Results from '../components/Results.vue';
+  import Tags from '../components/Tags.vue';
 
   
-  
   export default {
-    name: 'MyRecipesView',
+    name: 'SearchView',
     components: {
-     Results
+     Results, 
+     Tags
   }
   }
   </script>

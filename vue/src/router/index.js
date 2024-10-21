@@ -8,6 +8,11 @@ import LogoutView from '../views/LogoutView.vue';
 import RegisterView from '../views/RegisterView.vue';
 import MyRecipesView from '../views/MyRecipesView.vue';
 import UserSettingsView from '../views/UserSettingsView.vue';
+import SearchView from '../views/SearchView.vue';
+import RecipeByIdView from '../views/RecipeByIdView.vue';
+import GrowView from '../views/GrowView.vue';
+import AdminToolsView from '../views/AdminToolsView.vue';
+import UpdatePasswordView from '../views/UpdatePasswordView.vue';
 
 
 
@@ -17,13 +22,20 @@ const routes = [
     name: 'home',
     component: HomeView,
     
-  },
+  }, 
   {
-    path: "/login",
-    name: "login",
+    path: '/login',
+    name: 'login',
     component: LoginView,
     
   },
+  {
+    path: '/register',
+    name: 'register',
+    component: RegisterView,
+    
+  },
+  
   {
     path: "/logout",
     name: "logout",
@@ -31,11 +43,30 @@ const routes = [
     
   },
   {
-    path: "/register",
-    name: "register",
-    component: RegisterView,
+    path: "/search",
+    name: "search",
+    component: SearchView,
     
   },
+  {
+    path: "/password-reset",
+    name: "password",
+    component: UpdatePasswordView,
+    
+  },
+  {
+    path: "/help-us-grow",
+    name: "grow",
+    component: GrowView,
+    
+  },
+  {
+    path: "/recipe/:recipeId",
+    name: "recipe",
+    component: RecipeByIdView,
+    
+  },
+  
   {
     path: "/my-recipes",
     name: "my-recipes",
@@ -54,7 +85,15 @@ const routes = [
     }
     
   },
-
+  {
+    path: "/admin-tools",
+    name: "admin-tools",
+    component: AdminToolsView,
+    meta: {
+      requiresAuth: true
+    }
+    
+  },
 
   
   

@@ -1,22 +1,21 @@
 <template>
     <div class="home-container">
-my recipes
+tags display
 
-        <Results/>
     </div>
   </template>
   
   
   
   <script>
-  import Results from '../components/Results.vue';
+  
 
   
   
   export default {
-    name: 'MyRecipesView',
+    name: 'Tags',
     components: {
-     Results
+    
   }
   }
   </script>

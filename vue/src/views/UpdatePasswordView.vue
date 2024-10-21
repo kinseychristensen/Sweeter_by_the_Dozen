@@ -1,22 +1,22 @@
 <template>
     <div class="home-container">
-my recipes
+reset password 
 
-        <Results/>
-    </div>
+
+</div>
   </template>
   
   
   
   <script>
-  import Results from '../components/Results.vue';
+
 
   
   
   export default {
-    name: 'MyRecipesView',
+    name: 'ResetPasswordView',
     components: {
-     Results
+     
   }
   }
   </script>

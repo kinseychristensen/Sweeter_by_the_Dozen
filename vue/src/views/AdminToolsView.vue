@@ -1,22 +1,18 @@
 <template>
     <div class="home-container">
-my recipes
-
-        <Results/>
+Admin tools
     </div>
   </template>
   
   
   
   <script>
-  import Results from '../components/Results.vue';
-
   
   
   export default {
-    name: 'MyRecipesView',
+    name: 'AdminToolsView',
     components: {
-     Results
+     
   }
   }
   </script>

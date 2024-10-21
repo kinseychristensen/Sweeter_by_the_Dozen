@@ -1,22 +1,23 @@
 <template>
     <div class="home-container">
-my recipes
+Results
 
-        <Results/>
+        <RecipeCard/>
+        <RecipeCard/>
     </div>
   </template>
   
   
   
   <script>
-  import Results from '../components/Results.vue';
+  import RecipeCard from '../components/RecipeCard.vue';
 
   
   
   export default {
-    name: 'MyRecipesView',
+    name: 'Results',
     components: {
-     Results
+     RecipeCard
   }
   }
   </script>

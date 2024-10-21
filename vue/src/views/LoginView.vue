@@ -21,6 +21,9 @@
       <button class="btn btn-primary" type="submit">SIGN IN</button>
       <p class="register-link">
       <router-link v-bind:to="{ name: 'register' }">Need an account? Sign up.</router-link></p>
+      <p class="register-link">
+          <router-link v-bind:to="{ name: 'password' }">Reset Password</router-link></p>
+        
       
     </form>
   </div>

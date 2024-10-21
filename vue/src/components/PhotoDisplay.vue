@@ -1,22 +1,21 @@
 <template>
     <div class="home-container">
-my recipes
+photo display
 
-        <Results/>
+<SubmitPhoto/>
     </div>
   </template>
   
   
   
   <script>
-  import Results from '../components/Results.vue';
+  import SubmitPhoto from './SubmitPhoto.vue';
 
   
-  
   export default {
-    name: 'MyRecipesView',
+    name: 'PhotoDisplay',
     components: {
-     Results
+     SubmitPhoto
   }
   }
   </script>
