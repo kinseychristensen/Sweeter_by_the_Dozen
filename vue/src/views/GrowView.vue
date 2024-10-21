@@ -1,5 +1,5 @@
 <template>
-    <div class="home-container">
+    <div>
 grow page
 <Suggestion />
 <AdminApply />

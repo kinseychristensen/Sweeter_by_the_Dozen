@@ -1,6 +1,6 @@
 <template>
 
-  <div id="capstone-app">
+  <div>
     <div id="nav">
       
       <router-link v-bind:to="{ name: 'home' }">Home</router-link>
@@ -23,6 +23,9 @@
       </div>
       
     </div>
+    <div>
+      <NavBar/>
+    </div>
     <router-view />
   </div>
 </template>
@@ -30,13 +33,15 @@
 <script>
 import Login from './components/Login.vue';
 import Register from './components/Register.vue';
+import NavBar from './components/NavBar.vue';
 
   
 export default {
   
     components: {
      Login,
-     Register
+     Register, 
+     NavBar
   }, 
   data () {
     return  {

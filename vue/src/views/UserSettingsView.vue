@@ -1,5 +1,5 @@
 <template>
-    <div class="home-container">
+    <div>
 user settings
 
 <router-link v-bind:to="{ name: 'admin-tools' }"> go to admin tools</router-link>

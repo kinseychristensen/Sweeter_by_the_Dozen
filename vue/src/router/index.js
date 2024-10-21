@@ -13,6 +13,8 @@ import RecipeByIdView from '../views/RecipeByIdView.vue';
 import GrowView from '../views/GrowView.vue';
 import AdminToolsView from '../views/AdminToolsView.vue';
 import UpdatePasswordView from '../views/UpdatePasswordView.vue';
+import TipsAndTempsView from '../views/TipsAndTempsView.vue';
+import UserByIdView from '../views/UserByIdView.vue';
 
 
 
@@ -61,9 +63,21 @@ const routes = [
     
   },
   {
+    path: "/tips-and-temps",
+    name: "tips",
+    component: TipsAndTempsView,
+    
+  },
+  {
     path: "/recipe/:recipeId",
     name: "recipe",
     component: RecipeByIdView,
+    
+  },
+  {
+    path: "/user/:userId",
+    name: "user",
+    component: UserByIdView,
     
   },
   

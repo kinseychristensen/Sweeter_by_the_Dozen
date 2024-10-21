@@ -1,6 +1,6 @@
 <template>
     <div>
-submit photo
+edit user
     </div>
   </template>
   
@@ -10,7 +10,7 @@ submit photo
   
   
   export default {
-    name: 'SubmitPhoto',
+    name: 'EditUser',
     components: {
      
   }

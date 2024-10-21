@@ -1,9 +1,10 @@
 <template>
-    <div class="home-container">
+    <div>
 RECIPE CARD
 
 <router-link v-bind:to="{ name: 'recipe', params: {recipeId: 1}}">GO TO recipe 1</router-link>
-<router-link v-bind:to="{ name: 'recipe', params: {recipeId: 2}}">GO TO recipe 2</router-link>
+<p></p>
+<router-link v-bind:to="{ name: 'user', params: {userId: 1}}">GO TO  user</router-link>
 
     </div>
   </template>

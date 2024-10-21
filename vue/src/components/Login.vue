@@ -1,5 +1,5 @@
 <template>
-    <div class = 'flexed'>
+    <div>
     <div id="login" class = login-container>
       <form class="login-form" v-on:submit.prevent="login">
        
@@ -18,10 +18,10 @@
           <label for="password" class="bold-label">PASSWORD:</label>
           <input type="password" id="password" v-model="user.password" required />
         </div>
-        <button class="btn btn-primary" type="submit">SIGN IN</button>
-        <p class="register-link">
+        <button type="submit">SIGN IN</button>
+        <p>
         <router-link v-bind:to="{ name: 'register' }">Need an account? Sign up.</router-link></p>
-        <p class="register-link">
+        <p>
           <router-link v-bind:to="{ name: 'password' }">Reset Password.</router-link></p>
         
         

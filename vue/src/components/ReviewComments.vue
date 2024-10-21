@@ -1,6 +1,6 @@
 <template>
     <div>
-submit photo
+review comment
     </div>
   </template>
   
@@ -10,7 +10,7 @@ submit photo
   
   
   export default {
-    name: 'SubmitPhoto',
+    name: 'ReviewComment',
     components: {
      
   }

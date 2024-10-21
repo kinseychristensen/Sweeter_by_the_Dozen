@@ -1,9 +1,11 @@
 <template>
-    <div class="home-container">
+    <div>
 recipe by id
 
 <CommentsDisplay/>
 <PhotoDisplay/>
+
+<router-link v-bind:to="{ name: 'user', params: {userId: 1}}">GO TO  user</router-link>
     </div>
   </template>
   
@@ -13,6 +15,7 @@ recipe by id
   
   import CommentsDisplay from '../components/CommentsDisplay.vue';
 import PhotoDisplay from '../components/PhotoDisplay.vue';
+
 
 
   

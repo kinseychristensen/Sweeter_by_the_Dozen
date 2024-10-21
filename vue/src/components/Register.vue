@@ -8,11 +8,11 @@
        </div>
        <div class="form-input-group">
          <label for="username" class="bold-label">EMAIL:</label>
-         <input type="text" id="username" v-model="user.username" required autofocus />
+         <input type="email" id="username" v-model="user.username" required autofocus />
        </div>
        <div class="form-input-group">
-         <label for="username" class="bold-label">DISPLAY NAME:</label>
-         <input type="text" id="username" v-model="user.displayName" required autofocus />
+         <label for="displayname" class="bold-label">DISPLAY NAME:</label>
+         <input type="text" id="displayname" v-model="user.displayName" required autofocus />
        </div>
        <div class="form-input-group">
          <label for="password" class="bold-label">PASSWORD:</label>
