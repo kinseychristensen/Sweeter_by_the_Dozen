@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface PendingRecipeDao {
 
-    boolean createPendingRecipe(PendingRecipe recipe);
+    int createPendingRecipe(PendingRecipe recipe);
     List<PendingRecipe> getPendingRecipes();
     boolean deletePendingRecipe (int recipeId);
     List<PendingRecipe> getPendingRecipesByUser(int userId);
     List<RecipePic> getPendingPics();
     boolean approvePendingPics(List<RecipePic> pics);
     boolean deletePendingPics(List<RecipePic> pics);
-
+    boolean submitPhoto(String picURL, int recipeId);
 
 }

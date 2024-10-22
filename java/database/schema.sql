@@ -89,14 +89,15 @@ CREATE TABLE pending_recipes (
     description varchar(200),
     tags text,
     attribution text,
+    picture_url text,
     CONSTRAINT PK_pending_recipes PRIMARY KEY (pending_recipe_id),
     CONSTRAINT FK_user_id FOREIGN KEY (user_id) REFERENCES users(user_id)
     );
 
 CREATE TABLE pending_recipe_pics (
-    pending_recipe_id int,
+    recipe_id int,
     picture_url text,
-    CONSTRAINT FK_pending_recipe_id FOREIGN KEY (pending_recipe_id) REFERENCES pending_recipes(pending_recipe_id)
+    CONSTRAINT FK_recipe_id FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id)
     );
 
 

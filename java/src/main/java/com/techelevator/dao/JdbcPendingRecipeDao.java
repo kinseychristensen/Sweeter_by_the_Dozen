@@ -2,13 +2,11 @@ package com.techelevator.dao;
 
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.PendingRecipe;
-import com.techelevator.model.Recipe;
 import com.techelevator.model.RecipePic;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -24,26 +22,20 @@ public class JdbcPendingRecipeDao implements PendingRecipeDao{
 
 
     @Override
-    public boolean createPendingRecipe(PendingRecipe recipe){
+    public int createPendingRecipe(PendingRecipe recipe){
+        int recipeId = 0;
         try {
-            String sql = "INSERT INTO pending_recipes (user_id, recipe_text, title, description, tags, attribution)" +
-                    "VALUES (?, ?, ?, ?, ?, ?) RETURNING pending_recipe_id;";
-            int recipeId = jdbcTemplate.queryForObject(sql, int.class, recipe.getUserId(), recipe.getRecipeText(), recipe.getTitle(),
-                    recipe.getDescription(), recipe.getTags(), recipe.getAttribution());
-
-            if(recipeId != 0 && !recipe.getPics().isEmpty()){
-                sql = "INSERT INTO pending_recipe_pics (pending_recipe_id, picture_url) VALUES (?, ?);";
-                for (RecipePic pic : recipe.getPics()){
-                    jdbcTemplate.update(sql, recipeId, pic.getPicUrl());
-                }
-            }
+            String sql = "INSERT INTO pending_recipes (user_id, recipe_text, title, description, tags, attribution, picture_url)" +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING pending_recipe_id;";
+            recipeId = jdbcTemplate.update(sql, recipe.getUserId(), recipe.getRecipeText(), recipe.getTitle(),
+                    recipe.getDescription(), recipe.getTags(), recipe.getAttribute(), recipe.getPics());
 
         }catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
         } catch (DataIntegrityViolationException e) {
             throw new DaoException("Data integrity violation", e);
         }
-        return true;
+        return recipeId;
     }
 
     @Override
@@ -56,15 +48,6 @@ public class JdbcPendingRecipeDao implements PendingRecipeDao{
             while(rs.next()){
                 PendingRecipe recipe = mapRowToPendingRecipe(rs);
                 recipes.add(recipe);
-            }for(PendingRecipe recipe : recipes){
-              sql = "SELECT * FROM pending_recipes_pics WHERE pending_recipe_id = ?;";
-              SqlRowSet rs2 = jdbcTemplate.queryForRowSet(sql, recipe.getId());
-              List<RecipePic> pics = new ArrayList<>();
-              while(rs.next()){
-                  RecipePic pic = mapRowToPic(rs2);
-                  pics.add(pic);
-              }
-              recipe.setPics(pics);
             }
 
         }catch (CannotGetJdbcConnectionException e) {
@@ -79,9 +62,7 @@ public class JdbcPendingRecipeDao implements PendingRecipeDao{
     @Override
     public boolean deletePendingRecipe (int recipeId){
         try {
-            String sql = "DELETE FROM pending_recipe_pics WHERE pending_recipe_id = ?;";
-            jdbcTemplate.update(sql, recipeId);
-            sql = "DELETE FROM pending_recipes WHERE pending_recipe_id = ?;";
+            String sql = "DELETE FROM pending_recipes WHERE pending_recipe_id = ?;";
             jdbcTemplate.update(sql, recipeId);
         }catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -101,15 +82,6 @@ public class JdbcPendingRecipeDao implements PendingRecipeDao{
             while(rs.next()){
                 PendingRecipe recipe = mapRowToPendingRecipe(rs);
                 recipes.add(recipe);
-            }for(PendingRecipe recipe : recipes){
-                sql = "SELECT * FROM pending_recipes_pics WHERE pending_recipe_id = ?;";
-                SqlRowSet rs2 = jdbcTemplate.queryForRowSet(sql, recipe.getId());
-                List<RecipePic> pics = new ArrayList<>();
-                while(rs.next()){
-                    RecipePic pic = mapRowToPic(rs2);
-                    pics.add(pic);
-                }
-                recipe.setPics(pics);
             }
 
 
@@ -143,7 +115,7 @@ public class JdbcPendingRecipeDao implements PendingRecipeDao{
 @Override
 public boolean approvePendingPics(List<RecipePic> pics){
         try {
-            String sql1 = "INSERT INTO recipe_pics (recipe_id, picture_url, alt_text) VALUES (?,?,?);";
+            String sql1 = "INSERT INTO recipe_pictures (recipe_id, picture_url, alt_text) VALUES (?,?,?);";
             String sql2 = "DELETE FROM pending_recipe_pics WHERE recipe_id = ? AND picture_url = ?;";
             for(RecipePic pic : pics) {
             jdbcTemplate.update(sql1, pic.getRecipeId(), pic.getPicUrl(), pic.getAltText());
@@ -173,6 +145,26 @@ public boolean deletePendingPics(List<RecipePic> pics){
     return true;
 }
 
+
+    @Override
+    public boolean submitPhoto(String picURL, int recipeId){
+        try {
+            String sql = "INSERT INTO pending_recipe_pics (recipe_id, picture_url)" +
+                    "VALUES (?, ?);";
+            jdbcTemplate.update(sql, recipeId, picURL);
+
+        }catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+        return true;
+    }
+
+
+
+
+
 private PendingRecipe mapRowToPendingRecipe (SqlRowSet rs){
         PendingRecipe recipe = new PendingRecipe();
         recipe.setUserId(rs.getInt("user_id"));
@@ -181,15 +173,17 @@ private PendingRecipe mapRowToPendingRecipe (SqlRowSet rs){
         recipe.setTitle(rs.getString("title"));
         recipe.setDescription(rs.getString("description"));
         recipe.setTags(rs.getString("tags"));
-        recipe.setAttribution(rs.getString("attribution"));
+        recipe.setAttribute(rs.getString("attribution"));
+        recipe.setPics(rs.getString("picture_url_list"));
+
 
         return recipe;
 }
 
 private RecipePic mapRowToPic (SqlRowSet rs){
         RecipePic pic = new RecipePic();
-        pic.setRecipeId(rs.getInt("pending_recipe_id"));
-        pic.setPicUrl("picture_url");
+        pic.setRecipeId(rs.getInt("recipe_id"));
+        pic.setPicUrl(rs.getString("picture_url"));
         return pic;
 }
 

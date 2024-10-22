@@ -26,7 +26,7 @@ public class JdbcCommentDao implements CommentDao{
         List<Comment> comments = new ArrayList<>();
         try {
             String sql = "SELECT recipe_comments.recipe_id, recipe_comments.comment_id, recipe_comments.user_id, \n" +
-                    "\trecipe_comments.reported, recipe_comments.comment, users.username \n" +
+                    "\trecipe_comments.reported, recipe_comments.comment, users.display_name \n" +
                     "\tFROM recipe_comments \n" +
                     "\tLEFT JOIN users \n" +
                     "\tON recipe_comments.user_id = users.user_id \n" +
@@ -107,7 +107,7 @@ public boolean reportComment (int commentId){
         List<Comment> comments = new ArrayList<>();
         try {
             String sql = "SELECT recipe_comments.recipe_id, recipe_comments.comment_id, recipe_comments.user_id, \n" +
-                    "recipe_comments.reported,recipe_comments.comment, users.username \n" +
+                    "recipe_comments.reported,recipe_comments.comment, users.display_name \n" +
                     "FROM recipe_comments \n" +
                     "LEFT JOIN users \n" +
                     "ON recipe_comments.user_id = users.user_id \n" +
@@ -136,7 +136,7 @@ public boolean reportComment (int commentId){
         comment.setComment(rs.getString("comment"));
         comment.setUserId(rs.getInt("user_id"));
         comment.setReported(rs.getBoolean("reported"));
-        comment.setWriter(rs.getString("username"));
+        comment.setWriter(rs.getString("display_name"));
 
         return comment;
     }

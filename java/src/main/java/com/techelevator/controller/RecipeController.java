@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -17,7 +19,9 @@ import java.util.Random;
 
 public class RecipeController {
 
+    @Autowired
     private final RecipeDao recipeDao;
+    @Autowired
     private final UserDao userDao;
 
 
@@ -36,7 +40,14 @@ public class RecipeController {
     public List<Recipe> getRecipesByUser (@PathVariable int userId){
         return recipeDao.getRecipesByUser(userId);
     }
+    @RequestMapping(path = "/my-recipes", method= RequestMethod.GET)
+    public List<Recipe> getRecipesForPrincipal (Principal principal){
+        String userName = principal.getName();
+        User user= userDao.getUserByUsername(userName);
+        return recipeDao.getRecipesByUser(user.getId());
+    }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(path = "/recipes/new", method= RequestMethod.POST)
     public int createRecipe (@RequestBody Recipe recipe){
         return recipeDao.createRecipe(recipe);
@@ -52,19 +63,19 @@ public class RecipeController {
         int numRecipes = recipeDao.getNumOfRecipes();
         Random rand = new Random();
         int randomRecipeId = rand.nextInt(numRecipes);
-        while(randomRecipeId > numRecipes || randomRecipeId == 0){
+        while(randomRecipeId == 0){
             randomRecipeId = rand.nextInt(numRecipes);
         }
         return recipeDao.getRecipeDetails(randomRecipeId);
  }
-
+    @PreAuthorize("isAuthenticated()")
 @RequestMapping(path = "recipe/{recipeId}/save", method = RequestMethod.POST)
     public boolean saveRecipe (@PathVariable int recipeId, Principal principal){
         String userName = principal.getName();
         User user= userDao.getUserByUsername(userName);
         return recipeDao.saveRecipe(recipeId, user.getId());
         }
-
+    @PreAuthorize("isAuthenticated()")
  @RequestMapping(path = "/recipes/my-saves", method = RequestMethod.GET)
  public List<Recipe> getSavedRecipes (Principal principal){
      String userName = principal.getName();
@@ -77,11 +88,13 @@ public class RecipeController {
         return recipeDao.getAllTags();
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(path = "/recipe/{recipeId}", method = RequestMethod.DELETE)
         public boolean deleteRecipe(@PathVariable int recipeId) {
         return recipeDao.deleteRecipe(recipeId);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="/recipe/{recipeId}/save", method = RequestMethod.DELETE)
     public boolean removeFromSaves (@PathVariable int recipeId, Principal principal){
         String userName = principal.getName();
@@ -89,16 +102,18 @@ public class RecipeController {
         return recipeDao.removeFromSaves(recipeId, user.getId());
     }
 
-    @RequestMapping(path="/search/{keyWord}/page/{pageNum]", method = RequestMethod.GET)
+    @RequestMapping(path="/search/{keyword}/page/{pageNum}", method = RequestMethod.GET)
     public List<Recipe> searchByKeyword (@PathVariable String keyword, @PathVariable int pageNum){
         return recipeDao.searchByKeyword(keyword, pageNum);
     }
 
-    @RequestMapping(path="/search/{keyWord}/page/{pageNum]", method = RequestMethod.PUT)
-    public List<Recipe> searchByKeywordAndTags (@PathVariable String keyword, @PathVariable int pageNum, @RequestBody List<Tag> tags){
+    @RequestMapping(path="/search/{keyword}/page/{pageNum}", method = RequestMethod.PUT)
+    public List<Recipe> searchByKeywordAndTags (@PathVariable String keyword, @PathVariable int pageNum, @RequestBody List<Integer> tags){
+        System.out.println(tags);
         if(tags.isEmpty()){
             return recipeDao.searchByKeyword(keyword, pageNum);
         }
+
         return recipeDao.getRecipesByKeywordAndTag(tags, keyword, pageNum);
     }
 

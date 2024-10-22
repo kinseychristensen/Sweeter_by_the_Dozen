@@ -8,9 +8,9 @@ public class PendingRecipe {
     private String recipeText;
     private String title;
     private String tags;
-    private String attribution;
+    private String attribute;
     private String description;
-    private List<RecipePic> pics;
+    private String pics;
 
     public int getUserId() {
         return userId;
@@ -20,11 +20,11 @@ public class PendingRecipe {
         return id;
     }
 
-    public List<RecipePic> getPics() {
+    public String getPics() {
         return pics;
     }
 
-    public void setPics(List<RecipePic> pics) {
+    public void setPics(String pics) {
         this.pics = pics;
     }
 
@@ -60,12 +60,12 @@ public class PendingRecipe {
         this.tags = tags;
     }
 
-    public String getAttribution() {
-        return attribution;
+    public String getAttribute() {
+        return attribute;
     }
 
-    public void setAttribution(String attribution) {
-        this.attribution = attribution;
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
     }
 
     public String getDescription() {
