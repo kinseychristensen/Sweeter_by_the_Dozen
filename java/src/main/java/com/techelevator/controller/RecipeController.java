@@ -102,15 +102,16 @@ public class RecipeController {
         return recipeDao.removeFromSaves(recipeId, user.getId());
     }
 
-    @RequestMapping(path="/search/{keyword}/page/{pageNum}", method = RequestMethod.GET)
+    @RequestMapping(path="/search/={keyword}/page/{pageNum}", method = RequestMethod.GET)
     public List<Recipe> searchByKeyword (@PathVariable String keyword, @PathVariable int pageNum){
+
         return recipeDao.searchByKeyword(keyword, pageNum);
     }
 
-    @RequestMapping(path="/search/{keyword}/page/{pageNum}", method = RequestMethod.PUT)
-    public List<Recipe> searchByKeywordAndTags (@PathVariable String keyword, @PathVariable int pageNum, @RequestBody List<Integer> tags){
-        System.out.println(tags);
-        if(tags.isEmpty()){
+    @RequestMapping(path="/search/={keyword}/page/{pageNum}", method = RequestMethod.PUT)
+    public List<Recipe> searchByKeywordAndTags (@PathVariable String keyword, @PathVariable int pageNum, @RequestBody int[] tags){
+
+        if(tags.length == 0){
             return recipeDao.searchByKeyword(keyword, pageNum);
         }
 

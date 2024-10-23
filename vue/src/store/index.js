@@ -54,8 +54,11 @@ export function createStore(currentToken, currentUser) {
         state.token = '';
         state.user = {};
         axios.defaults.headers.common = {};
-      }
+      },
     },
-  });
+    getters: {
+      isAuthenticated: state => !!state.token,  // Checks if a token exists
+    }
+});
   return store;
 }

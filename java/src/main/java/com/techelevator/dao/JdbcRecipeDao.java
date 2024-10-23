@@ -12,6 +12,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -20,7 +21,7 @@ public class JdbcRecipeDao implements RecipeDao{
 
     private final JdbcTemplate jdbcTemplate;
     private final UserDao userDao;
-    private final int RECIPES_PER_PAGE = 25;
+    private final int RECIPES_PER_PAGE = 5;
 
     public JdbcRecipeDao(JdbcTemplate jdbcTemplate, UserDao userDao) {this.jdbcTemplate = jdbcTemplate;
         this.userDao = userDao;
@@ -48,42 +49,40 @@ public class JdbcRecipeDao implements RecipeDao{
     }
 
     @Override
-    public List<Recipe> getRecipesByKeywordAndTag(List<Integer> tags, String keyword, int pageNum) {
+    public List<Recipe> getRecipesByKeywordAndTag(int[] tags, String keyword, int pageNum) {
         List<Recipe> recipes = new ArrayList<>();
-        String searchWord = "%" + keyword.toLowerCase().strip() + "%";
+        String searchWordUpper = "%" + keyword.toUpperCase().strip() + "%";
+        String searchWordLower = "%" + keyword.toLowerCase().strip() + "%";
         int offset = pageNum * RECIPES_PER_PAGE;
-        int numTags = tags.size();
+
+        String intArray = "";
+        for (int i = 0; i<tags.length-1; i++){
+            String num =  Integer.toString(tags[i]);
+            intArray = intArray + num + ", ";
+        }
+        String num =  Integer.toString(tags[tags.length-1]);
+        intArray = intArray + num;
+
+
 
         try {
-            String sql = "SELECT recipe_to_tags.recipe_id FROM recipe_to_tags " +
-                    "LEFT JOIN recipes ON recipes.recipe_id = recipe_to_tags.recipe_id " +
-                    "WHERE recipe_to_tags.tag_id = ANY (?) " +
-                    "AND recipes.recipe_title LIKE ? " +
-                    "GROUP BY recipe_to_tags.recipe_id " +
-                    "HAVING COUNT(DISTINCT tag_id) >= ? " +
-                    "LIMIT ? OFFSET ?";
-
-            Object[] params = new Object[]{
-                    tags.toArray(new Integer[0]), // Pass the tag IDs as an array
-                    searchWord,
-                    numTags,
-                    RECIPES_PER_PAGE,
-                    offset
-            };
-
-            int[] types = new int[]{
-                    java.sql.Types.ARRAY, // Type for tagIds
-                    java.sql.Types.VARCHAR, // Type for searchWord
-                    java.sql.Types.INTEGER, // Type for numTags
-                    java.sql.Types.INTEGER, // Type for limit
-                    java.sql.Types.INTEGER  // Type for offset
-            };
-
-            SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, params, types);
+            String sql = "SELECT recipes.recipe_id, COUNT(DISTINCT tag_id)\n" +
+                    "FROM recipes\n" +
+                    "LEFT JOIN recipe_ingredients \n" +
+                    "\tON recipes.recipe_id = recipe_ingredients.recipe_id\n" +
+                    "\tLEFT JOIN recipe_to_tags \n" +
+                    "\t\tON recipe_ingredients.recipe_id = recipe_to_tags.recipe_id\n" +
+                    "WHERE recipe_to_tags.tag_id IN (" + intArray + ") \n" +
+                    "\tAND  (recipe_ingredients.ingredient LIKE ? \n" +
+                    "\t\t\tOR recipes.recipe_title LIKE ?)\n" +
+                    "\tGROUP BY recipes.recipe_id\n" +
+                    "\tORDER BY  COUNT(DISTINCT tag_id) DESC, recipes.recipe_id\t\n" +
+                    "\tLIMIT ?\n" +
+                    "\tOFFSET ?;";
+            SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, searchWordLower, searchWordUpper, RECIPES_PER_PAGE, offset);
 
             while (rs.next()) {
-                Recipe recipe = mapRowToRecipe(rs);
-                recipe = getRecipeDetails(recipe.getRecipeId());
+                Recipe recipe = getRecipeDetails(rs.getInt("recipe_id"));
                 recipes.add(recipe);
             }
 
@@ -418,46 +417,25 @@ public Recipe getRecipeDetails (int recipeId){
         String searchWordLower = "%" + keyword.toLowerCase().strip() + "%";
         int offset = pageNum * RECIPES_PER_PAGE;
 
-
         try {
-            String sql = "SELECT * FROM recipes \n" +
-                    "WHERE recipe_title LIKE ? \n" +
-                    "ORDER BY recipe_id LIMIT ? OFFSET ?;";
+            String sql = "SELECT DISTINCT ON (recipes.recipe_id) recipes.recipe_id, recipes.user_id, recipes.recipe_title, recipes.recipe_description, recipes.attribution \n" +
+                    "FROM recipes\n" +
+                    "LEFT JOIN recipe_ingredients \n" +
+                    "\tON recipes.recipe_id = recipe_ingredients.recipe_id\n" +
+                    "WHERE recipe_ingredients.ingredient LIKE ? \n" +
+                    "\tOR recipes.recipe_title LIKE ?\n" +
+                    "\tORDER BY recipes.recipe_id\n" +
+                    "\tLIMIT ?\n" +
+                    "\tOFFSET ?;";
 
-            SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, searchWordUpper, RECIPES_PER_PAGE, offset);
+            SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, searchWordLower, searchWordUpper, RECIPES_PER_PAGE, offset);
+
 
             while(rs.next()){
+
                 Recipe recipe = mapRowToRecipe(rs);
                 recipe = getRecipeDetails(recipe.getRecipeId());
                 recipes.add(recipe);
-            }
-
-            if(recipes.size()< RECIPES_PER_PAGE){
-                if(recipes.isEmpty() && pageNum != 1) {
-                    sql = "SELECT COUNT (recipe_id) FROM recipes WHERE recipe_title LIKE ?;";
-                    int numRecipes = jdbcTemplate.queryForObject(sql, int.class, searchWordUpper);
-                    int page = numRecipes / RECIPES_PER_PAGE;//example if we are on pageNum 4 and there were 51 recipes then 2 whole pages were recipes
-                    int adjustedPage = pageNum - page; //4 - 2 = 2 we are on page two of searching for ingredients
-                    offset = adjustedPage * RECIPES_PER_PAGE; // 2 * 25 = 50 so our offset should be 50 since we are on page 2
-                    if (numRecipes % RECIPES_PER_PAGE > 0) {//1 one left over recipe was on the third page so we need to adjust the offset
-                        offset = offset - (numRecipes % RECIPES_PER_PAGE); //offset is reduced by the amount of leftover recipes.
-
-                    }
-                }else {
-                      offset = 0;  //if there is a recipe, then that means we are doing the first page of ingredient searching so offset is 0
-                    }
-               int listLimit = RECIPES_PER_PAGE - recipes.size(); //list should only return 25 items, so this will make sure to not go over.
-
-                sql = "SELECT recipe_id FROM recipe_ingredients \n" +
-                            "WHERE ingredient LIKE ? \n" +
-                            "ORDER BY recipe_id LIMIT ? OFFSET ?;";
-
-                rs = jdbcTemplate.queryForRowSet(sql, searchWordLower, listLimit, offset);
-                while (rs.next()){
-                    Recipe recipe = getRecipeDetails(rs.getInt("recipe_id"));
-                    recipes.add(recipe);
-                }
-
             }
 
         }catch(CannotGetJdbcConnectionException e) {

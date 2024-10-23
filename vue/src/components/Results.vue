@@ -4,10 +4,11 @@
     <div v-if="isLoading">Loading...</div>
     <div v-else>
       <div v-for="recipe in recipes" :key="recipe.recipeId">
-        <RecipeCard :recipeId="recipe.recipeId"/>
+        <RecipeCard :recipe="recipe"/>
       </div>
     </div>
   </div>
+  
 </template>
 
 <script>
@@ -19,13 +20,14 @@ export default {
   components: {
     RecipeCard
   },
+  props: ['keyword'],
+
   data() {
     return {
       recipes: [],
       isLoading: false,
-      pageNum: 0,
+      pageNum: 2,
       tagsList: [],
-      keyword: '',
     }
   },
   methods: {
@@ -39,7 +41,7 @@ export default {
       }
     },
     getRecipesBySearch() {
-      RecipeService.searchByKeywordAndTags(this.keyword, this.pageNum, this.tagsList)
+      RecipeService.searchByKeyword(this.keyword, this.pageNum)
         .then(response => {
           console.log('API response:', response);
           this.recipes = response.data;

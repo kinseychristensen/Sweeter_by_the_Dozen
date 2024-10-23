@@ -1,7 +1,10 @@
 <template>
     <div>
       <p></p>
-{{ recipe.title }}
+      
+{{recipe.title}}
+{{ recipe.description }}
+
 <router-link v-bind:to="{ name: 'recipe', params: {recipeId: recipe.recipeId}}">GO TO recipe</router-link>
 
 <router-link v-bind:to="{ name: 'user', params: {userId: recipe.userId}}">GO TO  user</router-link>

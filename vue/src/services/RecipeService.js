@@ -38,10 +38,10 @@ removeFromSaves(recipeId){
     return axios.delete(`/recipe/${recipeId}/save`)
  },
  searchByKeyword(keyword, pageNum){
-    return axios.get(`/search/${keyword}/page/${pageNum}`)
+    return axios.get(`/search/=${keyword}/page/${pageNum}`)
  },
  searchByKeywordAndTags(keyword, pageNum, tags){
-    return axios.put(`/search/${keyword}/page/${pageNum}`, tags)
+    return axios.put(`/search/=${keyword}/page/${pageNum}`, tags)
  },
 
 }

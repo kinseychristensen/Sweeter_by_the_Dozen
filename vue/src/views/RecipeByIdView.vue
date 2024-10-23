@@ -1,13 +1,34 @@
 <template>
     <div>
-recipe by id
-{{ recipe }}
+<h1>Recipe by Id Page</h1>
+{{recipe.title}}
+{{ recipe.description }}
+<button @click="nowShowRecipe">show recipe</button>
+<button @click="nowShowComments">show comments</button>
+<button @click="nowShowPhotos">show photos</button>
 
-<CommentsDisplay/>
-<PhotoDisplay/>
+<div v-if="showRecipe">
 
-<router-link v-bind:to="{ name: 'user', params: {userId: 1}}">GO TO  user</router-link>
+  ingredients: {{ recipe.ingredientList }}
+  <p></p>
+  steps: {{ recipe.recipeStepList }}
+
+  <div v-if="isAuthenticated">
+<SaveRecipe :recipe="recipe"/>
+</div>
+<div v-else>you must sign in to save a recipe</div>
+
+<router-link v-bind:to="{ name: 'user', params: {userId: 1}}">go to recipe writer's page</router-link>
     </div>
+
+
+
+<div v-if="showComments">
+<CommentsDisplay/></div>
+<div v-if="showPhotos">
+<PhotoDisplay/>
+</div>
+</div>
   </template>
   
   
@@ -17,6 +38,8 @@ recipe by id
   import CommentsDisplay from '../components/CommentsDisplay.vue';
 import PhotoDisplay from '../components/PhotoDisplay.vue';
 import RecipeService from '../services/RecipeService';
+import SaveRecipe from '../components/SaveRecipe.vue';
+
 
 
 
@@ -25,7 +48,8 @@ import RecipeService from '../services/RecipeService';
     name: 'RecipeByIdView',
     components: {
      CommentsDisplay,
-     PhotoDisplay
+     PhotoDisplay,
+     SaveRecipe
   },
   data() {
     return {
@@ -37,6 +61,11 @@ import RecipeService from '../services/RecipeService';
 
     }
   }, 
+  computed: {
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
+    }
+  },
   methods: {
 
     handleError(error, verb) {
@@ -54,13 +83,29 @@ import RecipeService from '../services/RecipeService';
         this.recipe = response.data;
         this.isLoading = false;
       })
-    }
+    },
+    nowShowPhotos() {
+      this.showPhotos = true;
+      this.showComments = false;
+      this.showRecipe = false;
+    },
+    nowShowComments() {
+      this.showPhotos = false;
+      this.showComments = true;
+      this.showRecipe = false;
+    },
+    nowShowRecipe() {
+      this.showPhotos = false;
+      this.showComments = false;
+      this.showRecipe = true;
+    },
 
 
   }, 
   created() {
 
     this.isLoading = true;
+    this.showRecipe = true;
     const recipeId = parseInt(this.$route.params.recipeId);
     this.getRecipe(recipeId);
 
