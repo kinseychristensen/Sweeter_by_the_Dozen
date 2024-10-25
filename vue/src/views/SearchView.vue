@@ -51,7 +51,6 @@ import RecipeService from '../services/RecipeService';
     getRecipesBySearch() {
       RecipeService.searchByKeywordAndTags(this.keyword, this.pageNum, this.tagsList)
         .then(response => {
-          console.log('API response:', response);
           this.recipes = response.data;
           this.isLoading = false;
         })

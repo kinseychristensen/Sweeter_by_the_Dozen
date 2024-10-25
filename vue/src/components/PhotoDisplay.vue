@@ -2,6 +2,8 @@
     <div class="home-container">
 photo display
 
+{{ photos }}
+
 <SubmitPhoto/>
     </div>
   </template>
@@ -16,7 +18,8 @@ photo display
     name: 'PhotoDisplay',
     components: {
      SubmitPhoto
-  }
+  }, 
+  props: ['photos'],
   }
   </script>
   

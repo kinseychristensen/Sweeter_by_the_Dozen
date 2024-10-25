@@ -9,9 +9,17 @@
 
 <div v-if="showRecipe">
 
-  ingredients: {{ recipe.ingredientList }}
+  <div v-for=" ing in recipe.ingredientList" :key="ing.ingredientNum">
+   <BuildFraction :numerator="ing.amountNumerator" :denominator="ing.amountDenominator"/> {{ ing.unitType }} {{ ing.quantifier }} {{ ing.ingredientText }} 
+
+
+  </div>
   <p></p>
-  steps: {{ recipe.recipeStepList }}
+ 
+  <ol>
+    <li v-for="step in recipe.recipeStepList" :key="step.stepNum">{{ step.instructions }}</li>
+  </ol>
+
 
   <div v-if="isAuthenticated">
 <SaveRecipe :recipe="recipe"/>
@@ -24,11 +32,13 @@
 
 
 <div v-if="showComments">
-<CommentsDisplay/></div>
+<CommentsDisplay :recipeId="recipe.recipeId"/></div>
 <div v-if="showPhotos">
-<PhotoDisplay/>
+<PhotoDisplay :photos="recipe.recipePicList"/>
 </div>
 </div>
+
+
   </template>
   
   
@@ -39,6 +49,8 @@
 import PhotoDisplay from '../components/PhotoDisplay.vue';
 import RecipeService from '../services/RecipeService';
 import SaveRecipe from '../components/SaveRecipe.vue';
+import BuildFraction from '../components/BuildFraction.vue';
+
 
 
 
@@ -49,7 +61,8 @@ import SaveRecipe from '../components/SaveRecipe.vue';
     components: {
      CommentsDisplay,
      PhotoDisplay,
-     SaveRecipe
+     SaveRecipe,
+     BuildFraction
   },
   data() {
     return {
@@ -64,7 +77,7 @@ import SaveRecipe from '../components/SaveRecipe.vue';
   computed: {
     isAuthenticated() {
       return this.$store.getters.isAuthenticated;
-    }
+    },
   },
   methods: {
 

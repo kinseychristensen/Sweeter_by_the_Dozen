@@ -255,7 +255,7 @@ public Recipe getRecipeDetails (int recipeId){
                 User writer = userDao.getUserById(recipe.getUserId());
                 recipe.setWriter(writer.getDisplayName());
 
-                sql = "SELECT * from recipe_ingredients WHERE recipe_id = ?;";
+                sql = "SELECT * from recipe_ingredients WHERE recipe_id = ? ORDER BY order_num;";
                 rs = jdbcTemplate.queryForRowSet(sql, recipeId);
                 List<Ingredient> ingredients = new ArrayList<>();
                 while(rs.next()){
@@ -265,7 +265,7 @@ public Recipe getRecipeDetails (int recipeId){
                 }
                 recipe.setIngredientList(ingredients);
 
-                sql = "SELECT * from recipe_steps WHERE recipe_id = ?;";
+                sql = "SELECT * from recipe_steps WHERE recipe_id = ? ORDER BY step;";
                 rs = jdbcTemplate.queryForRowSet(sql, recipeId);
                 List<RecipeStep> steps = new ArrayList<>();
                while(rs.next()){
