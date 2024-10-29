@@ -75,7 +75,7 @@ const routes = [
     
   },
   {
-    path: "/user/:userId",
+    path: "/user/:userId/:displayName",
     name: "user",
     component: UserByIdView,
     

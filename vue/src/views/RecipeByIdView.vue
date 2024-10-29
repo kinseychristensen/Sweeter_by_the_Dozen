@@ -26,7 +26,7 @@
 </div>
 <div v-else>you must sign in to save a recipe</div>
 
-<router-link v-bind:to="{ name: 'user', params: {userId: 1}}">go to recipe writer's page</router-link>
+<router-link v-if="recipe.userId" v-bind:to="{ name: 'user', params: {userId: recipe.userId, displayName: recipe.writer}}">{{recipe.writer}}</router-link>
     </div>
 
 

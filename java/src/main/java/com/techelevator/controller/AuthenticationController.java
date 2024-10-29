@@ -83,10 +83,22 @@ public class AuthenticationController {
     }
 
     @RequestMapping(path = "/user/{userId}/make-admin", method = RequestMethod.PUT)
-    public boolean makeUserAdmin(int userId){
+    public boolean makeUserAdmin(@PathVariable int userId){
         return userDao.makeUserAdmin(userId);
     }
 
+    @RequestMapping(path = "/get-user/{username}", method = RequestMethod.GET)
+        public int getUserIdByUsername(@PathVariable String username){
+            User user;
+            try {
+                user = userDao.getUserByUsername(username);
+            } catch (DaoException e) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username or password is incorrect.");
+            }
+            return user.getId();
+        }
+    }
 
-}
+
+
 

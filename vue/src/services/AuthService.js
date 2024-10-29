@@ -20,6 +20,10 @@ export default {
 
   makeAdmin( userId) {
     return axios.put(`/user/${userId}/make-admin`)
+  },
+
+  getId(username) {
+    return axios.get(`/get-user/${username}`)
   }
 
 }

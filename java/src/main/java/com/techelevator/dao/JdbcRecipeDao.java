@@ -30,20 +30,11 @@ public class JdbcRecipeDao implements RecipeDao{
     @Override
     public List<Recipe> getRecipesByUser (int userId){
         List<Recipe> recipes = new ArrayList<>();
-        String sql = "SELECT * FROM recipes WHERE user_id = ?;";
+        String sql = "SELECT recipe_id, recipe_title FROM recipes WHERE user_id = ? ORDER BY recipe_title;";
         SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, userId);
-        while(rs.next()){
-            Recipe recipe = new Recipe();
-            recipe = mapRowToRecipe(rs);
-            recipes.add(recipe);
-        }
-        for(Recipe recipe : recipes){
-           Recipe fullRecipe = getRecipeDetails(recipe.getRecipeId());
-           recipe.setRecipePicList(fullRecipe.getRecipePicList());
-           recipe.setRecipeTagList(fullRecipe.getRecipeTagList());
-           recipe.setRecipeStepList(fullRecipe.getRecipeStepList());
-           recipe.setIngredientList(fullRecipe.getIngredientList());
-
+        while(rs.next()) {
+            int recipeId = rs.getInt("recipe_id");
+            recipes.add(getRecipeDetails(recipeId));
         }
         return recipes;
     }
@@ -97,101 +88,6 @@ public class JdbcRecipeDao implements RecipeDao{
 
 
 
-    /**
-    @Override
-    public List<Recipe> getRecipesByKeywordAndTag (List<Integer> tags, String keyword, int pageNum){
-        List<Recipe> recipes = new ArrayList<>();
-        String searchWordUpper = "%" + keyword.toUpperCase().strip() + "%";
-        String searchWordLower = "%" + keyword.toLowerCase().strip() + "%";
-        int offset = pageNum * RECIPES_PER_PAGE;
-        int numTags = tags.size();
-        if(numTags != 1){ numTags = 2;}
-
-
-        try {
-
-            String sql = "SELECT recipe_to_tags.recipe_id FROM recipe_to_tags \n" +
-                    "LEFT JOIN recipes ON recipes.recipe_id = recipe_to_tags.recipe_id\n" +
-                    "WHERE recipe_to_tags.tag_id ANY (:tagIds) AND recipes.recipe_title LIKE :searchWord\n" +
-                    "GROUP BY recipe_to_tags.recipe_id\n" +
-                    "HAVING COUNT(DISTINCT tag_id) >= :numTags\n" +
-                    "LIMIT :limit OFFSET :offset";
-
-            MapSqlParameterSource parameters = new MapSqlParameterSource();
-            parameters.addValue("tagIds", tags.toArray(new Integer[0]), java.sql.Types.ARRAY);  // Explicitly specify ARRAY type
-            parameters.addValue("searchWord", searchWordUpper, java.sql.Types.VARCHAR);  // Explicitly specify VARCHAR
-            parameters.addValue("numTags", numTags, java.sql.Types.INTEGER);  // INTEGER type for numTags
-            parameters.addValue("limit", RECIPES_PER_PAGE, java.sql.Types.INTEGER);  // Explicitly specify INTEGER for limit
-            parameters.addValue("offset", offset, java.sql.Types.INTEGER);  // INTEGER for offset
-
-            NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate.getDataSource());
-            SqlRowSet rs = namedParameterJdbcTemplate.queryForRowSet(sql, parameters);
-
-            while(rs.next()){
-                Recipe recipe = mapRowToRecipe(rs);
-                recipe = getRecipeDetails(recipe.getRecipeId());
-                recipes.add(recipe);
-            }
-
-            if(recipes.size()< RECIPES_PER_PAGE){
-                if(recipes.isEmpty() && pageNum != 1) {
-
-                    sql = "SELECT COUNT (recipe_to_tags.recipe_id) FROM recipe_to_tags \n" +
-                            "LEFT JOIN recipes ON recipes.recipe_id = recipe_to_tags.recipe_id\n" +
-                            "WHERE recipe_to_tags.tag_id ANY (:tagIds) AND recipes.recipe_title LIKE :searchWord\n" +
-                            "GROUP BY recipe_to_tags.recipe_id\n" +
-                            "HAVING COUNT(DISTINCT tag_id) >= :numTags;";
-
-
-                    MapSqlParameterSource parameters2 = new MapSqlParameterSource();
-                    parameters2.addValue("tagIds", tags.toArray(new Integer[0]), Types.ARRAY);
-                    parameters2.addValue("searchWord", searchWordUpper, Types.VARCHAR);
-                    parameters2.addValue("numTags", numTags, Types.INTEGER);
-
-                    int numRecipes = jdbcTemplate.queryForObject(sql, int.class, parameters2);
-                        int page = numRecipes / RECIPES_PER_PAGE;//example if we are on pageNum 4 and there were 51 recipes then 2 whole pages were recipes
-                        int adjustedPage = pageNum - page; //4 - 2 = 2 we are on page two of searching for ingredients
-                        offset = adjustedPage * RECIPES_PER_PAGE; // 2 * 25 = 50 so our offset should be 50 since we are on page 2
-                        if (numRecipes % RECIPES_PER_PAGE > 0) {//1 one left over recipe was on the third page so we need to adjust the offset
-                            offset = offset - (numRecipes % RECIPES_PER_PAGE); //offset is reduced by the amount of leftover recipes.
-                        }
-
-                    } else {
-                        offset = 0;  //if there is a recipe, then that means we are doing the first page of ingredient searching so offset is 0
-                    }
-                    int listLimit = RECIPES_PER_PAGE - recipes.size(); //list should only return 25 items, so this will make sure to not go over.
-
-                    sql = "SELECT recipe_to_tags.recipe_id FROM recipe_to_tags \n" +
-                            "LEFT JOIN recipe_ingredients ON recipe_ingredients.recipe_id = recipe_to_tags.recipe_id\n" +
-                            "WHERE recipe_to_tags.tag_id ANY (:tagIds) AND recipe_ingredients.ingredient LIKE :searchWord\n" +
-                            "GROUP BY recipe_to_tags.recipe_id\n" +
-                            "HAVING COUNT(DISTINCT tag_id) >= :numTags\n" +
-                            "LIMIT :limit OFFSET :offset";
-
-                MapSqlParameterSource parameters3 = new MapSqlParameterSource();
-                parameters3.addValue("tagIds", tags.toArray(new Integer[0]), java.sql.Types.ARRAY);  // Explicitly specify ARRAY type
-                parameters3.addValue("searchWord", searchWordUpper, java.sql.Types.VARCHAR);  // Explicitly specify VARCHAR
-                parameters3.addValue("numTags", numTags, java.sql.Types.INTEGER);  // INTEGER type for numTags
-                parameters3.addValue("limit", RECIPES_PER_PAGE, java.sql.Types.INTEGER);  // Explicitly specify INTEGER for limit
-                parameters3.addValue("offset", offset, java.sql.Types.INTEGER);  // INTEGER for offset
-
-
-
-              rs = namedParameterJdbcTemplate.queryForRowSet(sql, parameters);
-                    while (rs.next()) {
-                        Recipe recipe = getRecipeDetails(rs.getInt("recipe_id"));
-                        recipes.add(recipe);
-                    }
-                }
-
-        }catch(CannotGetJdbcConnectionException e) {
-            throw new DaoException("Unable to connect to server or database", e);
-        } catch (DataIntegrityViolationException e) {
-            throw new DaoException("Data integrity violation", e);
-        }
-        return recipes;
-    }
-     /*/
 
     @Override
     public int createRecipe(Recipe recipe){
