@@ -1,7 +1,13 @@
 BEGIN TRANSACTION;
 
 DROP TABLE IF EXISTS pending_recipe_pics, pending_recipes, recipe_to_tags, tags, recipe_ingredients, recipe_steps, saved_recipes,
-recipe_pictures, recipes, users;
+recipe_pictures, recipes, users, avatars;
+
+CREATE TABLE avatars (
+ avatar_id SERIAL,
+ avatar_url text,
+ CONSTRAINT PK_avatars PRIMARY KEY (avatar_id)
+ );
 
 CREATE TABLE users (
 	user_id SERIAL,
@@ -11,7 +17,9 @@ CREATE TABLE users (
 	display_name varchar(30) NOT NULL UNIQUE,
 	flagged_comments int default 0,
 	restricted boolean default false,
-	CONSTRAINT PK_user PRIMARY KEY (user_id)
+	avatar_id int default 0,
+	CONSTRAINT PK_users PRIMARY KEY (user_id),
+	CONSTRAINT FK_avatar_id FOREIGN KEY (avatar_id) REFERENCES avatars (avatar_id)
 );
 
 CREATE TABLE recipes (

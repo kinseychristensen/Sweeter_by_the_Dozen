@@ -11,8 +11,8 @@
         <input type="text" id="username" v-model="user.username" required autofocus />
       </div>
       <div class="form-input-group">
-        <label for="username" class="bold-label">DISPLAY NAME:</label>
-        <input type="text" id="username" v-model="user.displayName" required autofocus />
+        <label for="displayName" class="bold-label">DISPLAY NAME:</label>
+        <input type="text" id="displayName" v-model="user.displayName" required autofocus />
       </div>
       <div class="form-input-group">
         <label for="password" class="bold-label">PASSWORD:</label>
@@ -24,7 +24,7 @@
       </div>
       <button type="submit" class="btn">Create Account</button>
       <p class="login-link"><router-link v-bind:to="{ name: 'login' }">Already have an account? Log in.</router-link></p>
-     
+    avatar: {{ user.avatarId }}
     </form>
   </div>
 </template>
@@ -41,6 +41,7 @@ export default {
         password: '',
         confirmPassword: '',
         role: 'user',
+        avatarId: 1,
       },
       registrationErrors: false,
       registrationErrorMsg: 'There were problems registering this user.',

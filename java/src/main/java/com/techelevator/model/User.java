@@ -14,6 +14,8 @@ public class User {
    private boolean restricted;
    private String displayName;
    private int flaggedComments;
+   private int avatarId;
+   private String avatarUrl;
    private Set<Authority> authorities = new HashSet<>();
 
    public User() { }
@@ -28,6 +30,22 @@ public class User {
 
    public boolean isRestricted() {
       return restricted;
+   }
+
+   public int getAvatarId() {
+      return avatarId;
+   }
+
+   public void setAvatarId(int avatarId) {
+      this.avatarId = avatarId;
+   }
+
+   public String getAvatarUrl() {
+      return avatarUrl;
+   }
+
+   public void setAvatarUrl(String avatarUrl) {
+      this.avatarUrl = avatarUrl;
    }
 
    public void setRestricted(boolean restricted) {

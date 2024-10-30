@@ -13,6 +13,7 @@ public class RegisterUserDto {
     private String username;
     @NotEmpty
     private String password;
+    private int avatarId;
     @NotEmpty
     private String displayName;
     @NotEmpty
@@ -54,6 +55,14 @@ public class RegisterUserDto {
 
     public String getRole() {
         return role;
+    }
+
+    public int getAvatarId() {
+        return avatarId;
+    }
+
+    public void setAvatarId(int avatarId) {
+        this.avatarId = avatarId;
     }
 
     public void setRole(String role) {

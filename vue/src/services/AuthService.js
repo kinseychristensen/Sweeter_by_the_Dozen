@@ -24,6 +24,10 @@ export default {
 
   getId(username) {
     return axios.get(`/get-user/${username}`)
+  },
+
+  getUser(){
+    return axios.get('/get-user/principal')
   }
 
 }

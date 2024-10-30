@@ -30,9 +30,7 @@
        <p>{{ errorMessage }}</p>
        <button  v-if="showLogin" ><router-link id="loginlink" v-bind:to="{ name: 'login' }">Proceed to Log in.</router-link></button>
        
-       {{ userEmail }}
-  {{ user }}
-  {{ confirmationCode }}
+       
  
  </template>
  

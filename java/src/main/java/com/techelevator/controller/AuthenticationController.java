@@ -19,6 +19,8 @@ import com.techelevator.dao.UserDao;
 import com.techelevator.security.jwt.JWTFilter;
 import com.techelevator.security.jwt.TokenProvider;
 
+import java.security.Principal;
+
 @RestController
 @CrossOrigin
 public class AuthenticationController {
@@ -89,15 +91,19 @@ public class AuthenticationController {
 
     @RequestMapping(path = "/get-user/{username}", method = RequestMethod.GET)
         public int getUserIdByUsername(@PathVariable String username){
-            User user;
-            try {
-                user = userDao.getUserByUsername(username);
-            } catch (DaoException e) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username or password is incorrect.");
-            }
+            User user = userDao.getUserByUsername(username);
             return user.getId();
         }
+
+       @RequestMapping(path = "/get-user/principal", method = RequestMethod.GET)
+    public User getUserPrincipal(Principal principal){
+           String userName = principal.getName();
+           return userDao.getUserByUsername(userName);
+       }
+
     }
+
+
 
 
 
