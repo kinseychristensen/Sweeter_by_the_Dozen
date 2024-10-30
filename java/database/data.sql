@@ -1,24 +1,8 @@
 BEGIN TRANSACTION;
 
-INSERT INTO avatars (avatar_url) VALUES ('https://photos.google.com/share/AF1QipPVRZl-C8slrEEIAkXpwFGq7QHjVthSo1H_B1Rrd5L1Pkh381G60gWqd0r8ZDmrwA/photo/AF1QipOO9a9kVQpYSzoZL-ffd-B9NpMM2DpBPuKwXKpx?key=V212clhEeC05X2QyZ0hxWktKUHZJbFM0alVfRl93'),
-('https://photos.app.goo.gl/hyW7ZV8jUJrmyPANA'),
-('https://photos.app.goo.gl/rhsVbGUVbfY2U7Jf7'),
-('https://photos.app.goo.gl/dHb4N9qf1tV9Ktg36'),
-('https://photos.app.goo.gl/j8ZmLSozmmurUeQv5'),
-('https://photos.app.goo.gl/94WvJAcGoeBDduuz6'),
-('https://photos.app.goo.gl/C2P16qnErKmc7fXaA'),
-('https://photos.app.goo.gl/WaYNR6mD6EDwtnjUA'),
-('https://photos.app.goo.gl/hiLTvU8MK9M68CRj9'),
-('https://photos.app.goo.gl/pBvHpN84ypFqrzPA7'),
-('https://photos.app.goo.gl/ZqGP7K9mDzUppFPT9'),
-('https://photos.app.goo.gl/1g9Bp3srTNjHPDN76'),
-('https://photos.app.goo.gl/HjWsirE4cFNzuYVZA'),
-('https://photos.app.goo.gl/1fxABwXg5YuPeTpN7'),
-('https://photos.app.goo.gl/UvepXR5ajGi7LHQGA'),
-('https://photos.app.goo.gl/b3rDiJEnrj1qQN729');
 
 INSERT INTO users (username,password_hash,role, display_name, avatar_id) VALUES ('kit.the.avenger@gmail.com','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_USER', 'kinsey', 1);
-INSERT INTO users (username,password_hash,role, display_name, avatar_id) VALUES ('kittheavenger@gmail.com','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_ADMIN', 'admin', 1);
+INSERT INTO users (username,password_hash,role, display_name, avatar_id) VALUES ('kittheavenger@gmail.com','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_ADMIN', 'admin', 20);
 
 
 INSERT INTO tags (tag) VALUES ('breakfast'), ('easy'), ('kid-friendly'), ('lunch'), ('dinner'), ('snack'), ('dessert'), ('beginner'),
