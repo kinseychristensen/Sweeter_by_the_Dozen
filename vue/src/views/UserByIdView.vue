@@ -4,7 +4,8 @@
 
 <div v-if="isLoading">Loading...</div>
   <div v-else>
-   
+
+   <Avatar :userId="userId"/>
     <p></p>
     {{userName}}'s RECIPES:
     <div v-for="recipe in userRecipes" :key="recipe.recipeId">
@@ -22,16 +23,20 @@
 
 import RecipeService from '../services/RecipeService';
 import RecipeCard from '../components/RecipeCard.vue';
+import Avatar from '../components/Avatar.vue';
+
 
 
 export default {
   name: 'MyRecipesView',
   components: {
-  RecipeCard
+  RecipeCard,
+  Avatar
 },
 data() {
   return {
    userName: '',
+   userId: 0,
     userRecipes: [],
    
     isLoading: false,
@@ -66,6 +71,7 @@ created() {
 
   this.isLoading = true;
   const userId = parseInt(this.$route.params.userId);
+  this.userId = userId;
   this.userName = this.$route.params.displayName;
   this.getUserRecipes(userId);
 

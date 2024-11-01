@@ -9,10 +9,11 @@ user settings
    {{ editUser }}
 
    {{ user }}
+ 
     <div v-if="isLoading">Loading...</div>
     
     <div v-else >
-      
+      <Avatar :userId="user.id"/>
       <div  v-if="first">
         <p></p><p></p>
         <div> Display Name: {{user.displayName}}</div>
@@ -57,10 +58,14 @@ user settings
     <script>
   
     import AuthService from '../services/AuthService';
+    import Avatar from '../components/Avatar.vue';
 
     
     export default {
       name: 'UserSettingsView',
+      components: {
+        Avatar,
+      },
     
     data() {
       return {
@@ -83,7 +88,7 @@ user settings
           username: '',
           restricted: false,
           flaggedComments: 0,
-          id: 0,
+          id: 1,
           avatarId: 0,
         },
         verified: false,
@@ -173,7 +178,7 @@ async verifyPassword() {
     
     },
     created(){
-    
+      
      this.retrieveUser();
       
     }

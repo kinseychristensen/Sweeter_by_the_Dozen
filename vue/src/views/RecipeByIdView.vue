@@ -26,7 +26,7 @@
 </div>
 <div v-else>you must sign in to save a recipe</div>
 
-<router-link v-if="recipe.userId" v-bind:to="{ name: 'user', params: {userId: recipe.userId, displayName: recipe.writer}}">{{recipe.writer}}</router-link>
+<router-link v-if="recipe.userId" v-bind:to="{ name: 'user', params: {userId: recipe.userId, displayName: recipe.writer}}">{{recipe.writer}}<Avatar :userId="recipe.userId"/> </router-link>
     </div>
 
 
@@ -50,6 +50,7 @@ import PhotoDisplay from '../components/PhotoDisplay.vue';
 import RecipeService from '../services/RecipeService';
 import SaveRecipe from '../components/SaveRecipe.vue';
 import BuildFraction from '../components/BuildFraction.vue';
+import Avatar from '../components/Avatar.vue';
 
 
 
@@ -62,7 +63,8 @@ import BuildFraction from '../components/BuildFraction.vue';
      CommentsDisplay,
      PhotoDisplay,
      SaveRecipe,
-     BuildFraction
+     BuildFraction,
+     Avatar
   },
   data() {
     return {

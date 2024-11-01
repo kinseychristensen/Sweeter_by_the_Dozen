@@ -13,6 +13,7 @@ public class RegisterUserDto {
     private String username;
     @NotEmpty
     private String password;
+
     private int avatarId;
     @NotEmpty
     private String displayName;

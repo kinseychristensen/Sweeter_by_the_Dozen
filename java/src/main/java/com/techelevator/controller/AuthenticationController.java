@@ -89,7 +89,7 @@ public class AuthenticationController {
         return userDao.makeUserAdmin(userId);
     }
 
-    @RequestMapping(path = "/get-user/{username}", method = RequestMethod.GET)
+    @RequestMapping(path = "/get-user/username/{username}", method = RequestMethod.GET)
         public int getUserIdByUsername(@PathVariable String username){
             User user = userDao.getUserByUsername(username);
             return user.getId();
@@ -100,6 +100,14 @@ public class AuthenticationController {
            String userName = principal.getName();
            return userDao.getUserByUsername(userName);
        }
+
+
+    @RequestMapping(path = "/get-user/id/{userId}", method = RequestMethod.GET)
+    public User getUserPrincipal(@PathVariable int userId){
+        return userDao.getUserById(userId);
+    }
+
+
 
     }
 

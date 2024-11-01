@@ -7,6 +7,7 @@
 <div v-if="comment.reported">this comment has been flagged for review.</div>  {{ comment.comment }}
   {{ comment.writer }}
 {{ comment.reported }}
+<Avatar :userId="comment.userId"/>
 <p></p>
 <button @click="toggleReport">Report</button>
 <div v-if="showReport">
@@ -49,6 +50,7 @@ Once a comment is reported, an admin will review the comment and if the comment 
   import ReportComment from './ReportComment.vue';
   import PostComment from './PostComment.vue';
   import CommentService from '../services/CommentService';
+  import Avatar from './Avatar.vue';
 
 
   
@@ -57,7 +59,8 @@ Once a comment is reported, an admin will review the comment and if the comment 
     name: 'CommentsDisplay',
     components: {
      ReportComment,
-     PostComment
+     PostComment,
+     Avatar
   },
   data(){
     return {

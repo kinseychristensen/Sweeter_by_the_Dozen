@@ -58,7 +58,8 @@ export function createStore(currentToken, currentUser) {
     },
     getters: {
       isAuthenticated: state => !!state.token,  // Checks if a token exists
-    }
+    },
+
 });
   return store;
 }

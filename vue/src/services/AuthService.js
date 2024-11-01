@@ -23,11 +23,15 @@ export default {
   },
 
   getId(username) {
-    return axios.get(`/get-user/${username}`)
+    return axios.get(`/get-user/username/${username}`)
   },
 
   getUser(){
     return axios.get('/get-user/principal')
+  },
+
+  getUserById(userId){
+    return axios.get(`/get-user/id/${userId}`)
   }
 
 }

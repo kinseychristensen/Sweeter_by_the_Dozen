@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 
 import com.techelevator.exception.DaoException;
-import com.techelevator.model.Avatar;
 import com.techelevator.model.RegisterUserDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
@@ -25,36 +24,6 @@ public class JdbcUserDao implements UserDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public String getAvatar(int avatarId){
-        String avatarUrl = "";
-        String sql = "SELECT * FROM avatars WHERE avatar_id = ?";
-        try {
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, avatarId);
-            if (results.next()) {
-               avatarUrl = results.getString("avatar_url");
-            }
-        } catch (CannotGetJdbcConnectionException e) {
-            throw new DaoException("Unable to connect to server or database", e);
-        }
-        return avatarUrl;
-    }
-
-    public List<Avatar> getAllAvatars(){
-       List<Avatar> avatars = new ArrayList<>();
-        String sql = "SELECT * FROM avatars";
-        try {
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
-            if (results.next()) {
-                Avatar avatar = new Avatar();
-                avatar.setAvatarId(results.getInt("avatar_id"));
-                avatar.setAvatarUrl(results.getString("avatar_url"));
-                avatars.add(avatar);
-            }
-        } catch (CannotGetJdbcConnectionException e) {
-            throw new DaoException("Unable to connect to server or database", e);
-        }
-        return avatars;
-    }
 
 
     @Override
@@ -65,7 +34,7 @@ public class JdbcUserDao implements UserDao {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
             if (results.next()) {
                 user = mapRowToUser(results);
-                user.setAvatarUrl(getAvatar(user.getAvatarId()));
+
             }
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -81,7 +50,6 @@ public class JdbcUserDao implements UserDao {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
             while (results.next()) {
                 User user = mapRowToUser(results);
-                user.setAvatarUrl(getAvatar(user.getAvatarId()));
                 users.add(user);
             }
         } catch (CannotGetJdbcConnectionException e) {
@@ -99,7 +67,6 @@ public class JdbcUserDao implements UserDao {
             SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, username);
             if (rowSet.next()) {
                 user = mapRowToUser(rowSet);
-                user.setAvatarUrl(getAvatar(user.getAvatarId()));
             }
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -116,7 +83,6 @@ public class JdbcUserDao implements UserDao {
             SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, displayName);
             if (rowSet.next()) {
                 user = mapRowToUser(rowSet);
-                user.setAvatarUrl(getAvatar(user.getAvatarId()));
             }
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
