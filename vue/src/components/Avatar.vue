@@ -9,9 +9,7 @@
           
         />
         <p>{{ userName }}</p>
-        {{ loading }}
-        {{ avatarAlt }}
-        {{ avatarPath }}
+        
       </div>
     </div>
   </template>

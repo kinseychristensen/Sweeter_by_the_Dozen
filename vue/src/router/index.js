@@ -15,6 +15,7 @@ import AdminToolsView from '../views/AdminToolsView.vue';
 import UpdatePasswordView from '../views/UpdatePasswordView.vue';
 import TipsAndTempsView from '../views/TipsAndTempsView.vue';
 import UserByIdView from '../views/UserByIdView.vue';
+import AboutUsView from '../views/AboutUsView.vue';
 
 
 
@@ -60,6 +61,12 @@ const routes = [
     path: "/help-us-grow",
     name: "grow",
     component: GrowView,
+    
+  },
+  {
+    path: "/about-us",
+    name: "about",
+    component: AboutUsView,
     
   },
   {

@@ -45,7 +45,7 @@
 import authService from '../services/AuthService';
 import { avatars } from '../AvatarsArray.js';
 
-console.log(avatars);
+
 
 export default {
   data() {

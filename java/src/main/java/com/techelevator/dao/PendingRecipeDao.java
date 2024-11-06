@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PendingRecipeDao {
 
-    int createPendingRecipe(PendingRecipe recipe);
+    boolean createPendingRecipe(PendingRecipe recipe);
     List<PendingRecipe> getPendingRecipes();
     boolean deletePendingRecipe (int recipeId);
     List<PendingRecipe> getPendingRecipesByUser(int userId);

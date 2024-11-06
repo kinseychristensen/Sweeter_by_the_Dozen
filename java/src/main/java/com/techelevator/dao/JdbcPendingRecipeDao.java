@@ -22,12 +22,12 @@ public class JdbcPendingRecipeDao implements PendingRecipeDao{
 
 
     @Override
-    public int createPendingRecipe(PendingRecipe recipe){
-        int recipeId = 0;
+    public boolean createPendingRecipe(PendingRecipe recipe){
+
         try {
             String sql = "INSERT INTO pending_recipes (user_id, recipe_text, title, description, tags, attribution, picture_url)" +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING pending_recipe_id;";
-            recipeId = jdbcTemplate.update(sql, recipe.getUserId(), recipe.getRecipeText(), recipe.getTitle(),
+                    "VALUES (?, ?, ?, ?, ?, ?, ?);";
+             jdbcTemplate.update(sql, recipe.getUserId(), recipe.getRecipeText(), recipe.getTitle(),
                     recipe.getDescription(), recipe.getTags(), recipe.getAttribute(), recipe.getPics());
 
         }catch (CannotGetJdbcConnectionException e) {
@@ -35,7 +35,7 @@ public class JdbcPendingRecipeDao implements PendingRecipeDao{
         } catch (DataIntegrityViolationException e) {
             throw new DaoException("Data integrity violation", e);
         }
-        return recipeId;
+        return true;
     }
 
     @Override

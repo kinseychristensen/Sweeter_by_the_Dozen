@@ -1,11 +1,12 @@
 <template>
     <div>
-<h1>Recipe by Id Page</h1>
-{{recipe.title}}
-{{ recipe.description }}
+
+
 <button @click="nowShowRecipe">show recipe</button>
 <button @click="nowShowComments">show comments</button>
 <button @click="nowShowPhotos">show photos</button>
+<h1>{{recipe.title}}</h1>
+<p>{{ recipe.description }}</p>
 
 <div v-if="showRecipe">
 
@@ -26,7 +27,8 @@
 </div>
 <div v-else>you must sign in to save a recipe</div>
 
-<router-link v-if="recipe.userId" v-bind:to="{ name: 'user', params: {userId: recipe.userId, displayName: recipe.writer}}">{{recipe.writer}}<Avatar :userId="recipe.userId"/> </router-link>
+<router-link v-if="recipe.userId" v-bind:to="{ name: 'user', params: {userId: recipe.userId, displayName: recipe.writer}}">
+  <Avatar :userId="recipe.userId"/> </router-link>
     </div>
 
 

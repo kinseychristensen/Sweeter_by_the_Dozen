@@ -1,18 +1,17 @@
 <template>
     <div>
-user settings
 
-<router-link v-bind:to="{ name: 'admin-tools' }"> go to admin tools</router-link>
-<router-link v-bind:to="{ name: 'password' }"> reset passwords</router-link>
-</div>
-
-   {{ editUser }}
-
-   {{ user }}
  
     <div v-if="isLoading">Loading...</div>
     
     <div v-else >
+
+      <h1>Your Account</h1>
+
+<button><router-link v-bind:to="{ name: 'admin-tools' }" v-if="user.authorities[0].name == 'ROLE_ADMIN'"> Go To Admin Tools</router-link></button>
+<button><router-link v-bind:to="{ name: 'password' }"> Reset Your Password</router-link></button>
+
+
       <Avatar :userId="user.id"/>
       <div  v-if="first">
         <p></p><p></p>
@@ -45,6 +44,21 @@ user settings
           <input type="text" id="displayname" v-model="editUser.displayName"/>
           <label for="email" id="email-answer-label">  Email: </label>
           <input type="email" id="email-answer" v-model="editUser.username"/>
+          avatar: {{ user.avatarId }}
+          New Avatar: {{ editUser.avatarId }}
+            
+            <button>Save Changes and Return to LogIn</button>
+
+  
+    <select v-model="editUser.avatarId">
+      <option v-for="avatar in avatars" :key="avatar.avatarId" :value="avatar.avatarId">
+        {{avatar.avatarId}}: {{ avatar.altText }}
+      </option>
+    </select>
+    <div>
+      <a v-for="avatar in avatars" :key="avatar.avatarId">
+      <img id="avatar" :src="avatar.avatarSrc"/>{{ avatar.avatarId }}: {{ avatar.altText }}</a>
+  </div>
 
           New Avatar: {{ editUser.avatarId }}
             
@@ -52,13 +66,14 @@ user settings
         </form>
        </div>
       </div>
-
+</div>
     </template>
     
     <script>
   
     import AuthService from '../services/AuthService';
     import Avatar from '../components/Avatar.vue';
+    import {avatars} from '../AvatarsArray.js';
 
     
     export default {
@@ -93,6 +108,9 @@ user settings
         },
         verified: false,
         first: true,
+        showAvatars: false,
+      avatarBtnMsg: 'Choose Avatar',
+      avatars,
       };
     },
   
@@ -122,6 +140,10 @@ user settings
           this.buttonMsg = 'Cancel';
         }
       },
+
+      
+  
+
 async verifyPassword() {
 
         AuthService.login(this.user)
@@ -186,3 +208,16 @@ async verifyPassword() {
     
     
     </script>
+
+
+<style scoped>
+#avatar{
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border-color:antiquewhite;
+  border-width: 4px;
+  border-style: double;
+}
+
+</style>

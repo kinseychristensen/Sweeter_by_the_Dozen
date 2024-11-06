@@ -28,7 +28,7 @@ public class PendingRecipeController {
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path="/new-recipe/pending", method= RequestMethod.POST)
-    int createPendingRecipe(@RequestBody PendingRecipe recipe, Principal principal){
+    boolean createPendingRecipe(@RequestBody PendingRecipe recipe, Principal principal){
         String userName = principal.getName();
         User user= userDao.getUserByUsername(userName);
         recipe.setUserId(user.getId());

@@ -25,10 +25,6 @@ export default {
 data() {
     return {
       
-      isLoading: false,
-      showComments: false,
-      showPhotos: false,
-      showRecipe: true,
 
     }
   }, 

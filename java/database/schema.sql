@@ -16,11 +16,11 @@ CREATE TABLE users (
 	avatar_id int default 0,
 	CONSTRAINT PK_users PRIMARY KEY (user_id)
 );
-
++-
 CREATE TABLE recipes (
     recipe_id SERIAL,
     user_id int,
-    recipe_title varchar(100) NOT NULL,
+    recipe_title varchar(200) NOT NULL,
     recipe_description text,
     attribution text,
     CONSTRAINT PK_recipes PRIMARY KEY (recipe_id),
@@ -88,8 +88,8 @@ CREATE TABLE pending_recipes (
     user_id int,
     pending_recipe_id SERIAL,
     recipe_text text,
-    title varchar(100),
-    description varchar(200),
+    title varchar(200),
+    description text,
     tags text,
     attribution text,
     picture_url text,

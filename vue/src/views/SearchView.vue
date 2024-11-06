@@ -2,9 +2,10 @@
    
       <div v-if="isLoading">Loading...</div>
     <div v-else>
-search
+<h1>Search</h1>
 <form v-on:submit.prevent="newSearch">
   <input text v-model="keyword"/>
+  <p></p>
 
   <a v-for="tag in tags" :key="tag.tagId">
     <input type="checkbox" :id="tag.tagId" v-model="tagsList" :value="tag.tagId">

@@ -26,7 +26,11 @@
     <div>
       <NavBar/>
     </div>
-    <router-view />
+    <router-view /><p></p>
+    <footer>
+      <Router-Link v-bind:to="{name: 'about'}">About Us</Router-Link>    |       
+      <a href="mailto:sweeter.by.the.dozen.cookbook@gmail.com">Contact Us</a>
+    </footer>
   </div>
 </template>
 
@@ -34,6 +38,7 @@
 import Login from './components/Login.vue';
 import Register from './components/Register.vue';
 import NavBar from './components/NavBar.vue';
+import { RouterLink } from 'vue-router';
 
   
 export default {
@@ -67,6 +72,10 @@ export default {
       }
     }
 
+  },
+  created() {
+    this.showLogIn = false;
+    this.showRegister = false;
   }
   }
 
