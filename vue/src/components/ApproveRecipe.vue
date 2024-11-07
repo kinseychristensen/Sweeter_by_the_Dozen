@@ -37,10 +37,31 @@
 <p> amount  unit  ingredient   special instructions</p>
   <p v-for="ingredient in recipe.ingredientList" v-bind:key="ingredient.ingredientNum">
     
-  <input type="num" id="numerator" v-model="ingredient.amountNumberator"/>
+  <input type="num" id="numerator" v-model="ingredient.amountNumerator"/>
   /
   <input type="num" id="denominator" v-model="ingredient.amountDenominator"/>
-  <input text id="unitType" v-model="ingredient.unitType"/>
+  
+  <input type="text" list="units" v-model="ingredient.unitType"/>
+    <datalist id="units">
+      <option>cups</option>
+      <option>teaspoons</option>
+      <option>tablespoons</option>
+      <option>ounces</option>
+      <option>pounds</option>
+      <option>grams</option>
+      <option>mililiters</option>
+      <option>liters</option>
+      <option>pints</option>
+      <option>cans</option>
+      <option>gallons</option>
+      <option>quarts</option>
+      <option>package</option>
+    </datalist>
+
+
+
+
+
     <input text id="ingredient" v-model="ingredient.ingredientText"/>
     <input text id="quantifier" v-model="ingredient.quantifier"/>
   </p>
@@ -48,7 +69,7 @@
 <p></p>
 <p v-for="step in recipe.recipeStepList" v-bind:key="step.stepNum">
   <label for="step">Step: </label>
-  <input text id="step" v-model="step.step"/>
+  <input text id="step" v-model="step.instructions"/>
 </p>
 <button @click="addStep">Add Step</button>
 
@@ -56,23 +77,25 @@
 
   <div>
   <a v-for="tag in tags" :key="tag.tagId">
-    <input type="checkbox" :id="tag.tagId" v-model="tagsList" :value="tag.tag">
+    <input type="checkbox" :id="tag.tagId" v-model="recipe.recipeTagList" :value="tag">
     <label :for="tag.tagId">{{ tag.tag }}</label>
   </a>
-</div> 
+</div>
+<p></p>
 
-{{ recipe }}
+PHOTOS
+
+<div v-for="pic in recipe.recipePicList" v-bind:key="pic.picUrl">
+ ADD CODE TO DISPLAY PIC:  {{ pic }}
+ <p></p>
+ <label for="altText">Provide alternate text to describe this photo for the visually impared:</label>
+ <input text id="altText" v-model="pic.altText"/>
+ <button @click="deleteImage(pic.picUrl)">Remove this Image</button>
+
+  </div>
 
 
-
-
-
-
-
-
-
-
-
+<button @click="verifyRecipe">Submit Recipe</button>
   </form>
 </div>
 
@@ -100,6 +123,7 @@ data() {
     pendingRecipes: [],
     isLoading: false,
     showRecipeBuilder: false,
+    tags: [],
     recipe: {
         title: '',
         description: '',
@@ -110,19 +134,11 @@ data() {
           instructions: '',
 
           },],
-          recipePicList: [{
-            picUrl: '',
-            altText: '',
-
-          }],
-          recipeTagList: [{
-            tagId: 0,
-            tag: '',
-
-          }],
+          recipePicList: [],
+          recipeTagList: [],
           ingredientList: [{
-            amountNumberator: 0,
-            amountDenominator: 0,
+            amountNumerator: 0,
+            amountDenominator: 1,
             ingredientNum: 1,
             quantifier: '',
             ingredientText: '',
@@ -146,8 +162,12 @@ computed: {
   },
   currentPics(){
     let currentPics = [];
+    let rawUrls = this.pendingRecipes[0].pics;
 
-   currentPics = this.pendingRecipes[0].pics.split(",");
+   currentPics = rawUrls.split(",");
+   if(rawUrls == ""){
+    return []
+   }
 
     return currentPics;
   }
@@ -161,9 +181,18 @@ methods: {
    PendingRecipeService.getPendingRecipes()
     .then((response) => {
       this.pendingRecipes = response.data;
-      this.isLoading = false;
+      this.getTags();
     })
   },
+
+  getTags(){
+      RecipeService.getAllTags()
+      .then(response => {
+        this.tags = response.data;
+        this.isLoading = false;
+      })
+    },
+
 
   buildRecipe(){
     this.showRecipeBuilder = true;
@@ -171,6 +200,16 @@ methods: {
     this.recipe.description=this.pendingRecipes[0].description;
     this.recipe.userId=this.pendingRecipes[0].userId;
     this.recipe.title=this.pendingRecipes[0].title;
+    if(this.currentPics != ""){
+    
+      this.currentPics.forEach((pic) => {
+        let thisPic = {
+          picUrl: pic,
+          altText: '',
+        };
+        this.recipe.recipePicList.push(thisPic);
+      })
+    }
   },
 
   addStep(){
@@ -183,8 +222,8 @@ methods: {
   addIngredient(){
     let ingNum = this.recipe.ingredientList.length + 1;
     this.recipe.ingredientList.push({
-        amountNumberator: 0,
-        amountDenominator: 0,
+        amountNumerator: 0,
+        amountDenominator: 1,
         ingredientNum: ingNum,            
         quantifier: '',
         ingredientText: '',
@@ -192,6 +231,22 @@ methods: {
 
     );
   },
+
+  deleteImage(picUrl){
+  this.recipe.recipePicList = this.recipe.recipePicList.filter(pic => pic.picUrl != picUrl);
+
+  },
+
+  verifyRecipe(){
+    this.isLoading = true;
+RecipeService.createRecipe(this.recipe)
+.then((response) => {
+  if(response.status === 200){
+    console.log("success!");
+  }
+
+})
+  }
 
 }, 
   
