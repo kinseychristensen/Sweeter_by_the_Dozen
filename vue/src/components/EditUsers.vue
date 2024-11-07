@@ -13,7 +13,8 @@ edit user
     name: 'EditUser',
     components: {
      
-  }
+  }, 
+  props: ['userid'],
   }
   </script>
   

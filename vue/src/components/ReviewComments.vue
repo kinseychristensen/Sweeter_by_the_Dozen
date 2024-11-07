@@ -13,7 +13,8 @@ review comment
     name: 'ReviewComment',
     components: {
      
-  }
+  },
+  props: ['userid'],
   }
   </script>
   

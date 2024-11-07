@@ -13,7 +13,8 @@ approve images
     name: 'ApproveImage',
     components: {
      
-  }
+  },
+  props: ['userid'],
   }
   </script>
   

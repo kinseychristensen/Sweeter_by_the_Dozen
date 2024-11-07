@@ -174,7 +174,7 @@ private PendingRecipe mapRowToPendingRecipe (SqlRowSet rs){
         recipe.setDescription(rs.getString("description"));
         recipe.setTags(rs.getString("tags"));
         recipe.setAttribute(rs.getString("attribution"));
-        recipe.setPics(rs.getString("picture_url_list"));
+        recipe.setPics(rs.getString("picture_url"));
 
 
         return recipe;

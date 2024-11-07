@@ -8,7 +8,7 @@
 
       <h1>Your Account</h1>
 
-<button><router-link v-bind:to="{ name: 'admin-tools' }" v-if="user.authorities[0].name == 'ROLE_ADMIN'"> Go To Admin Tools</router-link></button>
+<button><router-link v-bind:to="{ name: 'admin-tools', params: {userId: user.id} }" v-if="user.authorities[0].name == 'ROLE_ADMIN'"> Go To Admin Tools</router-link></button>
 <button><router-link v-bind:to="{ name: 'password' }"> Reset Your Password</router-link></button>
 
 

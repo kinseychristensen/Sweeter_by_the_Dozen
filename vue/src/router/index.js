@@ -107,7 +107,7 @@ const routes = [
     
   },
   {
-    path: "/admin-tools",
+    path: "/admin-tools/:userId",
     name: "admin-tools",
     component: AdminToolsView,
     meta: {
