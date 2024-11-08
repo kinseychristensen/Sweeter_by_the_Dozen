@@ -21,7 +21,7 @@ public class JdbcRecipeDao implements RecipeDao{
 
     private final JdbcTemplate jdbcTemplate;
     private final UserDao userDao;
-    private final int RECIPES_PER_PAGE = 5;
+    private final int RECIPES_PER_PAGE = 25;
 
     public JdbcRecipeDao(JdbcTemplate jdbcTemplate, UserDao userDao) {this.jdbcTemplate = jdbcTemplate;
         this.userDao = userDao;
@@ -137,6 +137,64 @@ public class JdbcRecipeDao implements RecipeDao{
 
         return recipe.getRecipeId();
     }
+
+
+@Override
+    public boolean updateRecipe (Recipe recipe) {
+        try {
+            String sql = "UPDATE recipes SET recipe_title = ?, recipe_description = ?, attribution = ? WHERE recipe_id = ?;";
+            String titleUpper = recipe.getTitle().toUpperCase(Locale.ROOT).strip();
+            jdbcTemplate.update(sql, titleUpper, recipe.getDescription(), recipe.getAttribute(), recipe.getRecipeId());
+
+            sql = "DELETE from recipe_ingredients WHERE recipe_id = ?;";
+            jdbcTemplate.update(sql, recipe.getRecipeId());
+
+            sql = "DELETE from recipe_steps WHERE recipe_id = ?;";
+            jdbcTemplate.update(sql, recipe.getRecipeId());
+
+            sql = "DELETE from recipe_to_tags WHERE recipe_id = ?;";
+            jdbcTemplate.update(sql, recipe.getRecipeId());
+
+            sql = "DELETE from recipe_pictures WHERE recipe_id = ?;";
+            jdbcTemplate.update(sql, recipe.getRecipeId());
+
+            if (!recipe.getRecipePicList().isEmpty()) {
+                for (RecipePic pic : recipe.getRecipePicList()) {
+                    sql = "INSERT INTO recipe_pictures (recipe_id, picture_url, alt_text) VALUES (?, ?, ?);";
+                    jdbcTemplate.update(sql, recipe.getRecipeId(), pic.getPicUrl(), pic.getAltText());
+                }
+            }
+            if (!recipe.getRecipeStepList().isEmpty()) {
+                for (RecipeStep step : recipe.getRecipeStepList()) {
+                    sql = "INSERT INTO recipe_steps (recipe_id, instructions, step) VALUES (?, ?, ?);";
+                    jdbcTemplate.update(sql, recipe.getRecipeId(), step.getInstructions(), step.getStepNum());
+                }
+            }
+            if (!recipe.getIngredientList().isEmpty()) {
+                for (Ingredient ingredient : recipe.getIngredientList()) {
+                    sql = "INSERT INTO recipe_ingredients (recipe_id, order_num, amount_numerator, amount_denominator, unit_type," +
+                            "quantifier, ingredient) VALUES (?, ?, ?, ?, ?, ?, ?);";
+                    String ingredientLower = ingredient.getIngredientText().toLowerCase().strip();
+                    jdbcTemplate.update(sql, recipe.getRecipeId(), ingredient.getIngredientNum(), ingredient.getAmountNumerator(),
+                            ingredient.getAmountDenominator(), ingredient.getUnitType(), ingredient.getQuantifier(), ingredientLower);
+                }
+            }
+            if (!recipe.getRecipeTagList().isEmpty()) {
+                for (Tag tag : recipe.getRecipeTagList()) {
+                    sql = "INSERT INTO recipe_to_tags (recipe_id, tag_id) VALUES (?, ?);";
+                    jdbcTemplate.update(sql, recipe.getRecipeId(), tag.getTagId());
+                }
+            }
+
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+        return true;
+    }
+
+
 
 
 @Override

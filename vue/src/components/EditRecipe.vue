@@ -1,32 +1,24 @@
 <template>
-    <div>
-<h1>Approve Recipes</h1>
+<h1>Edit Existing Recipe</h1>
+<label for id="recipeId">Enter the recipe id (number at end of url): </label>
+<input number id="recipeId" v-model="recipeId"/>
+<button @click="getRecipe">Find Recipe</button>
 
-<p>There are {{ pendingRecipes.length }} recipes to approve.</p>
+<div v-if="isLoading">Loading...</div>
+<div v-else>
+  
+  <div v-if="showErrorMsg">There was not a recipe found for that id.  Please try again.</div>
+  <div v-if="recipeUpdated">The recipe was successfully updated.</div>
+  <div v-if="showDeletedMessage">This recipe was successfully deleted.</div>
+  
+  
+  <div v-if="showRecipeBuilder">
+{{ originalRecipe }}
 
-<div v-if="pendingRecipes.length> 0">
+{{ recipe }}
 
-
-  Title: {{ pendingRecipes[0].title }}<p></p>
-  Description: {{ pendingRecipes[0].description }}<p></p>
-  Attribution: {{ pendingRecipes[0].attribute }}<p></p>
-  Recipe: {{ pendingRecipes[0].recipeText }}<p></p>
-<p></p>
-  Tags:
-  <p v-for="tag in currentTags" v-bind:key="tag">{{ tag }}</p>
-  <p></p>
-  Pics:
-  <p v-for="pic in currentPics" v-bind:key="pic">{{ pic }}</p>
-
-</div>
-<button @click="buildRecipe" v-if="pendingRecipes.length>0">Standardize Recipe and Approve</button>
-<button @click="rejectRecipe" v-if="pendingRecipes.length>0">Reject Recipe</button>
-<button @click="newBlankRecipe">Create New Recipe</button>
-
-
-<div v-if="showRecipeBuilder">
-  <h1>Recipe Form</h1>
-  <form v-on:submit.prevent="saveRecipe">
+<h1>Recipe Form</h1>
+  <form v-on:submit.prevent="submitRecipe">
 
     <label for="recipe-title-form">Recipe Title:</label>
   <input text id="recipe-title-form" v-model="recipe.title"/>
@@ -68,13 +60,13 @@
     <input text id="ingredient" v-model="ingredient.ingredientText"/>
     <input text id="quantifier" v-model="ingredient.quantifier"/>
   </p>
-  <button @click="addIngredient">Add Ingredient</button>
+  <button type="button" @click="addIngredient">Add Ingredient</button>
 <p></p>
 <p v-for="step in recipe.recipeStepList" v-bind:key="step.stepNum">
   <label for="step">Step: </label>
   <input text id="step" v-model="step.instructions"/>
 </p>
-<button @click="addStep">Add Step</button>
+<button  type="button"  @click="addStep">Add Step</button>
 
 
 
@@ -93,42 +85,45 @@ PHOTOS
  <p></p>
  <label for="altText">Provide alternate text to describe this photo for the visually impared:</label>
  <input text id="altText" v-model="pic.altText"/>
- <button @click="deleteImage(pic.picUrl)">Remove this Image</button>
+ <button  type="button"  @click="deleteImage(pic.picUrl)">Remove this Image</button>
 
   </div>
 
 
-<button @click="verifyRecipe">Submit Recipe</button>
+<button>Submit Recipe</button>
   </form>
+
+  <button @click="deleteRecipe">Delete This Recipe</button>
+</div>
 </div>
 
-
 <p></p>
------------
-    </div>
+
   </template>
   
   
   
   <script>
-  import PendingRecipeService from '../services/PendingRecipeService';
+  
   import RecipeService from '../services/RecipeService';
   
   export default {
-    name: 'ApproveRecipe',
+    name: 'EditRecipe',
     components: {
      
   },
-  props: ['userid'],
 
-data() {
-  return {
-    pendingRecipes: [],
-    isLoading: false,
-    showRecipeBuilder: false,
-    isNew: false,
-    tags: [],
-    recipe: {
+  data(){
+    return {
+      recipeId: 0,
+      isLoading: false,
+      originalRecipe: {},
+      showRecipeBuilder: false,
+      showErrorMsg: false,
+      recipeUpdated: false,
+      showDeletedMessage: false,
+      tags: [],
+      recipe: {
         title: '',
         description: '',
         userId: 0,
@@ -151,84 +146,27 @@ data() {
           }],
 
       },
-
-  }
-},
-
-computed: {
-
-  currentTags(){
-    let currentTags = [];
-
-   currentTags = this.pendingRecipes[0].tags.split(",");
-
-    return currentTags;
-  },
-  currentPics(){
-    let currentPics = [];
-    let rawUrls = this.pendingRecipes[0].pics;
-
-   currentPics = rawUrls.split(",");
-   if(rawUrls == ""){
-    return []
-   }
-
-    return currentPics;
-  }
-
-
-
-},
-methods: {
-  pullPendingRecipes(){
-    
-   PendingRecipeService.getPendingRecipes()
-    .then((response) => {
-      this.pendingRecipes = response.data;
-      this.showRecipeBuilder = false;
-      this.isLoading = false;
-    })
-  },
-  rejectRecipe(){
-    PendingRecipeService.deletePendingRecipe(this.pendingRecipes[0].id)
-    .then((response) => {
-      if(response.data){
-        this.pullPendingRecipes();
-      }
-    })
-  },
-
-  getTags(){
-      RecipeService.getAllTags()
-      .then(response => {
-        this.tags = response.data;
-       this.pullPendingRecipes();
-      })
-    },
-
-    newBlankRecipe(){
-      this.showRecipeBuilder = true;
-      this.recipe.userId = 1;
-      this.isNew = true;
-    },
-
-
-  buildRecipe(){
-    this.showRecipeBuilder = true;
-    this.recipe.attribute = this.pendingRecipes[0].attribute;
-    this.recipe.description=this.pendingRecipes[0].description;
-    this.recipe.userId=this.pendingRecipes[0].userId;
-    this.recipe.title=this.pendingRecipes[0].title;
-    if(this.currentPics != ""){
-    
-      this.currentPics.forEach((pic) => {
-        let thisPic = {
-          picUrl: pic,
-          altText: '',
-        };
-        this.recipe.recipePicList.push(thisPic);
-      })
     }
+  },
+
+  methods: {
+  getRecipe(){
+    this.isLoading = true;
+    this.recipeUpdated = false;
+    this.showErrorMsg = false;
+    this.showDeletedMessage = false;
+    RecipeService.getRecipeDetails(this.recipeId)
+    .then((response) => {
+      this.originalRecipe = response.data;
+      if(this.originalRecipe.recipeId == 0){
+        this.showErrorMsg = true;
+        this.showRecipeBuilder = false;
+        this.isLoading = false;
+      }else {
+      this.recipe = this.originalRecipe;
+      this.isLoading = false;
+      this.showRecipeBuilder = true;
+  }})
   },
 
   addStep(){
@@ -255,46 +193,41 @@ methods: {
   this.recipe.recipePicList = this.recipe.recipePicList.filter(pic => pic.picUrl != picUrl);
 
   },
+  getTags(){
+      RecipeService.getAllTags()
+      .then(response => {
+        this.tags = response.data;
+       this.isLoading = false;
+      })
+    },
 
-  verifyRecipe(isNew){
-    this.isLoading = true;
-RecipeService.createRecipe(this.recipe)
-.then((response) => {
-  if(response.status === 200){
-    if(!this.isNew){
-    PendingRecipeService.deletePendingRecipe(this.pendingRecipes[0].id)
-    .then((response) => {
-      if(response.data){
-        this.isNew = false;
-        this.pullPendingRecipes();
-      }
+    submitRecipe(){
+      this.isLoading = true;
+      console.log(this.recipe);
+      RecipeService.updateRecipe(this.recipe.recipeId, this.recipe)
+      .then((response) =>{
+      this.showRecipeBuilder = false,
+      this.recipeUpdated = true;
+      this.isLoading = false;
     })
-    }else {
-      this.pullPendingRecipes();
-      this.isNew = false;
+    },
 
-    }
-  }
+    deleteRecipe(){
+      const shouldDelete = confirm("Are you sure you want to delete this recipe?");
+      if(shouldDelete){
+      RecipeService.deleteRecipe(this.recipe.recipeId)
+      .then((response) => {
+        this.showDeletedMessage = true;
+        this.showRecipeBuilder = false;
+      })
+    }}
 
-})
-  }
 
-}, 
-  
-created() {
+  },
+  created() {
   this.isLoading = true;
   this.getTags();
 }
-
-
-
-
-
-
-
-
-
-
   }
   </script>
   

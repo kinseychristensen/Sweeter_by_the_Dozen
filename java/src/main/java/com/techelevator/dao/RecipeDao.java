@@ -18,4 +18,5 @@ public interface RecipeDao {
     boolean removeFromSaves (int recipeId, int userId);
     List<Recipe> searchByKeyword (String keyword, int pageNum);
     List<Recipe> getRecipesByKeywordAndTag (int[] tags, String keyword, int pageNum);
+    boolean updateRecipe (Recipe recipe);
 }

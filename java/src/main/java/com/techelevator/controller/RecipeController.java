@@ -118,6 +118,11 @@ public class RecipeController {
         return recipeDao.getRecipesByKeywordAndTag(tags, keyword, pageNum);
     }
 
+    @RequestMapping(path="/recipe/{recipeId}/update",  method= RequestMethod.PUT)
+    public boolean updateRecipe (@PathVariable int recipeId, @RequestBody Recipe recipe){
+        return recipeDao.updateRecipe(recipe);
+    }
+
 
 
         }

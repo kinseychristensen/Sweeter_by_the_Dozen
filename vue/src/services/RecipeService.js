@@ -44,4 +44,8 @@ removeFromSaves(recipeId){
     return axios.put(`/search/=${keyword}/page/${pageNum}`, tags)
  },
 
+ updateRecipe(recipeId, recipe){
+   return axios.put(`/recipe/${recipeId}/update`, recipe)
+ }
+
 }
