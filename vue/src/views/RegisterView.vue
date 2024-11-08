@@ -22,6 +22,8 @@
         <label for="confirmPassword" class="bold-label">Confirm Password</label>
         <input type="password" id="confirmPassword" v-model="user.confirmPassword" required />
       </div>
+<CodeConduct />
+
       <button type="submit" class="btn">Create Account</button>
       <p class="login-link"><router-link v-bind:to="{ name: 'login' }">Already have an account? Log in.</router-link></p>
     avatar: {{ user.avatarId }}
@@ -44,10 +46,14 @@
 <script>
 import authService from '../services/AuthService';
 import { avatars } from '../AvatarsArray.js';
+import CodeConduct from '../components/CodeConduct.vue';
 
 
 
 export default {
+  components: {
+    CodeConduct
+  },
   data() {
     return {
       user: {
@@ -72,6 +78,8 @@ export default {
         this.registrationErrors = true;
         this.registrationErrorMsg = 'Password & Confirm Password do not match.';
       } else {
+        const shouldCreate = confirm("Do you agree to abide by the Code of Conduct on this site?");
+        if(shouldCreate){
         authService
           .register(this.user)
           .then((response) => {
@@ -90,6 +98,7 @@ export default {
             }
           });
       }
+    }
     },
     clearErrors() {
       this.registrationErrors = false;

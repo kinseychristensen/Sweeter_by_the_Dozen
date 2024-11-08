@@ -13,9 +13,6 @@
   
   
   <div v-if="showRecipeBuilder">
-{{ originalRecipe }}
-
-{{ recipe }}
 
 <h1>Recipe Form</h1>
   <form v-on:submit.prevent="submitRecipe">
@@ -203,7 +200,6 @@ PHOTOS
 
     submitRecipe(){
       this.isLoading = true;
-      console.log(this.recipe);
       RecipeService.updateRecipe(this.recipe.recipeId, this.recipe)
       .then((response) =>{
       this.showRecipeBuilder = false,

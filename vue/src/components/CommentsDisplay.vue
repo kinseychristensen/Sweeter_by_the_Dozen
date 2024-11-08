@@ -18,15 +18,9 @@
 
 <button @click="togglePost">Post a Comment</button>
 <div v-if="showReport">
-  Comments are meant to encourage and aid other recipe collectors, but not to spread negativity!  Do you want to report this comment for any of the following reasons:
-<ul>
-  <li>Profanity</li>
-  <li>Violence against self, others, or animals</li>
-  <li>Bigotry or hate speech against ethnicities, nationalities, religions, identities, etc.</li>
-  <li>Bullying and intolerance</li>
-  <li>Sexually provocative content</li>
-  <li>Langauge that encourages disordered eating or critiques others' food choices</li>
-</ul>
+  Comments are meant to encourage and aid other recipe collectors, but not to spread negativity!  
+<CodeConduct/>
+
 
 Once a comment is reported, an admin will review the comment and if the comment is found to be against the site's code of ethics, the comment will be permenantly deleted and the original poster will recieve a warning and/or restriced use of the site.
 <p></p>
@@ -36,8 +30,11 @@ Once a comment is reported, an admin will review the comment and if the comment 
 
 
 <div v-if="showPost">
+  <div v-if="$store.state.token != ''">
   <PostComment :recipeId="recipeId"/>
   <button @click="togglePost">Cancel</button>
+  </div><div v-else>You must be logged in to post a comment.</div>
+
 </div>
 
     </div>
@@ -51,6 +48,7 @@ Once a comment is reported, an admin will review the comment and if the comment 
   import PostComment from './PostComment.vue';
   import CommentService from '../services/CommentService';
   import Avatar from './Avatar.vue';
+  import CodeConduct from './CodeConduct.vue';
 
 
   
@@ -60,7 +58,8 @@ Once a comment is reported, an admin will review the comment and if the comment 
     components: {
      ReportComment,
      PostComment,
-     Avatar
+     Avatar,
+     CodeConduct,
   },
   data(){
     return {

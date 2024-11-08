@@ -16,11 +16,11 @@
 <div v-for="comment in flaggedComments" v-bind:key="comment.commentId">
 {{comment.comment}} by {{ comment.writer }}  for this <router-link v-bind:to="{name: 'recipe', params: {recipeId: comment.recipeId}}">recipe</router-link>.
 
-<button @click="reviewComment(comment.commentId)">This comment should be removed.</button>
+<button @click="deleteComment(comment.commentId)">This comment should be removed.</button>
 <button @click="approveComment(comment.commentId)">This comment is acceptable.</button>
 
 
-<div v-if="comment.commentId == deletingCommentId">
+<div v-if="showReasons">
   Please select all reasons this comment will be removed: 
 
   <label v-for="reason in reasonsToRemove" :key="reason.reasonNum"><p></p>
@@ -29,7 +29,7 @@
 </div>
 </div>
 
-{{ flaggedComments }}
+{{ reasonsForRemoval }}
 
     </div>
   </template>
@@ -54,10 +54,9 @@ import RecipeByIdView from '../views/RecipeByIdView.vue';
   data() {
     return {
       isLoading: false,
-      flaggedComments: [
-      ],
+      flaggedComments: [],
       reasonsForRemoval: [],
-     deletingCommentId: 0,
+      showReasons: true,
       reasonsToRemove: [
         {reason: 'Profanity', reasonNum: 1,},
         {reason: 'Sexually provocative content', reasonNum: 2,},
@@ -79,12 +78,9 @@ import RecipeByIdView from '../views/RecipeByIdView.vue';
         this.flaggedComments = response.data;
         this.isLoading = false;
       })
-    },
 
-    reviewComment(commentId){
-      this.deletingCommentId = commentId;
-    },
 
+    },
 
   },
   created() {

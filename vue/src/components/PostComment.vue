@@ -5,17 +5,9 @@
 </form>
 <div v-if="showWarning">Opps!  Your comment is blank!  Please try again.</div>
 
-Comments are meant to encourage and aid other recipe collectors, but not to spread negativity!  Please make sure your comment does not include any of the following:
-<ul>
-<li>Profanity</li>
-<li>Violence against self, others, or animals</li>
-<li>Bigotry or hate speech against ethnicities, nationalities, religions, identities, etc.</li>
-<li>Bullying and intolerance</li>
-<li>Sexually provocative content</li>
-<li>Langauge that encourages disordered eating or critiques others' food choices</li>
-</ul>
+Comments are meant to encourage and aid other recipe collectors, but not to spread negativity!  Please review our Code of Conduct before submitting.
+<CodeConduct/>
 
-If a comment you post is found to be against the site's code of ethics, the comment will be permenantly deleted and you will recieve a warning and/or restriced use of the site.
 <p></p>
 <button @click="postComment">Post this Comment</button>
 </div>
@@ -26,12 +18,14 @@ If a comment you post is found to be against the site's code of ethics, the comm
 <script>
 
 import CommentService from '../services/CommentService';
+import CodeConduct from './CodeConduct.vue';
 
 
 export default {
 props: ['recipeId'],
 name: 'ReportComment',
 components: {
+  CodeConduct
  
 },
 data(){

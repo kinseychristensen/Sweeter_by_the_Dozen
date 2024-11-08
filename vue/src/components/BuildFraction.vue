@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <a v-if="newFraction != 0">
 {{ newFraction }}
-</div>
+    </a>
   </template>
   
   
@@ -30,7 +30,7 @@ computed: {
         }else {
             const whole = Math.floor(this.numerator / this.denominator);
             const newNumerator = this.numerator % this.denominator;
-        return whole + " " + newNumerator + operator + this.denominator;
+        return whole + "  " + newNumerator + operator + this.denominator;
     }
 }
 }
