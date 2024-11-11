@@ -2,8 +2,11 @@ package com.techelevator.controller;
 
 import javax.validation.Valid;
 
+
+import com.techelevator.dao.RecipeDao;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,8 @@ import com.techelevator.security.jwt.JWTFilter;
 import com.techelevator.security.jwt.TokenProvider;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -28,11 +33,15 @@ public class AuthenticationController {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private UserDao userDao;
+    @Autowired
+    private final RecipeDao recipeDao;
 
-    public AuthenticationController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, UserDao userDao) {
+
+    public AuthenticationController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, UserDao userDao, RecipeDao recipeDao) {
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userDao = userDao;
+        this.recipeDao = recipeDao;
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
@@ -68,50 +77,57 @@ public class AuthenticationController {
             } else {
                 userDao.createUser(newUser);
             }
-        }
-        catch (DaoException e) {
+        } catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "User registration failed.");
         }
     }
 
-    @RequestMapping(path="/update-user", method=RequestMethod.PUT)
+    @RequestMapping(path = "/update-user", method = RequestMethod.PUT)
     public boolean updateUserDetails(@RequestBody User user) {
         return userDao.updateUserDetails(user);
     }
 
-    @RequestMapping(path="/update-password", method=RequestMethod.PUT)
-    public boolean updateUserPassword(@RequestBody User user){
+    @RequestMapping(path = "/update-password", method = RequestMethod.PUT)
+    public boolean updateUserPassword(@RequestBody User user) {
         return userDao.updateUserPassword(user);
     }
 
     @RequestMapping(path = "/user/{userId}/make-admin", method = RequestMethod.PUT)
-    public boolean makeUserAdmin(@PathVariable int userId){
+    public boolean makeUserAdmin(@PathVariable int userId) {
         return userDao.makeUserAdmin(userId);
+    }
+    @RequestMapping(path = "/user/{userId}/remove-admin", method = RequestMethod.PUT)
+    public boolean removeAdmin(@PathVariable int userId) {
+        return userDao.removeAdmin(userId);
     }
 
     @RequestMapping(path = "/get-user/username/{username}", method = RequestMethod.GET)
-        public int getUserIdByUsername(@PathVariable String username){
-            User user = userDao.getUserByUsername(username);
-            return user.getId();
-        }
+    public int getUserIdByUsername(@PathVariable String username) {
+        User user = userDao.getUserByUsername(username);
+        return user.getId();
+    }
 
-       @RequestMapping(path = "/get-user/principal", method = RequestMethod.GET)
-    public User getUserPrincipal(Principal principal){
-           String userName = principal.getName();
-           return userDao.getUserByUsername(userName);
-       }
+    @RequestMapping(path = "/get-user/principal", method = RequestMethod.GET)
+    public User getUserPrincipal(Principal principal) {
+        String userName = principal.getName();
+        return userDao.getUserByUsername(userName);
+    }
 
 
     @RequestMapping(path = "/get-user/id/{userId}", method = RequestMethod.GET)
-    public User getUserPrincipal(@PathVariable int userId){
+    public User getUserPrincipal(@PathVariable int userId) {
         return userDao.getUserById(userId);
     }
 
-
-
+    @RequestMapping(path = "/user/{userId}/delete", method = RequestMethod.DELETE)
+    public Boolean deleteUser(@PathVariable int userId) {
+        List<Recipe> recipes = recipeDao.getRecipesByUser(userId);
+        for(Recipe recipe : recipes) {
+            recipeDao.deleteRecipe(recipe.getRecipeId());
+        }
+    return userDao.deleteUser(userId);
     }
-
-    //delete user needs to delete all comments, delete pending recipes
+}
 
 
 

@@ -21,6 +21,9 @@ export default {
   makeAdmin( userId) {
     return axios.put(`/user/${userId}/make-admin`)
   },
+  removeAdmin( userId) {
+    return axios.put(`/user/${userId}/remove-admin`)
+  },
 
   getId(username) {
     return axios.get(`/get-user/username/${username}`)
@@ -32,6 +35,10 @@ export default {
 
   getUserById(userId){
     return axios.get(`/get-user/id/${userId}`)
+  },
+
+  deleteUser(userId){
+    return axios.delete(`/user/${userId}/delete`)
   }
 
 }

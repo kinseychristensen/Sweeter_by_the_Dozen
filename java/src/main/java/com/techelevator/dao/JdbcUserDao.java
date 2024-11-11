@@ -108,6 +108,7 @@ public class JdbcUserDao implements UserDao {
         return newUser;
     }
 
+    @Override
     public boolean updateUserDetails(User user) {
         try {
             String sql = "UPDATE users SET display_name = ?, username = ?, violations = ?, restricted = ?, avatar_id = ?  " +
@@ -126,7 +127,7 @@ public class JdbcUserDao implements UserDao {
     @Override
     public boolean makeUserAdmin(int userId) {
         try {
-            String sql = "UPDATE users SET role = ROLE_ADMIN " +
+            String sql = "UPDATE users SET role = 'ROLE_ADMIN' " +
                     "WHERE user_id = ?;";
             jdbcTemplate.update(sql, userId);
 
@@ -137,6 +138,23 @@ public class JdbcUserDao implements UserDao {
         }
         return true;
     }
+
+    @Override
+    public boolean removeAdmin(int userId) {
+        try {
+            String sql = "UPDATE users SET role = 'ROLE_USER' " +
+                    "WHERE user_id = ?;";
+            jdbcTemplate.update(sql, userId);
+
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+        return true;
+    }
+
+
 
     public boolean updateUserPassword(User user){
    try{
@@ -153,7 +171,18 @@ public class JdbcUserDao implements UserDao {
 
 public boolean deleteUser (int userId){
         try {
-    String sql= "";
+    String sql= "DELETE FROM recipe_comments WHERE user_id = ?;";
+    jdbcTemplate.update(sql, userId);
+    sql = "DELETE FROM recipe_pictures WHERE user_id = ?;";
+    jdbcTemplate.update(sql, userId);
+    sql = "DELETE FROM pending_recipes WHERE user_id = ?;";
+    jdbcTemplate.update(sql, userId);
+    sql = "DELETE FROM saved_recipes WHERE user_id = ?;";
+    jdbcTemplate.update(sql, userId);
+    sql = "DELETE FROM pending_recipe_pics WHERE user_id = ?;";
+    jdbcTemplate.update(sql, userId);
+    sql = "DELETE FROM users WHERE user_id = ?;";
+    jdbcTemplate.update(sql, userId);
 
 
         }catch(CannotGetJdbcConnectionException e){

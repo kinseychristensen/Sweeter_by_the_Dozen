@@ -20,15 +20,15 @@ OR
 
 
 
-  <button>Delete This User</button>
+  <button @click="deleteUser">Delete This User</button>
   <button @click="resetViolations">Reset Violations</button>
-  <button v-if="foundUser.authorities[0].name == 'ROLE_USER'">Make User an Admin</button>
-  <button v-if="foundUser.authorities[0].name == 'ROLE_ADMIN'">Make Admin a User</button>
-
+  <button v-if="foundUser.authorities[0].name == 'ROLE_USER'" @click="makeUserAdmin">Make User an Admin</button>
+  <button v-if="foundUser.authorities[0].name == 'ROLE_ADMIN'" @click="makeAdminUser">Remove Admin privleges</button>
 
 
 </div>
-{{ foundUser }}
+<div v-else>No user found.</div>
+
 
     </div>
   </template>
@@ -67,6 +67,7 @@ OR
 
     findUserbyEmail() {
       this.isLoading = true;
+      this.showUserOptions = false;
       AuthService.getId(this.searchUserEmail)
       .then((response) => {
         this.searchUserId=response.data;
@@ -76,6 +77,7 @@ OR
     },
     findUserById() {
       this.isLoading = true;
+      this.showUserOptions = false;
       AuthService.getUserById(this.searchUserId)
       .then((response) => {
         this.foundUser =response.data;
@@ -86,11 +88,21 @@ OR
     },
 
     deleteUser(){
-      const shouldDelete = confirm("Are you sure you want to permenatly delet this user and all their content?  This action cannot be undone.");
+      const shouldDelete = confirm("Are you sure you want to permanently delet this user and all their content?  This action cannot be undone.");
     
       if(shouldDelete){
         this.isLoading = true;
-        AuthService.
+        AuthService.deleteUser(this.foundUser.id)
+        .then((response) => {
+          if(response.data){
+            console.log("User was deleted.");
+            this.showUserOptions = false;
+            this.foundUser = {};
+            this.isLoading = false;
+          }
+        })
+        
+       
       }
     
     
@@ -99,6 +111,7 @@ OR
 
     resetViolations() {
       const shouldReset = confirm("Are you sure you want to reset this user's violation count?  This will also remove a restricted status.")
+      if(shouldReset){
       this.isLoading = true;
       let editedUser = {
         id: this.foundUser.id,
@@ -113,10 +126,31 @@ OR
     if(response.data){
       this.findUserById(editedUser.id);
 
-   }})
-    }
+   }})}
+    },
 
-  }, 
+    makeUserAdmin() {
+      const shouldAdmin = confirm("Are you sure you want to set this user as an admin?");
+      if(shouldAdmin){
+        this.isLoading = true;
+        AuthService.makeAdmin(this.foundUser.id)
+        .then((response) => {
+          this.findUserById();
+        })
+      }
+    },
+
+  makeAdminUser(){
+    const shouldAdmin = confirm("Are you sure you want to remove admin privleges for this user?");
+      if(shouldAdmin){
+        this.isLoading = true;
+        AuthService.removeAdmin(this.foundUser.id)
+        .then((response) => {
+          this.findUserById();
+        })
+      }
+    }
+  }
 
   }
   </script>

@@ -14,7 +14,7 @@
   should be removed.
 </p>
 
-<div v-for="comment in flaggedComments" v-bind:key="comment.commentId">
+<div v-for="comment in violations" v-bind:key="comment.commentId">
 {{comment.comment}} by {{ comment.writer }}  for this <router-link v-bind:to="{name: 'recipe', params: {recipeId: comment.recipeId}}">recipe</router-link>.
 
 <button @click="reviewComment(comment.commentId, comment.userId)">This comment should be removed.</button>
@@ -34,7 +34,7 @@
 <p></p>
 {{ deletingCommentId }}
 </div>
-{{ flaggedComments }}
+{{ violations }}
 </div>
 _______<p></p>
 
@@ -65,7 +65,7 @@ import emailjs from 'emailjs-com';
     return {
       isLoading: false,
       user: {},
-      flaggedComments: [
+      violations: [
       ],
       reasonsForRemoval: [],
      deletingCommentId: 0,
@@ -88,10 +88,10 @@ import emailjs from 'emailjs-com';
   },
 
   methods: {
-    getFlaggedComments(){
+    getviolations(){
       CommentService.getReportedComments()
       .then((response) => {
-        this.flaggedComments = response.data;
+        this.violations = response.data;
         this.isLoading = false;
       })
     },
@@ -101,7 +101,7 @@ import emailjs from 'emailjs-com';
       if(shouldApprove){
       CommentService.unreportComment(commentId)
       .then((response) => {
-        this.getFlaggedComments();
+        this.getviolations();
       })}
     },
 
@@ -132,9 +132,9 @@ import emailjs from 'emailjs-com';
   async updateUserStatus() {
     console.log('got to update user');
     try {
-      this.user.flaggedComments += 1;
+      this.user.violations += 1;
 
-      if (this.user.flaggedComments >= 3) {
+      if (this.user.violations >= 3) {
         this.user.restricted = true; // Restrict user if they hit three strikes
       }
       let user = {
@@ -142,7 +142,7 @@ import emailjs from 'emailjs-com';
       username: this.user.username,
       restricted: this.user.restricted,
       displayName: this.user.displayName,
-      flaggedComments: this.user.flaggedComments + 1,
+      violations: this.user.violations + 1,
       avatarId: this.avatarId,
     };
     console.log(user);
@@ -161,7 +161,7 @@ import emailjs from 'emailjs-com';
       await emailjs.send(this.serviceId, this.templateId, {
         user_email: this.user.username,
         reasons: this.reasonsForRemoval,
-        numViolations: this.user.flaggedComments,
+        numViolations: this.user.violations,
       }, this.publicKey);
       console.log("Email successfully sent!");
     } catch (error) {
@@ -188,8 +188,9 @@ import emailjs from 'emailjs-com';
       this.handleError(error, 'removeComment');
     } finally {
       console.log('end, loading set to false');
-      this.getFlaggedComments();
+      this.user = {};
       this.deletingCommentId = 0;
+      this.getviolations();
       this.isLoading = false; // Ensure isLoading is reset
     }
   }
@@ -200,7 +201,7 @@ import emailjs from 'emailjs-com';
   },
   created() {
     this.isLoading = false;
-    this.getFlaggedComments();
+    this.getviolations();
   }
   }
   </script>

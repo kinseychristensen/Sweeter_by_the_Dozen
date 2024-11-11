@@ -31,8 +31,10 @@ Once a comment is reported, an admin will review the comment and if the comment 
 
 <div v-if="showPost">
   <div v-if="$store.state.token != ''">
+    <div v-if="user.restricted">Your account is restricted.  You are unable to post comments.</div>
+    <div v-else>
   <PostComment :recipeId="recipeId"/>
-  <button @click="togglePost">Cancel</button>
+  <button @click="togglePost">Cancel</button></div>
   </div><div v-else>You must be logged in to post a comment.</div>
 
 </div>
@@ -49,6 +51,7 @@ Once a comment is reported, an admin will review the comment and if the comment 
   import CommentService from '../services/CommentService';
   import Avatar from './Avatar.vue';
   import CodeConduct from './CodeConduct.vue';
+  import AuthService from '../services/AuthService';
 
 
   
@@ -66,6 +69,7 @@ Once a comment is reported, an admin will review the comment and if the comment 
       comments: [],
       showReport: false,
       showPost: false,
+      user: {},
     }
   },
 
@@ -94,13 +98,22 @@ togglePost(){
 
 toggleReport() {
   this.showReport = !this.showReport;
-}
+},
 
+
+getUser(){
+ AuthService.getUser()
+ .then((response) => {
+  this.user = response.data;
+ })
+}
   },
+
 created() {
 
 this.isLoading = true;
 this.getComments(this.recipeId);
+this.getUser();
 
 
 }
