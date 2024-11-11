@@ -1,8 +1,8 @@
 BEGIN TRANSACTION;
 
-
+INSERT INTO users (username,password_hash,role, display_name, avatar_id) VALUES ('kittheavenger@gmail.com','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_ADMIN', 'theOriginalDozen', 20);
 INSERT INTO users (username,password_hash,role, display_name, avatar_id) VALUES ('kit.the.avenger@gmail.com','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_USER', 'kinsey', 1);
-INSERT INTO users (username,password_hash,role, display_name, avatar_id) VALUES ('kittheavenger@gmail.com','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_ADMIN', 'admin', 20);
+
 
 
 INSERT INTO tags (tag) VALUES ('breakfast'), ('easy'), ('kid-friendly'), ('lunch'), ('dinner'), ('snack'), ('dessert'), ('beginner'),
@@ -100,7 +100,7 @@ INSERT INTO recipe_to_tags (recipe_id, tag_id) VALUES (12, 1), (12, 9), (12, 41)
 
 
 
-INSERT INTO recipe_pictures (recipe_id, picture_url) VALUES (1, 'TEST'), (1, 'TEST1'), (2, 'TEST'), (3, 'TEST'), (4, 'TEST'), (4, 'TEST1'), (5, 'TEST'), (10, 'TEST');
+INSERT INTO recipe_pictures (recipe_id, picture_url, user_id) VALUES (1, 'TEST', 2), (1, 'TEST1', 2), (2, 'TEST', 2), (3, 'TEST', 2), (4, 'TEST', 2), (4, 'TEST1', 2), (5, 'TEST', 1), (10, 'TEST', 1);
 
 
 

@@ -111,6 +111,7 @@ public class AuthenticationController {
 
     }
 
+    //delete user needs to delete all comments, delete pending recipes
 
 
 

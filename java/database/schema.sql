@@ -11,12 +11,12 @@ CREATE TABLE users (
 	password_hash varchar(200) NOT NULL,
 	role varchar(50) NOT NULL,
 	display_name varchar(30) NOT NULL UNIQUE,
-	flagged_comments int default 0,
+	violations int default 0,
 	restricted boolean default false,
 	avatar_id int default 0,
 	CONSTRAINT PK_users PRIMARY KEY (user_id)
 );
-+-
+
 CREATE TABLE recipes (
     recipe_id SERIAL,
     user_id int,
@@ -31,6 +31,8 @@ CREATE TABLE recipe_pictures (
     recipe_id int,
     picture_url text,
     alt_text text,
+    user_id int,
+    CONSTRAINT FK_user_id FOREIGN KEY (user_id) REFERENCES users(user_id),
     CONSTRAINT FK_recipe_id FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id)
     );
 
@@ -100,7 +102,9 @@ CREATE TABLE pending_recipes (
 CREATE TABLE pending_recipe_pics (
     recipe_id int,
     picture_url text,
-    CONSTRAINT FK_recipe_id FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id)
+    user_id int,
+    CONSTRAINT FK_recipe_id FOREIGN KEY (recipe_id) REFERENCES recipes(recipe_id),
+    CONSTRAINT FK_user_id FOREIGN KEY (user_id) REFERENCES users(user_id)
     );
 
 

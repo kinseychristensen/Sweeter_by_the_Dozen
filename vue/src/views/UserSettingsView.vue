@@ -19,12 +19,12 @@
         <div>Email: {{ user.username }}</div>
         <img :src="user.avatarUrl"/>
         <div v-if="user.restricted"> Warning: your account is restricted due to violations of the site's terms of use.  You may still save recipes and browse, but you are no longer allowed to post comments or submit images.  If you feel this is in error, please contact the admin team.</div>
-       <div v-if="user.flaggedComments != 0 && !user.restricted">Warning: You have had {{ user.flaggedComments }} comments that have been reported as violating the site's terms of use.  The comments have been reviewed by admin and deleted from the site.  Further activity may result in your account being restricted.</div>
-       <div v-if="!user.restricted && user.flaggedComments ==0">Your account is in good standing.  Thank you for your support!</div> 
+       <div v-if="user.violations != 0 && !user.restricted">Warning: You have had {{ user.violations }} violations of the site's terms of use.  The prohibited content has been reviewed by admin and deleted from the site.  Further activity may result in your account being restricted.</div>
+       <div v-if="!user.restricted && user.violations ==0">Your account is in good standing.  Thank you for your support!</div> 
        <button @click="toggleUpdate">{{buttonMsg}}</button>
        <p></p><p></p>
       </div>
- 
+ {{ user }}
     <p></p><p></p>
        <div v-if="update">
         <form v-on:submit.prevent="verifyPassword">
@@ -92,7 +92,7 @@
           password: '',
           displayName: '',
           restricted: false,
-          flaggedComments: 0,
+          violations: 0,
           id: 0,
           avatarId: 0,
           avatarUrl: '',
@@ -102,7 +102,7 @@
           displayName: '',
           username: '',
           restricted: false,
-          flaggedComments: 0,
+          violations: 0,
           id: 1,
           avatarId: 0,
         },
@@ -130,7 +130,7 @@
           this.first = true;
           this.editUser.displayName = this.user.displayName;
           this.editUser.username = this.user.username;
-          this.editUser.flaggedComments = this.user.flaggedComments;
+          this.editUser.violations = this.user.violations;
           this.editUser.restricted = this.user.restricted;
           this.editUser.id = this.user.id;
           this.editUser.avatarId = this.user.avatarId;

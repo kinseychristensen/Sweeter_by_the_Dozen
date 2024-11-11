@@ -90,7 +90,7 @@
   },
   methods: {
   sendCode(){
-        emailjs.send(this.serviceId, this.templateId, {
+       /* emailjs.send(this.serviceId, this.templateId, {
             email: this.user.username,
             message: this.sentCode,
         }, this.publicKey)
@@ -99,10 +99,11 @@
         },
  (error) => {
     console.log('Failed to send email:', error)
- })   
+ })   */
     this.emailSent = true;
     
 },
+
 
 generateCode(){
     this.sentCode = '';

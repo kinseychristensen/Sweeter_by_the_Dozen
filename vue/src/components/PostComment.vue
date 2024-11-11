@@ -19,6 +19,7 @@ Comments are meant to encourage and aid other recipe collectors, but not to spre
 
 import CommentService from '../services/CommentService';
 import CodeConduct from './CodeConduct.vue';
+import AuthService from '../services/AuthService';
 
 
 export default {
@@ -35,6 +36,7 @@ return {
     comment: '',
   },
   showWarning : false,
+  user: {}  
 }
 },
 

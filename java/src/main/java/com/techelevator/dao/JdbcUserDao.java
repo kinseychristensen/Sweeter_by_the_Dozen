@@ -110,9 +110,9 @@ public class JdbcUserDao implements UserDao {
 
     public boolean updateUserDetails(User user) {
         try {
-            String sql = "UPDATE users SET display_name = ?, username = ?, flagged_comments = ?, restricted = ?, avatar_id = ?  " +
+            String sql = "UPDATE users SET display_name = ?, username = ?, violations = ?, restricted = ?, avatar_id = ?  " +
                     "WHERE user_id = ?;";
-            jdbcTemplate.update(sql, user.getDisplayName(), user.getUsername(), user.getFlaggedComments(),
+            jdbcTemplate.update(sql, user.getDisplayName(), user.getUsername(), user.getViolations(),
                     user.isRestricted(), user.getAvatarId(), user.getId());
 
         } catch (CannotGetJdbcConnectionException e) {
@@ -151,6 +151,20 @@ public class JdbcUserDao implements UserDao {
    return true;
 }
 
+public boolean deleteUser (int userId){
+        try {
+    String sql= "";
+
+
+        }catch(CannotGetJdbcConnectionException e){
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch(DataIntegrityViolationException e){
+            throw new DaoException("Data integrity violation", e);
+        }
+    return true;
+
+}
+
 
 
     private User mapRowToUser(SqlRowSet rs) {
@@ -160,7 +174,7 @@ public class JdbcUserDao implements UserDao {
         user.setPassword(rs.getString("password_hash"));
         user.setAuthorities(Objects.requireNonNull(rs.getString("role")));
         user.setDisplayName(rs.getString("display_name"));
-        user.setFlaggedComments(rs.getInt("flagged_comments"));
+        user.setViolations(rs.getInt("violations"));
         user.setRestricted(rs.getBoolean("restricted"));
         user.setAvatarId(rs.getInt("avatar_id"));
         return user;

@@ -103,8 +103,8 @@ public class JdbcRecipeDao implements RecipeDao{
 
             if(!recipe.getRecipePicList().isEmpty()) {
                 for (RecipePic pic : recipe.getRecipePicList()) {
-                    sql = "INSERT INTO recipe_pictures (recipe_id, picture_url, alt_text) VALUES (?, ?, ?);";
-                    jdbcTemplate.update(sql, recipe.getRecipeId(), pic.getPicUrl(), pic.getAltText());
+                    sql = "INSERT INTO recipe_pictures (recipe_id, picture_url, alt_text, user_id) VALUES (?, ?, ?, ?);";
+                    jdbcTemplate.update(sql, recipe.getRecipeId(), pic.getPicUrl(), pic.getAltText(), pic.getUserId());
                 }
             }
             if(!recipe.getRecipeStepList().isEmpty()) {
@@ -160,8 +160,8 @@ public class JdbcRecipeDao implements RecipeDao{
 
             if (!recipe.getRecipePicList().isEmpty()) {
                 for (RecipePic pic : recipe.getRecipePicList()) {
-                    sql = "INSERT INTO recipe_pictures (recipe_id, picture_url, alt_text) VALUES (?, ?, ?);";
-                    jdbcTemplate.update(sql, recipe.getRecipeId(), pic.getPicUrl(), pic.getAltText());
+                    sql = "INSERT INTO recipe_pictures (recipe_id, picture_url, alt_text, user_id) VALUES (?, ?, ?);";
+                    jdbcTemplate.update(sql, recipe.getRecipeId(), pic.getPicUrl(), pic.getAltText(), pic.getUserId());
                 }
             }
             if (!recipe.getRecipeStepList().isEmpty()) {
@@ -442,6 +442,7 @@ public Recipe getRecipeDetails (int recipeId){
         pic.setPicUrl(rs.getString("picture_url"));
         pic.setRecipeId(rs.getInt("recipe_id"));
         pic.setAltText(rs.getString("alt_text"));
+        pic.setUserId((rs.getInt("user_id")));
 
         return pic;
     }

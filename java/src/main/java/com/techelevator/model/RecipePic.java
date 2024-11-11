@@ -4,6 +4,15 @@ public class RecipePic {
     private int recipeId;
     private String picUrl;
     private String altText;
+    private int userId;
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     public int getRecipeId() {
         return recipeId;

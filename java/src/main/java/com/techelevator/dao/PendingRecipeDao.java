@@ -14,6 +14,6 @@ public interface PendingRecipeDao {
     List<RecipePic> getPendingPics();
     boolean approvePendingPics(List<RecipePic> pics);
     boolean deletePendingPics(List<RecipePic> pics);
-    boolean submitPhoto(String picURL, int recipeId);
+    boolean submitPhoto(String picURL, int recipeId, int userId);
 
 }

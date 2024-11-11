@@ -1,7 +1,5 @@
 package com.techelevator.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -13,7 +11,7 @@ public class User {
    private String password;
    private boolean restricted;
    private String displayName;
-   private int flaggedComments;
+   private int violations;
    private int avatarId;
    private Set<Authority> authorities = new HashSet<>();
 
@@ -51,12 +49,12 @@ public class User {
       this.displayName = displayName;
    }
 
-   public int getFlaggedComments() {
-      return flaggedComments;
+   public int getViolations() {
+      return violations;
    }
 
-   public void setFlaggedComments(int flaggedComments) {
-      this.flaggedComments = flaggedComments;
+   public void setViolations(int violations) {
+      this.violations = violations;
    }
 
    public int getId() {

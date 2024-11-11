@@ -115,7 +115,7 @@ public class JdbcPendingRecipeDao implements PendingRecipeDao{
 @Override
 public boolean approvePendingPics(List<RecipePic> pics){
         try {
-            String sql1 = "INSERT INTO recipe_pictures (recipe_id, picture_url, alt_text) VALUES (?,?,?);";
+            String sql1 = "INSERT INTO recipe_pictures (recipe_id, picture_url, alt_text, user_id) VALUES (?,?,?, ?);";
             String sql2 = "DELETE FROM pending_recipe_pics WHERE recipe_id = ? AND picture_url = ?;";
             for(RecipePic pic : pics) {
             jdbcTemplate.update(sql1, pic.getRecipeId(), pic.getPicUrl(), pic.getAltText());
@@ -147,11 +147,11 @@ public boolean deletePendingPics(List<RecipePic> pics){
 
 
     @Override
-    public boolean submitPhoto(String picURL, int recipeId){
+    public boolean submitPhoto(String picURL, int recipeId, int userId){
         try {
-            String sql = "INSERT INTO pending_recipe_pics (recipe_id, picture_url)" +
-                    "VALUES (?, ?);";
-            jdbcTemplate.update(sql, recipeId, picURL);
+            String sql = "INSERT INTO pending_recipe_pics (recipe_id, picture_url, user_id)" +
+                    "VALUES (?, ?, ?);";
+            jdbcTemplate.update(sql, recipeId, picURL, userId);
 
         }catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -184,6 +184,7 @@ private RecipePic mapRowToPic (SqlRowSet rs){
         RecipePic pic = new RecipePic();
         pic.setRecipeId(rs.getInt("recipe_id"));
         pic.setPicUrl(rs.getString("picture_url"));
+        pic.setUserId(rs.getInt("user_id"));
         return pic;
 }
 
