@@ -30,8 +30,8 @@ export default {
     return axios.put('/pending-pics/delete', pics)
   },
 
-  submitPhoto(recipeId, picUrl){
-    return axios.put(`/submit-photo/${recipeId}/${picUrl}`)
+  submitPhoto(pic){
+    return axios.put(`/submit-photo`, pic)
   }
 
 

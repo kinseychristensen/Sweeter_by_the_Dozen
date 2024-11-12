@@ -74,11 +74,11 @@ public class PendingRecipeController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(path="/submit-photo/{recipeId}/{picUrl}", method = RequestMethod.PUT)
-    boolean submitPhoto(@PathVariable String picUrl, @PathVariable int recipeId, Principal principal){
+    @RequestMapping(path="/submit-photo", method = RequestMethod.PUT)
+    boolean submitPhoto(@RequestBody RecipePic pic, Principal principal){
         String userName = principal.getName();
         User user= userDao.getUserByUsername(userName);
-        return pendingRecipeDao.submitPhoto(picUrl, recipeId, user.getId());
+        return pendingRecipeDao.submitPhoto(pic.getPicUrl(), pic.getRecipeId(), user.getId());
     }
 
 

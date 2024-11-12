@@ -36,7 +36,7 @@
 <div v-if="showComments">
 <CommentsDisplay :recipeId="recipe.recipeId"/></div>
 <div v-if="showPhotos">
-<PhotoDisplay :photos="recipe.recipePicList"/>
+<PhotoDisplay :photos="recipe.recipePicList" :recipeId="recipe.recipeId"/>
 </div>
 </div>
 

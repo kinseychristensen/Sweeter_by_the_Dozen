@@ -1,11 +1,21 @@
 <template>
-    <div class="home-container">
-photo display
+    <div>
+<h1>Photos</h1>
 
-{{ photos }}
+<div v-if="photos.length == 0">There are no images for this recipe yet.</div>
 
-<SubmitPhoto/>
-    </div>
+<div v-else>
+
+  <p></p>
+<button @click="prevPhoto">Previous Photo</button>
+
+<img :src="photos[currentImgIndex].picUrl" :altText="photos[currentImgIndex].altText"/>
+{{ photos[currentImgIndex].altText }}
+
+<button @click="nextPhoto">Next Photo</button>
+</div>
+<SubmitPhoto v-if="$store.state.token != ''" :recipeId="recipeId"/>
+   </div>
   </template>
   
   
@@ -19,8 +29,32 @@ photo display
     components: {
      SubmitPhoto
   }, 
-  props: ['photos'],
+  props: ['photos', 'recipeId'],
+  
+  data() {
+    return {
+      currentImgIndex: 0,
+      isLoading: false,
+      
+
+    };
+  },
+    methods: {
+      nextPhoto() {
+        this.currentImgIndex += 1;
+        if(this.currentImgIndex == this.photos.length){
+          this.currentImgIndex = 0;
+        }
+      },
+
+      prevPhoto() {
+        this.currentImgIndex -= 1;
+        if(this.currentImgIndex < 0){
+          this.currentImgIndex = this.photos.length -1;
+        }
+      }
   }
+}
   </script>
   
   
