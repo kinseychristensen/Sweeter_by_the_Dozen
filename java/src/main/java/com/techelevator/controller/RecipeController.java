@@ -36,6 +36,17 @@ public class RecipeController {
         return recipeDao.getRecipeDetails(recipeId);
     }
 
+    @RequestMapping(path = "/recipes", method= RequestMethod.PUT)
+    public List<Recipe> getRecipesFromList (@RequestBody List<Integer> recipeIds){
+        List<Recipe> recipes = new ArrayList<>();
+        for(int recipeId : recipeIds){
+            Recipe recipe = recipeDao.getRecipeDetails(recipeId);
+            recipes.add(recipe);
+        }
+        return recipes;
+    }
+
+
     @RequestMapping(path = "/{userId}/recipes", method= RequestMethod.GET)
     public List<Recipe> getRecipesByUser (@PathVariable int userId){
         return recipeDao.getRecipesByUser(userId);

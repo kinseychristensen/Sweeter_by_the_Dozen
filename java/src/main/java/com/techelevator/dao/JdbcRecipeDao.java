@@ -160,7 +160,7 @@ public class JdbcRecipeDao implements RecipeDao{
 
             if (!recipe.getRecipePicList().isEmpty()) {
                 for (RecipePic pic : recipe.getRecipePicList()) {
-                    sql = "INSERT INTO recipe_pictures (recipe_id, picture_url, alt_text, user_id) VALUES (?, ?, ?);";
+                    sql = "INSERT INTO recipe_pictures (recipe_id, picture_url, alt_text, user_id) VALUES (?, ?, ?, ?);";
                     jdbcTemplate.update(sql, recipe.getRecipeId(), pic.getPicUrl(), pic.getAltText(), pic.getUserId());
                 }
             }

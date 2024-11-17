@@ -5,6 +5,11 @@ export default {
 getRecipeDetails(recipeId){
     return axios.get(`/recipe/${recipeId}`)
  },
+
+ getRecipesFromList(recipeIds){
+   return axios.put('/recipes', recipeIds)
+ },
+
  getRecipesByUser(userId){
     return axios.get(`/${userId}/recipes`)
  },

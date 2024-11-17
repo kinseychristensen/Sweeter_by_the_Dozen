@@ -67,6 +67,7 @@
 
 
 
+
   <div>
   <a v-for="tag in tags" :key="tag.tagId">
     <input type="checkbox" :id="tag.tagId" v-model="recipe.recipeTagList" :value="tag">
@@ -78,14 +79,23 @@
 PHOTOS
 
 <div v-for="pic in recipe.recipePicList" v-bind:key="pic.picUrl">
- ADD CODE TO DISPLAY PIC:  {{ pic }}
- <p></p>
+ <img :src="pic.picUrl">
+ <p></p>{{ pic }}
  <label for="altText">Provide alternate text to describe this photo for the visually impared:</label>
  <input text id="altText" v-model="pic.altText"/>
  <button  type="button"  @click="deleteImage(pic.picUrl)">Remove this Image</button>
 
   </div>
 
+  <button type="button" @click="toggleShowPhotoManually">{{photoManualMessage}}</button>
+  <div v-if="showPhotoManually">
+    <label for="manualPicUrl">Enter URL for photo:</label>
+    <input text id="manualPicUrl" v-model="newPic.picUrl"/>
+    <label for="manualPicUser">Enter the user id of the original submitter.</label>
+    <input number id="manualPicUser" v-model="newPic.userId"/>
+    <button type=button @click="addManualPic">Load Photo</button>
+    {{ newPic }}
+  </div>
 
 <button>Submit Recipe</button>
   </form>
@@ -113,12 +123,22 @@ PHOTOS
   data(){
     return {
       recipeId: 0,
+      showPhotoManually: false,
+      photoManualMessage: 'Manually Add a New Image',
       isLoading: false,
       originalRecipe: {},
       showRecipeBuilder: false,
       showErrorMsg: false,
       recipeUpdated: false,
       showDeletedMessage: false,
+      
+      newPic : {
+      recipeId : 0,
+      picUrl : '',
+      altText: '',
+      userId: 1,
+      },
+      
       tags: [],
       recipe: {
         title: '',
@@ -166,6 +186,17 @@ PHOTOS
   }})
   },
 
+  toggleShowPhotoManually(){
+    if(this.showPhotoManually){
+      this.photoManualMessage = "Manually Add a New Image";
+      this.showPhotoManually = false;
+    }else {
+      this.showPhotoManually = true;
+      this.photoManualMessage = "Cancel";
+    }
+  },
+
+
   addStep(){
     let stepNum = this.recipe.recipeStepList.length + 1;
     this.recipe.recipeStepList.push(
@@ -185,6 +216,19 @@ PHOTOS
 
     );
   },
+  addManualPic(){
+    this.newPic.recipeId = this.recipeId;   
+    this.recipe.recipePicList.push(this.newPic);
+    let newPic = {
+      recipeId : this.recipeId,
+      picUrl : '',
+      altText: '',
+      userId: 1,
+    };
+    this.newPic = newPic;
+    this.toggleShowPhotoManually();
+  },
+
 
   deleteImage(picUrl){
   this.recipe.recipePicList = this.recipe.recipePicList.filter(pic => pic.picUrl != picUrl);
@@ -198,8 +242,32 @@ PHOTOS
       })
     },
 
+    verifyRecipe(){
+    
+      let newRecipePicList = this.recipe.recipePicList.filter(function (pic) {
+        return pic.picUrl !== '';
+      });
+      console.log(newRecipePicList);
+     let newIngredientList = this.recipe.ingredientList.filter((ingredient) => {
+        return ingredient.ingredientText !== '';
+      });
+      console.log(newIngredientList);
+      let newRecipeStepList = this.recipe.recipeStepList.filter((step) => {
+        return step.instructions !== '';
+      });
+      console.log(newRecipeStepList);
+      this.recipe.recipePicList = newRecipePicList;
+      this.recipe.ingredientList = newIngredientList;
+      this.recipe.recipeStepList = newRecipeStepList;
+      console.log(this.recipe);
+    },
+
+
+
     submitRecipe(){
       this.isLoading = true;
+      this.verifyRecipe();
+
       RecipeService.updateRecipe(this.recipe.recipeId, this.recipe)
       .then((response) =>{
       this.showRecipeBuilder = false,

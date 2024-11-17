@@ -142,7 +142,7 @@ import emailjs from 'emailjs-com';
       username: this.user.username,
       restricted: this.user.restricted,
       displayName: this.user.displayName,
-      violations: this.user.violations + 1,
+      violations: this.user.violations,
       avatarId: this.avatarId,
     };
     console.log(user);

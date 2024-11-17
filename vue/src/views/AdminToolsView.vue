@@ -25,7 +25,7 @@
 <p></p>
 
 
-<ApproveImage :userId="user.id" v-if="showImage" />
+<ApproveImage v-if="showImage" />
 <ApproveRecipe :userId="user.id" v-if="showRecipe"/>
 <ReviewComments :userId="user.id" v-if="showComments"/>
 <EditUsers :userId="user.id" v-if="showUsers"/>

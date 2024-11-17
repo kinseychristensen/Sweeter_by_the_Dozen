@@ -118,7 +118,7 @@ public boolean approvePendingPics(List<RecipePic> pics){
             String sql1 = "INSERT INTO recipe_pictures (recipe_id, picture_url, alt_text, user_id) VALUES (?,?,?, ?);";
             String sql2 = "DELETE FROM pending_recipe_pics WHERE recipe_id = ? AND picture_url = ?;";
             for(RecipePic pic : pics) {
-            jdbcTemplate.update(sql1, pic.getRecipeId(), pic.getPicUrl(), pic.getAltText());
+            jdbcTemplate.update(sql1, pic.getRecipeId(), pic.getPicUrl(), pic.getAltText(), pic.getUserId());
             jdbcTemplate.update(sql2, pic.getRecipeId(), pic.getPicUrl());
             }
         }catch (CannotGetJdbcConnectionException e) {
