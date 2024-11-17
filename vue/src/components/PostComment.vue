@@ -1,8 +1,8 @@
 <template>
   <div>
-<form>
+
   <input text v-model="comment.comment"/>Enter your comment here.
-</form>
+
 <div v-if="showWarning">Opps!  Your comment is blank!  Please try again.</div>
 
 Comments are meant to encourage and aid other recipe collectors, but not to spread negativity!  Please review our Code of Conduct before submitting.

@@ -15,8 +15,6 @@
   Tags:
   <p v-for="tag in currentTags" v-bind:key="tag">{{ tag }}</p>
   <p></p>
-  Pics:
-  <p v-for="pic in currentPics" v-bind:key="pic">{{ pic }}</p>
 
 </div>
 <button @click="buildRecipe" v-if="pendingRecipes.length>0">Standardize Recipe and Approve</button>
@@ -89,7 +87,7 @@
 PHOTOS
 
 <div v-for="pic in recipe.recipePicList" v-bind:key="pic.picUrl">
- ADD CODE TO DISPLAY PIC:  {{ pic }}
+<img :src="pic.picUrl">
  <p></p>
  <label for="altText">Provide alternate text to describe this photo for the visually impared:</label>
  <input text id="altText" v-model="pic.altText"/>
@@ -222,9 +220,11 @@ methods: {
     if(this.currentPics != ""){
     
       this.currentPics.forEach((pic) => {
+        console.log(pic);
         let thisPic = {
           picUrl: pic,
           altText: '',
+          userId: this.recipe.userId,
         };
         this.recipe.recipePicList.push(thisPic);
       })

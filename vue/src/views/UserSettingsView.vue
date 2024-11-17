@@ -8,7 +8,7 @@
 
       <h1>Your Account</h1>
 
-<button><router-link v-bind:to="{ name: 'admin-tools', params: {userId: user.id} }" v-if="user.authorities[0].name == 'ROLE_ADMIN'"> Go To Admin Tools</router-link></button>
+<button v-if="user.authorities[0].name == 'ROLE_ADMIN'"><router-link v-bind:to="{ name: 'admin-tools', params: {userId: user.id} }" > Go To Admin Tools</router-link></button>
 <button><router-link v-bind:to="{ name: 'password' }"> Reset Your Password</router-link></button>
 
 
@@ -24,7 +24,7 @@
        <button @click="toggleUpdate">{{buttonMsg}}</button>
        <p></p><p></p>
       </div>
- {{ user }}
+
     <p></p><p></p>
        <div v-if="update">
         <form v-on:submit.prevent="verifyPassword">
@@ -62,7 +62,7 @@
 
           New Avatar: {{ editUser.avatarId }}
             
-            <button>Save Changes</button>
+           
         </form>
        </div>
       </div>

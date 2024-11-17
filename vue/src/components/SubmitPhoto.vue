@@ -21,7 +21,7 @@
       <button @click="saveImage">Submit Picture</button>
     </div>
   </div>
-  {{ pic }} {{ recipeId }} {{ user }}
+
 </template>
 
 <script>

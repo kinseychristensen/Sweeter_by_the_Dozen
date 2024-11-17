@@ -1,22 +1,23 @@
 <template>
-    <div>
+<div>
 
-
-
+  <div v-if="comments.length == 0">There are no comments yet for this recipe.</div>
 <div v-for="comment in comments" :key="comment.commentId">
-<div v-if="comment.reported">this comment has been flagged for review.</div>  {{ comment.comment }}
-  {{ comment.writer }}
-{{ comment.reported }}
+<div v-if="comment.reported">this comment has been flagged for review.</div> 
+
+<h3>{{ comment.comment }}</h3>
+
 <Avatar :userId="comment.userId"/>
 <p></p>
-<button @click="toggleReport">Report</button>
+<button type="button" @click="toggleReport">Report</button>
+<button type="button" @click="deleteComment(comment.commentId)" v-if="comment.userId == user.id">Delete My Comment</button>
 <div v-if="showReport">
   <ReportComment :commentId="comment.commentId"/>
-<button @click="toggleReport">Cancel</button></div>
+<button type="button" @click="toggleReport">Cancel</button></div>
 </div>
 <p></p>
 
-<button @click="togglePost">Post a Comment</button>
+<button type="button" @click="togglePost">Post a Comment</button>
 <div v-if="showReport">
   Comments are meant to encourage and aid other recipe collectors, but not to spread negativity!  
 <CodeConduct/>
@@ -98,6 +99,19 @@ togglePost(){
 
 toggleReport() {
   this.showReport = !this.showReport;
+},
+
+deleteComment(commentId){
+  const shouldDelete = confirm("Are you sure you want to delete your comment?");
+
+  if(shouldDelete){
+CommentService.deleteComment(commentId)
+.then((response) => {
+  if(response.data){
+    this.isLoading = false;
+    this.$router.go(0);
+  }
+})}
 },
 
 
