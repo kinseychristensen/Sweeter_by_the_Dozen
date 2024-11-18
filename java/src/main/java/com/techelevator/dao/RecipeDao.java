@@ -19,4 +19,5 @@ public interface RecipeDao {
     List<Recipe> searchByKeyword (String keyword, int pageNum);
     List<Recipe> getRecipesByKeywordAndTag (int[] tags, String keyword, int pageNum);
     boolean updateRecipe (Recipe recipe);
+    boolean createTags (List<Tag> tags);
 }

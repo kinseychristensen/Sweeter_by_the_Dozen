@@ -1,6 +1,7 @@
 <template>
-  <div>
-   home
+  <div v-if="isLoading">Loading...</div>
+   
+  <div v-else>
 
 <RecipeCard :recipe="recipe"/>
 

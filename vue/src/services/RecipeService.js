@@ -36,6 +36,10 @@ getSavedRecipes(){
 getAllTags(){
     return axios.get('/tags')
  },
+createTags(tags) {
+   return axios.put('/tags/new', tags)
+},
+
 deleteRecipe(recipeId){
     return axios.delete(`/recipe/${recipeId}`)
  },

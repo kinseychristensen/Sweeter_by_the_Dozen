@@ -57,7 +57,7 @@
     </select>
     <div>
       <a v-for="avatar in avatars" :key="avatar.avatarId">
-      <img id="avatar" :src="avatar.avatarSrc"/>{{ avatar.avatarId }}: {{ avatar.altText }}</a>
+      <img id="avatar" :src="avatar.avatarSrc" loading="lazy" />{{ avatar.avatarId }}: {{ avatar.altText }}</a>
   </div>
 
           New Avatar: {{ editUser.avatarId }}

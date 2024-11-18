@@ -138,6 +138,21 @@ public class JdbcRecipeDao implements RecipeDao{
         return recipe.getRecipeId();
     }
 
+    @Override
+    public boolean createTags (List<Tag> tags){
+        String sql = "INSERT INTO tags (tag) VALUES (?);";
+        try {
+            for (Tag tag : tags) {
+                jdbcTemplate.update(sql, tag.getTag());
+            }
+        }catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+        return true;
+    }
+
 
 @Override
     public boolean updateRecipe (Recipe recipe) {

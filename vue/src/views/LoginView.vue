@@ -19,8 +19,8 @@
         <input type="password" id="password" v-model="user.password" required />
       </div>
       <button class="btn btn-primary" type="submit">SIGN IN</button>
-      <p>
-      <router-link v-bind:to="{ name: 'register' }">Need an account? Sign up.</router-link></p>
+  
+     
       <p>
           <router-link v-bind:to="{ name: 'password' }">Reset Password</router-link></p>
         

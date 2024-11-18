@@ -3,8 +3,8 @@
   <div>
     <div id="nav">
       
-      <router-link v-bind:to="{ name: 'home' }">Home</router-link>
-      <router-link v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
+     
+      <button v-if="$store.state.token != ''"><router-link v-bind:to="{ name: 'logout' }" >Logout</router-link></button>
       <div v-else>
       <button @click="toggleRegister">Register</button>
       <button @click="toggleLogin">Login</button>
@@ -12,26 +12,26 @@
 
       <div v-if="showLogIn">
         <Login />
-        <button @click="toggleLogin">Cancel</button>
-        <button @click="toggleRegister">Register</button>
+        <button @click="cancel">Cancel</button>
+        <button @click="toggleRegister">Register for a New Account</button>
       </div>
 
       <div v-if="showRegister">
         <Register />
-        <button @click="toggleRegister">Cancel</button>
-        <button @click="toggleLogin">Login</button>
+        <button @click="cancel">Cancel</button>
+        <button @click="toggleLogin">Login to Your Account</button>
       </div>
       
     </div>
-    <div>
+    <div v-if="!showRegister && !showLogIn">
       <NavBar/>
-    </div>
-    <router-view /><p></p>
+    <router-view /><p></p></div>
     <footer>
       <Router-Link v-bind:to="{name: 'about'}">About Us</Router-Link>    |       
       <a href="mailto:sweeter.by.the.dozen.cookbook@gmail.com">Contact Us</a>
     </footer>
-  </div>
+  
+</div>
 </template>
 
 <script>
@@ -55,6 +55,11 @@ export default {
     }
   },
   methods: {
+
+    cancel() {
+      this.showLogIn = false;
+      this.showRegister = false;
+    },
 
     toggleLogin() {
       this.showLogIn = !this.showLogIn;

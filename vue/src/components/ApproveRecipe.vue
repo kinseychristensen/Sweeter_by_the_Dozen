@@ -20,6 +20,26 @@
 <button @click="buildRecipe" v-if="pendingRecipes.length>0">Standardize Recipe and Approve</button>
 <button @click="rejectRecipe" v-if="pendingRecipes.length>0">Reject Recipe</button>
 <button @click="newBlankRecipe">Create New Recipe</button>
+<button @click="showNewTags = true">Create New Recipe Tags</button>
+
+
+
+<div v-if="showNewTags">
+  <h1>Add a Tag</h1>
+  <h3>Existing Tags:</h3>
+  <a v-for="tag in tags" :key="tag.tagId">{{ tag.tag }} </a>
+
+  New Tags: 
+  <a v-for="tag, index in newTags" :key="index">{{ tag }}</a>
+
+  <label for="newTagField">New Tag:</label>
+  <input type="text" v-model="newestTag"/>
+  <button @click="addTag">Add Tag</button>
+  <button @click="saveTags">Save Changes</button>
+  <button @click="cancelTags">Cancel</button>
+
+</div>
+
 
 
 <div v-if="showRecipeBuilder">
@@ -125,6 +145,9 @@ data() {
     isLoading: false,
     showRecipeBuilder: false,
     isNew: false,
+    showNewTags: false,
+    newTags: [],
+    newestTag: '',
     tags: [],
     recipe: {
         title: '',
@@ -178,6 +201,29 @@ computed: {
 
 },
 methods: {
+  saveTags(){
+    this.isLoading = true;
+    if(this.newestTag != ''){
+      this.newTags.push(
+      { tag: this.newestTag}
+    );
+    };
+    RecipeService.createTags(this.newTags)
+      .then((response) => {
+        this.getTags();
+        this.showNewTags = false;
+        this.newTags = [];
+        this.newestTag = '';
+      })
+  },
+
+  cancelTags(){
+    this.newTags = [];
+    this.newestTag = '';
+    this.showNewTags = false;
+  },
+
+
   pullPendingRecipes(){
     
    PendingRecipeService.getPendingRecipes()
@@ -231,6 +277,7 @@ methods: {
     }
   },
 
+
   addStep(){
     let stepNum = this.recipe.recipeStepList.length + 1;
     this.recipe.recipeStepList.push(
@@ -238,6 +285,15 @@ methods: {
         instructions: '',}
     );
   },
+
+  addTag(){
+    this.newTags.push(
+      { tag: this.newestTag}
+    );
+    this.newestTag = '';
+  },
+
+
   addIngredient(){
     let ingNum = this.recipe.ingredientList.length + 1;
     this.recipe.ingredientList.push({

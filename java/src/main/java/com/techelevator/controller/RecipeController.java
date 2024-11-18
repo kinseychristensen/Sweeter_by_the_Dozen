@@ -36,6 +36,11 @@ public class RecipeController {
         return recipeDao.getRecipeDetails(recipeId);
     }
 
+    @RequestMapping(path = "/tags/new", method = RequestMethod.PUT)
+    public boolean createTags (@RequestBody List<Tag> tags){
+        return recipeDao.createTags(tags);
+    }
+
     @RequestMapping(path = "/recipes", method= RequestMethod.PUT)
     public List<Recipe> getRecipesFromList (@RequestBody List<Integer> recipeIds){
         List<Recipe> recipes = new ArrayList<>();
