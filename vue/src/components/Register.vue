@@ -1,7 +1,7 @@
 <template>
   <div id="register" class="register-container">
    
- {{ user }}
+ 
      <h1 class="register-title">Create Account</h1>
      <div role="alert" v-if="registrationErrors">
        {{ registrationErrorMsg }}

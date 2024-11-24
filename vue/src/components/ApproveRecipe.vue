@@ -207,7 +207,7 @@ methods: {
       this.newTags.push(
       { tag: this.newestTag}
     );
-    };
+    }
     RecipeService.createTags(this.newTags)
       .then((response) => {
         this.getTags();

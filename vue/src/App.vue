@@ -1,6 +1,6 @@
 <template>
 
-  <div>
+  <div id="body">
     <div id="nav">
       
      
@@ -86,7 +86,9 @@ export default {
 
 </script>
 
-<style scoped>
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
 
 
 </style>

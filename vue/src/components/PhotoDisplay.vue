@@ -1,6 +1,5 @@
 <template>
     <div>
-<h1>Photos</h1>
 
 <div v-if="photos.length == 0">There are no images for this recipe yet.</div>
 

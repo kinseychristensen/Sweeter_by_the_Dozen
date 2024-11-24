@@ -1,0 +1,148 @@
+#body {
+    background-color: #dffefd;
+    min-height: 100vh;
+    min-width: 100vw;
+}
+
+.card{
+    display: grid;
+    padding: 0px;
+    width: 75vw;
+    max-width: 800px;
+    margin: 20px;
+    grid-template-columns: "200px 200px 200px 1fr";
+    grid-template-areas: 
+    "first second third spacing"
+    "base base base base";
+    grid-gap: 0px;
+}
+
+.card-base{
+    grid-area: base;
+    background-color: #fffaed;
+    min-height: 300px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+    border-color: antiquewhite;
+    border-width: 2px;
+    border-style: ridge;
+    border-top: none;
+    padding: 15px;
+    margin: 0px;
+  
+}
+
+.card-tab-first{
+    grid-area: first;
+    height: 40px;
+    width: 203px;
+    background-color: #fffaed;
+    border-color: antiquewhite;
+    border-width: 3px;
+   align-items: center;
+   border-top-right-radius: 20px;
+   border-top-left-radius: 20px;
+   border-style: ridge;
+   margin: 0px;
+   padding: 0px;
+ 
+  
+}
+.card-tab-second{
+    grid-area: second;
+    height: 40px;
+    width: 202px;
+    background-color: #fffaed;
+   align-items: center;
+   border-top-right-radius: 20px;
+   border-top-left-radius: 20px;
+   border-color: antiquewhite;
+   border-width: 3px;
+   border-style: ridge;
+   margin: 0px;
+   padding: 0px;
+}
+
+
+
+.card-tab-third{
+    grid-area: third;
+    height: 40px;
+    width: 203px;
+    background-color: #fffaed;
+    border-color: antiquewhite;
+    border-width: 3px;
+   align-items: center;
+   border-top-right-radius: 20px;
+   border-top-left-radius: 20px;
+   border-style: ridge;
+   margin: 0px;
+   padding: 0px;
+}
+
+.spacing{
+    grid-area: spacing;
+    width: 180px;
+    margin-right: 20px;
+    border-color: antiquewhite;
+    border-style: ridge;
+    border-bottom-width: 3px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+
+    padding: 0px;
+}
+
+h1{
+    font-family: "Caveat", cursive;
+  font-optical-sizing: auto;
+  font-weight: 15;
+  font-style: normal;
+
+}
+.tab-text{
+    font-family: "Caveat", cursive;
+    font-size: 15px;
+    font-style: bold;
+}
+
+.active-tab{
+  border-bottom: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+.description {
+    font-family: "Caveat", cursive;
+    font-size: 20px;
+    font-style: bold;
+    text-align: right;
+    margin-right: 5px;
+
+}
+
+.ingredient-list {
+    columns: 2;
+    margin-left: 20px;
+}
+.ingredient{
+    padding: 2px;
+}
+
+.recipe-writer{
+    margin-right: 5px;
+}
+
+.avatar-button{
+    display: grid;
+    grid-template-columns: 100px;
+
+}
+#avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px double rgb(244, 177, 90);
+  }

@@ -1,19 +1,22 @@
 <template>
     <div>
+<div class="card">
+
+<button @click="nowShowRecipe" :class="{'active-tab': showRecipe}" class="card-tab-first tab-text">{{recipe.title}}</button>
+<button @click="nowShowComments"  :class="{'active-tab': showComments}" class="card-tab-second tab-text">-Comments-</button>
+<button @click="nowShowPhotos"  :class="{'active-tab': showPhotos}" class="card-tab-third tab-text">-Photos-</button>
+<a class="spacing"></a>
+<div class="card-base">
 
 
-<button @click="nowShowRecipe">show recipe</button>
-<button @click="nowShowComments">show comments</button>
-<button @click="nowShowPhotos">show photos</button>
-<h1>{{recipe.title}}</h1>
-<p>{{ recipe.description }}</p>
 
 <div v-if="showRecipe">
+  <p class="description">{{ recipe.description }}</p>
 
-  <div v-for=" ing in recipe.ingredientList" :key="ing.ingredientNum">
+  <div class="ingredient-list"><div class="ingredient" v-for=" ing in recipe.ingredientList" :key="ing.ingredientNum">
    <BuildFraction :numerator="ing.amountNumerator" :denominator="ing.amountDenominator"/> {{ ing.unitType }} {{ ing.quantifier }} {{ ing.ingredientText }} 
 
-
+  </div>
   </div>
   <p></p>
  
@@ -27,7 +30,7 @@
 </div>
 <div v-else>you must sign in to save a recipe</div>
 
-<router-link v-if="recipe.userId" v-bind:to="{ name: 'user', params: {userId: recipe.userId, displayName: recipe.writer}}">
+<router-link  class="recipe-writer" v-if="recipe.userId" v-bind:to="{ name: 'user', params: {userId: recipe.userId, displayName: recipe.writer}}">
   <Avatar :userId="recipe.userId"/> </router-link>
     </div>
 
@@ -39,7 +42,8 @@
 <PhotoDisplay :photos="recipe.recipePicList" :recipeId="recipe.recipeId"/>
 </div>
 </div>
-
+</div>
+</div>
 
   </template>
   

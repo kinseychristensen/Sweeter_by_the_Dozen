@@ -1,14 +1,14 @@
 <template>
     <div>
       <div v-if="loading">Loading...</div>
-      <div v-else>
+      <div v-else class="avatar-button">
         <img 
           :src="avatarPath" 
           :alt="avatarAlt" 
           id="avatar"
           
         />
-        <p>{{ userName }}</p>
+        <a class="avatar-text">{{ userName }}</a>
         
       </div>
     </div>
@@ -55,11 +55,6 @@
   </script>
   
   <style scoped>
-  #avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    border: 4px double antiquewhite;
-  }
+
   </style>
   
