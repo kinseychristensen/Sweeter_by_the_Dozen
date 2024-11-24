@@ -10,8 +10,8 @@
 
 
 
-<div v-if="showRecipe">
-  <p class="description">{{ recipe.description }}</p>
+<div v-if="showRecipe" class="recipe-grid">
+
 
   <div class="ingredient-list"><div class="ingredient" v-for=" ing in recipe.ingredientList" :key="ing.ingredientNum">
    <BuildFraction :numerator="ing.amountNumerator" :denominator="ing.amountDenominator"/> {{ ing.unitType }} {{ ing.quantifier }} {{ ing.ingredientText }} 
@@ -20,21 +20,22 @@
   </div>
   <p></p>
  
-  <ol>
+  <ol class="step-list">
     <li v-for="step in recipe.recipeStepList" :key="step.stepNum">{{ step.instructions }}</li>
   </ol>
 
 
-  <div v-if="isAuthenticated">
+  <div v-if="isAuthenticated" class="save-recipe">
 <SaveRecipe :recipe="recipe"/>
 </div>
-<div v-else>you must sign in to save a recipe</div>
+<div v-else class="tab-text">You must sign in to save a recipe</div>
 
 <router-link  class="recipe-writer" v-if="recipe.userId" v-bind:to="{ name: 'user', params: {userId: recipe.userId, displayName: recipe.writer}}">
   <Avatar :userId="recipe.userId"/> </router-link>
+
+
+      <p class="description">{{ recipe.description }}</p>
     </div>
-
-
 
 <div v-if="showComments">
 <CommentsDisplay :recipeId="recipe.recipeId"/></div>

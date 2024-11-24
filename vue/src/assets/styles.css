@@ -113,8 +113,18 @@ h1{
   margin: 0px;
   padding: 0px;
 }
+.recipe-grid{
+    display: grid;
+    grid-template-columns: 120px 1fr 120px;
+    grid-template-areas: 
+    "ingredient ingredient ingredient"
+    "step step step"
+    "save description writer"
+    ;
+  }
 
 .description {
+    grid-area: description;
     font-family: "Caveat", cursive;
     font-size: 20px;
     font-style: bold;
@@ -124,6 +134,7 @@ h1{
 }
 
 .ingredient-list {
+    grid-area: ingredient;
     columns: 2;
     margin-left: 20px;
 }
@@ -132,7 +143,8 @@ h1{
 }
 
 .recipe-writer{
-    margin-right: 5px;
+    grid-area: writer;
+    
 }
 
 .avatar-button{
@@ -140,9 +152,24 @@ h1{
     grid-template-columns: 100px;
 
 }
+.step-list{
+    grid-area: step;
+}
+
+.save-recipe{
+    grid-area: save;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+
 #avatar {
     width: 100px;
     height: 100px;
     border-radius: 50%;
     border: 4px double rgb(244, 177, 90);
   }
+
+ .save-icon {
+    width: 60px;
+ }

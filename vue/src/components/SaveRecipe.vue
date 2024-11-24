@@ -3,10 +3,10 @@
     <div v-if="isLoading">is loading...</div>
     <div v-else>
         <div v-if="isSaved">
-            <button @click="unsaveRecipe">Remove from Saved Recipes.</button>
+            <button  @click="unsaveRecipe"><img src="/assets/icons/perserved.png" alt="preserved" class="save-icon"></button>
         </div>
         <div v-else>
-<button @click="saveRecipe">Save this recipe</button>
+<button  @click="saveRecipe"><img src="/assets/icons/save_me.png" alt="save-me" class="save-icon"></button>
 
     </div> 
 
