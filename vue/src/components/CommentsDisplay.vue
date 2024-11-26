@@ -1,23 +1,41 @@
 <template>
-<div>
+<div class="comment-grid">
+  <div v-if="comments.length == 0" id="no-comments">There are no comments yet for this recipe.</div>
 
-  <div v-if="comments.length == 0">There are no comments yet for this recipe.</div>
-<div v-for="comment in comments" :key="comment.commentId">
-<div v-if="comment.reported">this comment has been flagged for review.</div> 
+<div id="post-comment-flex">
+  <div v-if="$store.state.token != ''">
+    <div v-if="user.restricted">Your account is restricted.  You are unable to post comments.</div>
+    <div v-else>
+  <PostComment :recipeId="recipeId"/>
+</div>
+  </div>
+  <div v-else>You must be logged in to post a comment.</div>
+</div>
 
-<h3>{{ comment.comment }}</h3>
+ 
 
-<Avatar :userId="comment.userId"/>
-<p></p>
-<button type="button" @click="toggleReport">Report</button>
-<button type="button" @click="deleteComment(comment.commentId)" v-if="comment.userId == user.id">Delete My Comment</button>
-<div v-if="showReport">
-  <ReportComment :commentId="comment.commentId"/>
-<button type="button" @click="toggleReport">Cancel</button></div>
+ 
+ 
+  <div id="comment-flex">
+<div v-for="comment in comments" :key="comment.commentId" id="comment">
+  <div id="flag-icons">
+    
+<button v-if="comment.reported" class="icon-button"><img src="/public/assets/icons/red_flag.png" class="report-icon"></button>
+  <ReportComment :commentId="comment.commentId" v-else/>
+  <button type="button" @click="deleteComment(comment.commentId)" v-if="comment.userId == user.id" id="delete-my-comment" class="icon-button"><img src="/public/assets/icons/trash.png" class="report-icon" /></button>
+
+</div>
+
+<a class="comment-text">{{ comment.comment }}</a>
+
+<Avatar :userId="comment.userId" id="comment-writer"/>
+
+
+</div>
 </div>
 <p></p>
 
-<button type="button" @click="togglePost">Post a Comment</button>
+
 <div v-if="showReport">
   Comments are meant to encourage and aid other recipe collectors, but not to spread negativity!  
 <CodeConduct/>
@@ -29,16 +47,6 @@ Once a comment is reported, an admin will review the comment and if the comment 
 
 
 
-
-<div v-if="showPost">
-  <div v-if="$store.state.token != ''">
-    <div v-if="user.restricted">Your account is restricted.  You are unable to post comments.</div>
-    <div v-else>
-  <PostComment :recipeId="recipeId"/>
-  <button @click="togglePost">Cancel</button></div>
-  </div><div v-else>You must be logged in to post a comment.</div>
-
-</div>
 
     </div>
   </template>

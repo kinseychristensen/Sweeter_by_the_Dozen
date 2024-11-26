@@ -18,7 +18,6 @@
 
   </div>
   </div>
-  <p></p>
  
   <ol class="step-list">
     <li v-for="step in recipe.recipeStepList" :key="step.stepNum">{{ step.instructions }}</li>
@@ -28,7 +27,7 @@
   <div v-if="isAuthenticated" class="save-recipe">
 <SaveRecipe :recipe="recipe"/>
 </div>
-<div v-else class="tab-text">You must sign in to save a recipe</div>
+
 
 <router-link  class="recipe-writer" v-if="recipe.userId" v-bind:to="{ name: 'user', params: {userId: recipe.userId, displayName: recipe.writer}}">
   <Avatar :userId="recipe.userId"/> </router-link>

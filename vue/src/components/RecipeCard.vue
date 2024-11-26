@@ -1,18 +1,20 @@
 <template>
-    <div class="card">
+    <div class="lil-card">
   
-      
-      <router-link class="card-tab-first" v-bind:to="{ name: 'recipe', params: {recipeId: recipe.recipeId}}"><a class="tab-text">{{ recipe.title }}</a></router-link>
-<div class="card-base">
+      <span class="lil-space"></span>
+      <router-link class="lil-card-tab" v-bind:to="{ name: 'recipe', params: {recipeId: recipe.recipeId}}"><a class="tab-text">{{ recipe.title }}</a></router-link>
+<router-link class="lil-card-base" v-bind:to="{ name: 'recipe', params: {recipeId: recipe.recipeId}}">
 {{ recipe.description }}
 
-<a v-for="tag1 in recipe.recipeTagList" :key="tag1.tagId">{{ tag1.tag }} - </a>
 
+<a class="recipe-writer-lil">- {{recipe.writer}}</a>
 
-<router-link v-bind:to="{ name: 'user', params: {userId: recipe.userId, displayName: recipe.writer}}">{{recipe.writer}}</router-link>
-
+<div class="card-tags" v-if="recipe.recipeTagList.length >0"> <p></p>~ <a v-for="tag1 in recipe.recipeTagList" :key="tag1.tagId">{{ tag1.tag }}  ~  </a>
 </div>
-    </div>
+
+
+</router-link>
+</div>
   </template>
   
   

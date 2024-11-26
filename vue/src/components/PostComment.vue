@@ -1,15 +1,17 @@
 <template>
   <div>
 
-  <input text v-model="comment.comment"/>Enter your comment here.
-
-<div v-if="showWarning">Opps!  Your comment is blank!  Please try again.</div>
-
 Comments are meant to encourage and aid other recipe collectors, but not to spread negativity!  Please review our Code of Conduct before submitting.
 <CodeConduct/>
 
 <p></p>
-<button @click="postComment">Post this Comment</button>
+
+<textarea v-model="comment.comment" id="comment-input-area">Enter your comment here.</textarea>
+  <p></p>
+
+<div v-if="showWarning">Opps!  Your comment is blank!  Please try again.</div>
+
+<button @click="postComment" id="post-comment-button">Post this Comment</button>
 </div>
 </template>
 

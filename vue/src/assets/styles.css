@@ -4,6 +4,23 @@
     min-width: 100vw;
 }
 
+button {
+    text-decoration: none;
+    background-color: rgb(235, 219, 137);
+    padding: 15px;
+    margin: 5px;
+    min-width: 100px;
+    min-height: 40px;
+    border-radius: 10px;
+    border: none;
+    color: black;
+    font-family: "Caveat", cursive;
+    font-size: 20px;
+    font-style: bold;
+    
+}
+
+
 .card{
     display: grid;
     padding: 0px;
@@ -20,7 +37,6 @@
 .card-base{
     grid-area: base;
     background-color: #fffaed;
-    min-height: 300px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     border-top-right-radius: 20px;
@@ -43,6 +59,8 @@
    align-items: center;
    border-top-right-radius: 20px;
    border-top-left-radius: 20px;
+   border-bottom-right-radius: 0px;
+   border-bottom-left-radius: 0px;
    border-style: ridge;
    margin: 0px;
    padding: 0px;
@@ -57,6 +75,8 @@
    align-items: center;
    border-top-right-radius: 20px;
    border-top-left-radius: 20px;
+   border-bottom-right-radius: 0px;
+   border-bottom-left-radius: 0px;
    border-color: antiquewhite;
    border-width: 3px;
    border-style: ridge;
@@ -76,6 +96,8 @@
    align-items: center;
    border-top-right-radius: 20px;
    border-top-left-radius: 20px;
+   border-bottom-right-radius: 0px;
+   border-bottom-left-radius: 0px;
    border-style: ridge;
    margin: 0px;
    padding: 0px;
@@ -115,11 +137,11 @@ h1{
 }
 .recipe-grid{
     display: grid;
-    grid-template-columns: 120px 1fr 120px;
+    grid-template-columns: 1fr 100px 30px;
     grid-template-areas: 
-    "ingredient ingredient ingredient"
-    "step step step"
-    "save description writer"
+    " ingredient ingredient save"
+    " step step step"
+    " description writer writer"
     ;
   }
 
@@ -144,12 +166,13 @@ h1{
 
 .recipe-writer{
     grid-area: writer;
-    
 }
 
 .avatar-button{
-    display: grid;
-    grid-template-columns: 100px;
+    display: flex;
+    width: 110px;
+    flex-direction: column;
+    align-items: center;
 
 }
 .step-list{
@@ -158,10 +181,14 @@ h1{
 
 .save-recipe{
     grid-area: save;
-    margin: auto;
-    margin-bottom: 20px;
+    margin-top: 5px;
+    margin-right: 5px;
 }
 
+#avatar-text{
+    text-align: center;
+    align-items: center;
+}
 
 #avatar {
     width: 100px;
@@ -171,5 +198,221 @@ h1{
   }
 
  .save-icon {
-    width: 60px;
+   height: 30px;
  }
+
+ .save-button {
+    background-color: #fffaed;
+    border: none;
+ }
+
+
+
+.lil-card{
+    padding: 0px;
+    width: 300px;
+    margin: 20px;
+    display: grid;
+    grid-template-columns: 150px 150px;
+    grid-template-areas: 
+    "tab lil-space"
+    "lil-base lil-base";
+}
+
+.lil-card-base{
+    grid-area: lil-base;
+    background-color: #fffaed;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-right-radius: 0px;
+   border-bottom-left-radius: 0px;
+    border-top-right-radius: 20px;
+    border-color: antiquewhite;
+    border-width: 2px;
+    border-style: ridge;
+    border-top: none;
+    padding: 15px;
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: black;
+}
+
+.lil-card-tab {
+    
+    grid-area: tab;
+    height: 25px;
+    min-width: 100px;
+    background-color: #fffaed;
+    border-color: antiquewhite;
+    border-width: 3px;
+ border-top-right-radius: 20px;
+   border-top-left-radius: 20px;
+   border-style: ridge;
+   border-bottom: none;
+   text-decoration: none;
+    color: black;
+    font-family: "Caveat", cursive;
+    font-size: 25px;
+    font-style: bold;
+   text-align: center;
+   text-justify: auto;
+}
+
+.lil-space{
+    grid-area: lil-space;
+    margin-right: 20px;
+    border-color: antiquewhite;
+    border-style: ridge;
+    border-bottom-width: 3px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    padding: 0px;
+}
+
+.recipe-writer-lil {
+    text-decoration: none;
+    color: black;
+    font-family: "Caveat", cursive;
+    font-size: 15px;
+    font-style: bold;
+    text-align: right;
+}
+
+.card-tags{
+    font-family: "Caveat", cursive;
+    font-size: 15px;
+    text-align: center;
+}
+
+.comment-grid {
+    display: grid;
+   grid-template-columns: 1fr 350px;
+   grid-template-areas: 
+   "no-comments post-comment-flex"
+   "comment-flex post-comment-flex"
+   "comment-flex ."
+;
+}
+
+#post-comment-flex{
+    grid-area: post-comment-flex;
+}
+#no-comments{
+    grid-area: no-comments;
+}
+#post-comment-button{
+    margin: auto;
+}
+#comment-flex{
+    grid-area: comment-flex;
+    display: flex;
+    flex-direction: column;
+}
+
+#comment-input-area{
+    width: 340px;
+    height: 100px;
+}
+
+.icon-button{
+    background-color: transparent;
+    max-height: 10px;
+    border: none;
+    margin: none;
+    padding: none;
+}
+.icon-button img {
+    max-height: 15px;
+}
+
+button.icon-button{
+    padding: none;
+}
+
+#comment{
+    background-color: white;
+    width: 370px;
+    padding: 3px;
+    margin: 5px;
+    border-radius: 20px;
+    border: 4px double rgb(244, 177, 90);
+    align-items: center;
+    display: grid;
+    grid-template-columns:  150px 1fr;
+    grid-template-areas: 
+    "avatar  comment "
+    ".  comment"
+    "icons icons"
+}
+
+#flag-icons{
+    grid-area: icons;
+    max-width: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+#comment-text{
+    grid-area: comment;
+}
+
+#comment-writer{
+    grid-area: avatar;
+}
+
+#recipe-photo{
+    max-width: 600px;
+    border-radius: 40px;
+    border: 4px double rgb(244, 177, 90);
+}
+
+#submitting-photo{
+    max-width: 300px;
+    border-radius: 40px;
+    border: 4px double rgb(244, 177, 90);
+}
+
+#photo-grid{
+    display: grid;
+    grid-template-columns: 100px 1fr 100px;
+    grid-template-areas: 
+    "prev-photo recipe-photo next-photo"
+    ". recipe-photo ."
+    ". photo-caption ."
+    ;
+}
+
+#prev-photo{
+    grid-area: prev-photo;
+}
+
+#next-photo{
+    grid-area: next-photo;
+}
+
+#recipe-photo{
+    grid-area: recipe-photo;
+    margin: auto;
+}
+
+#photo-caption{
+    grid-area: photo-caption;
+    text-align: center;
+    color: black;
+    font-family: "Caveat", cursive;
+    font-size: 20px;
+    font-style: bold;
+
+}
+
+#submitting-photo-grid{
+    background-color: white;
+    border-radius: 20px;
+    border: 4px double rgb(244, 177, 90);
+    margin: 20px;
+    padding: 15px;
+
+}

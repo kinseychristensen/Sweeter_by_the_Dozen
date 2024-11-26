@@ -1,19 +1,19 @@
 <template>
     <div>
-
+      <SubmitPhoto v-if="$store.state.token != ''" :recipeId="recipeId"/>
 <div v-if="photos.length == 0">There are no images for this recipe yet.</div>
 
-<div v-else>
+<div v-else id="photo-grid">
 
-  <p></p>
-<button @click="prevPhoto">Previous Photo</button>
+  
+<button @click="prevPhoto" id="prev-photo">Previous Photo</button>
 
-<img :src="photos[currentImgIndex].picUrl" :altText="photos[currentImgIndex].altText"/>
-{{ photos[currentImgIndex].altText }}
+<img id="recipe-photo" :src="photos[currentImgIndex].picUrl" :altText="photos[currentImgIndex].altText"/>
+<p id="photo-caption">{{ photos[currentImgIndex].altText }}</p>
 
-<button @click="nextPhoto">Next Photo</button>
+<button @click="nextPhoto" id="next-photo">Next Photo</button>
 </div>
-<SubmitPhoto v-if="$store.state.token != ''" :recipeId="recipeId"/>
+
    </div>
   </template>
   

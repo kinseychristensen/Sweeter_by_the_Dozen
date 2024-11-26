@@ -3,7 +3,7 @@
   <div v-else>
    
     <div class="uploadImage" v-if="$store.state.token != ''">
-      <button v-on:click="upload">Upload Image</button><br>
+      <button v-on:click="upload" id="upload-photo-button">Upload Image</button><br>
     </div>
 
     <div v-if="addImage">
@@ -14,9 +14,10 @@
     </div>
 
     <!-- Image preview or additional UI can be added here -->
-    <div v-if="showPreview">
-      <p>Image Uploaded: </p>
-      <img :src="pic.picUrl" alt="Uploaded Image" />
+    <div v-if="showPreview" id="submitting-photo-grid">
+      <h3>Image Uploaded: </h3>
+      <img :src="pic.picUrl" alt="Uploaded Image" id="submitting-photo"/>
+      <p id="submitting-warning">All photos will be reviewed by an admin before posting.  Please only submit images that follow our Code of Conduct.</p>
       <button v-on:click="showPreview = false">Cancel</button>
       <button @click="saveImage">Submit Picture</button>
     </div>

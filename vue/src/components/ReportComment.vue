@@ -3,7 +3,7 @@
 
 
 
-<button @click="reportComment">Report this Comment</button>
+<button @click="reportComment" class="icon-button"><img src="/public/assets/icons/gray_flag.png" class="report-icon"/></button>
 </div>
   </template>
   
@@ -38,13 +38,14 @@ if (error.response) {
 }
 },
 reportComment() {
-  console.log(this.commentId);
+const shouldReport = confirm('Are you sure you want to report this comment for review?  This cannot be undone.');
+if(shouldReport){
 CommentService.reportComment(this.commentId)
 .then(response => {
   
   this.isLoading = false;
 })
-}
+}}
 }
 }
   </script>
