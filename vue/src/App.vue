@@ -4,7 +4,7 @@
     <div id="nav">
       
      
-      <button v-if="$store.state.token != ''"><router-link v-bind:to="{ name: 'logout' }" >Logout</router-link></button>
+      <button v-if="$store.state.token != ''"><router-link class="button-text" v-bind:to="{ name: 'logout' }" >Logout</router-link></button>
       <div v-else>
       <button @click="toggleRegister">Register</button>
       <button @click="toggleLogin">Login</button>

@@ -3,17 +3,20 @@
 
 
 <div v-if="isLoading">Loading...</div>
-    <div v-else>
-      SAVED RECIPES:
+    <div v-else id="recipes-page-flex">
+      <div id="saved-recipes">
+      <img src="/public/assets/icons/blue_banner_saved_recipes.png" alt="saved recipes" class="recipe-header-banner"/>
       <div v-for="recipe in savedRecipes" :key="recipe.recipeId">
         <RecipeCard :recipe="recipe"/>
       </div>  
-      <p></p>
-      MY RECIPES:
+    </div>
+<div id="my-recipes">
+  <img src="/public/assets/icons/blue_banner_my_recipes.png" alt="my recipes" class="recipe-header-banner"/>
       <div v-for="recipe in myRecipes" :key="recipe.recipeId">
         <RecipeCard :recipe="recipe"/>
       </div> 
     </div>
+  </div>
     </div>
   </template>
   

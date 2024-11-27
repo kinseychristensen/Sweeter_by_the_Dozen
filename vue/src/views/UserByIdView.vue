@@ -3,13 +3,13 @@
 
 
 <div v-if="isLoading">Loading...</div>
-  <div v-else>
+  <div v-else id="user-page-grid">
 
-   <Avatar :userId="userId"/>
-    <p></p>
-    {{userName}}'s RECIPES:
+   <Avatar :userId="userId" id="user-page-avatar"/>
+   <div id="user-page-recipes">
     <div v-for="recipe in userRecipes" :key="recipe.recipeId">
       <RecipeCard :recipe="recipe"/>
+    </div>
     </div> 
   </div>
   </div>

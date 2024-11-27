@@ -20,6 +20,10 @@ button {
     
 }
 
+.button-text {
+    text-decoration: none;
+    color: black;
+}
 
 .card{
     display: grid;
@@ -224,8 +228,8 @@ h1{
     background-color: #fffaed;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    border-bottom-right-radius: 0px;
-   border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 20px;
+   border-bottom-left-radius: 20px;
     border-top-right-radius: 20px;
     border-color: antiquewhite;
     border-width: 2px;
@@ -415,4 +419,98 @@ button.icon-button{
     margin: 20px;
     padding: 15px;
 
+}
+
+#recipes-page-flex{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 800px;
+}
+
+#saved-recipes{
+    background-color: rgb(245, 224, 170);
+    max-width: 350px;
+    border-radius: 20px;
+    border: 4px double rgb(244, 177, 90);
+    margin: 20px;
+    padding: 15px;
+}
+#my-recipes{
+    background-color:  rgb(245, 224, 170);
+    max-width: 350px;
+    border-radius: 20px;
+    border: 4px double rgb(244, 177, 90);
+    margin: 20px;
+    padding: 15px;
+}
+
+.recipe-header-banner{
+    max-width: 350px;
+ 
+}
+
+#user-page-grid{
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    max-width: 1000px;
+    padding: 5px;
+}
+
+#user-page-recipes{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#settings-grid{
+    display: grid;
+    grid-template-columns: 200px  1fr 1fr;
+    grid-template-areas: 
+    ". settings-header settings-header "
+    ". admin admin"
+    "avatar first first"
+    ". password update-button"
+    ". update update"
+    " .verified verified"
+}
+
+#settings-header{
+    grid-area: settings-header;
+    text-align: center;
+}
+#settings-avatar{
+    grid-area: avatar;
+    margin: auto;
+}
+#admin-tools-button{
+    grid-area: admin;
+}
+#password-reset-button{
+    grid-area: password;
+}
+#first{
+    grid-area: first;
+    padding: 30px;
+    margin: 5px;
+    background-color: rgb(244, 244, 244);
+    border-radius: 20px;;
+}
+#update-button{
+    grid-area: update-button;
+}
+#update{
+    grid-area: update;
+}
+#verified{
+    grid-area: verified;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+    "form avatars"
+    ". avatars"
+    ". avatars"
+}
+#settings-form{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }

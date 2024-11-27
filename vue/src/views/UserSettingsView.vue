@@ -4,29 +4,27 @@
  
     <div v-if="isLoading">Loading...</div>
     
-    <div v-else >
+    <div v-else id="settings-grid">
 
-      <h1>Your Account</h1>
+      <h1 id="settings-header">Your Account</h1>
 
-<button v-if="user.authorities[0].name == 'ROLE_ADMIN'"><router-link v-bind:to="{ name: 'admin-tools', params: {userId: user.id} }" > Go To Admin Tools</router-link></button>
-<button><router-link v-bind:to="{ name: 'password' }"> Reset Your Password</router-link></button>
+<button id="admin-tools-button" v-if="user.authorities[0].name == 'ROLE_ADMIN'"><router-link v-bind:to="{ name: 'admin-tools', params: {userId: user.id} }" class="button-text" > Go To Admin Tools</router-link></button>
+<button id="password-reset-button"><router-link class="button-text" v-bind:to="{ name: 'password' }"> Reset Your Password</router-link></button>
 
 
-      <Avatar :userId="user.id"/>
-      <div  v-if="first">
-        <p></p><p></p>
+      <Avatar :userId="user.id" id="settings-avatar"/>
+      <div  v-if="first" id="first">
         <div> Display Name: {{user.displayName}}</div>
         <div>Email: {{ user.username }}</div>
         <img :src="user.avatarUrl"/>
         <div v-if="user.restricted"> Warning: your account is restricted due to violations of the site's terms of use.  You may still save recipes and browse, but you are no longer allowed to post comments or submit images.  If you feel this is in error, please contact the admin team.</div>
        <div v-if="user.violations != 0 && !user.restricted">Warning: You have had {{ user.violations }} violations of the site's terms of use.  The prohibited content has been reviewed by admin and deleted from the site.  Further activity may result in your account being restricted.</div>
        <div v-if="!user.restricted && user.violations ==0">Your account is in good standing.  Thank you for your support!</div> 
-       <button @click="toggleUpdate">{{buttonMsg}}</button>
-       <p></p><p></p>
       </div>
+      <button @click="toggleUpdate" id="update-button">{{buttonMsg}}</button>
 
-    <p></p><p></p>
-       <div v-if="update">
+  
+       <div v-if="update" id="update">
         <form v-on:submit.prevent="verifyPassword">
           <label for="password1"> Please enter your password to make changes:
             </label>
@@ -34,36 +32,29 @@
             <p></p><p></p>
             <button>Verify</button>
         </form></div>
-      
-        <p></p><p></p>
 
-       <div v-if="verified">
-        <form v-on:submit.prevent="saveChanges">
+
+       <div v-if="verified" id="verified">
+        <form v-on:submit.prevent="saveChanges" id="settings-form">
          
-          <label for="displayname" id="displayname-label"> First Name: </label>
+          <label for="displayname" id="displayname-label"> Display Name: </label>
           <input type="text" id="displayname" v-model="editUser.displayName"/>
           <label for="email" id="email-answer-label">  Email: </label>
-          <input type="email" id="email-answer" v-model="editUser.username"/>
-          avatar: {{ user.avatarId }}
-          New Avatar: {{ editUser.avatarId }}
-            
-            <button>Save Changes and Return to LogIn</button>
-
-  
+          <input type="email" id="email-answer" v-model="editUser.username"/>      
     <select v-model="editUser.avatarId">
       <option v-for="avatar in avatars" :key="avatar.avatarId" :value="avatar.avatarId">
         {{avatar.avatarId}}: {{ avatar.altText }}
       </option>
     </select>
-    <div>
+    <button>Save Changes and Return to LogIn</button>
+  </form>
+    <div id="avatar-display">
       <a v-for="avatar in avatars" :key="avatar.avatarId">
       <img id="avatar" :src="avatar.avatarSrc" loading="lazy" />{{ avatar.avatarId }}: {{ avatar.altText }}</a>
   </div>
 
-          New Avatar: {{ editUser.avatarId }}
-            
            
-        </form>
+       
        </div>
       </div>
 </div>
