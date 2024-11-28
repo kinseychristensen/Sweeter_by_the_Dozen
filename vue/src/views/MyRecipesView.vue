@@ -3,7 +3,9 @@
 
 
 <div v-if="isLoading">Loading...</div>
-    <div v-else id="recipes-page-flex">
+    <div v-else>
+      <div v-if="isAuthenticated" id="recipes-page-flex">
+
       <div id="saved-recipes">
       <img src="/public/assets/icons/blue_banner_saved_recipes.png" alt="saved recipes" class="recipe-header-banner"/>
       <div v-for="recipe in savedRecipes" :key="recipe.recipeId">
@@ -17,14 +19,15 @@
       </div> 
     </div>
   </div>
-    </div>
+  <div v-else id="not-signed-in"> You must be signed in to view your recipes.</div>
+    </div></div>
   </template>
   
   
   
   <script>
  
-
+  import { mapGetters } from 'vuex/dist/vuex.cjs.js';
   import RecipeService from '../services/RecipeService';
   import RecipeCard from '../components/RecipeCard.vue';
   
@@ -44,6 +47,13 @@
 
     }
   }, 
+
+  computed: {
+    ...mapGetters(['isAuthenticated']) // Maps `isAuthenticated` to a computed property
+  
+  },
+
+
   methods: {
 
     handleError(error, verb) {
@@ -56,11 +66,14 @@
       }
     },
     getSavedRecipes() {
+      if(this.isAuthenticated){
       RecipeService.getSavedRecipes()
       .then(response => {
         this.savedRecipes = response.data;
         this.getMyRecipes();
-      })
+      })}else {
+        this.isLoading = false;
+      }
     }, 
     getMyRecipes() {
       RecipeService.getRecipesForPrincipal()

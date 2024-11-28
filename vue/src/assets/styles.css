@@ -507,10 +507,140 @@ button.icon-button{
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
     "form avatars"
-    ". avatars"
-    ". avatars"
+    " . avatars"
+    " . avatars"
 }
 #settings-form{
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 2fr;
+    max-height: 150px;
+    margin: 15px;
+}
+
+.avatar-display{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.avatar-individual-flex{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    padding: 3px;
+    margin: 3px;
+    text-align: center;
+    background-color: white;
+    border-radius: 20px;
+}
+
+#register{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    max-width: 800px;
+    background-color: antiquewhite;
+    border-radius: 20px;
+    padding: 15px;
+    margin: auto;
+    align-items: center;
+}
+
+#first-register{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#second-register{
+    display: grid;
+    gap: 15px;
+    grid-template-columns: 300px 1fr;
+    grid-template-areas: 
+    "questions avatars"
+    " . avatars "
+    ;
+}
+#second-register-form{
+    grid-area: questions;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+}
+
+#avatar-register{
+    grid-area: avatars;
+}
+
+
+.avatar{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border-color:antiquewhite;
+    border-width: 4px;
+    border-style: double;
+   }
+
+   #third-register{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+   }
+
+   .login-form{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    max-width: 800px;
+    background-color: antiquewhite;
+    border-radius: 20px;
+    padding: 15px;
+    margin: auto;
+    align-items: center;
+    gap: 15px;
+}
+
+#reset-password{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    max-width: 800px;
+    background-color: antiquewhite;
+    border-radius: 20px;
+    padding: 15px;
+    margin: auto;
+    align-items: center;
+    gap: 15px;
+}
+
+#email-confirm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#code-enter{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#new-password-enter{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+#not-signed-in{
+    text-align: center;
+    background-color: antiquewhite;
+    font-size: large;
+    width: 400px;
+    height:50px;
+    border-radius: 20px;
+    margin: auto;
+    padding: 5px;
 }

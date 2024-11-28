@@ -9,7 +9,7 @@
 <li>Violence against self, others, or animals</li>
 <li>Bigotry or hate speech against ethnicities, nationalities, religions, identities, etc.</li>
 <li>Bullying and intolerance</li>
-<li>Spam, promotion of outside content, or misinformation</li>
+<li>Spam, excessive promotion of outside content, or misinformation</li>
 <li>Langauge that encourages disordered eating or critiques personal food choices</li>
 </ul>
 

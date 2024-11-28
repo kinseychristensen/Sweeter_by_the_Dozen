@@ -1,55 +1,61 @@
 <template>
-  <div id="register" class="register-container">
+  <div id="register">
    
  
-     <h1 class="register-title">Create Account</h1>
-     <div role="alert" v-if="registrationErrors">
+     <h1 id="register-title">Create Account</h1>
+     <div role="alert" v-if="registrationErrors" id="error-msg">
        {{ registrationErrorMsg }}
-       <button @click="showFirst = true; showThird=false;">Start Over</button>
+       <button @click="showFirst = true; showThird=false;" id="start-over-button">Start Over</button>
      </div>
-     <div class="form-input-group" v-if="showFirst">
+     
+     <div class="form-input-group" v-if="showFirst" id="first-register">
        <label for="email" class="bold-label">Your Email: </label>
        <input type="email" id="email" v-model="user.username" required autofocus />
        <label for="password" class="bold-label">Password: </label>
        <input type="password" id="password" v-model="user.password" required />
        <label for="confirmPassword" class="bold-label">Confirm Password: </label>
        <input type="password" id="confirmPassword" v-model="user.confirmPassword" required />
-       <p v-if="showErrorMsg">Opps!  We already have an account under that email.  Please continue to Log in.</p>
        <p v-if="this.user.password != this.user.confirmPassword">Passwords must match.</p>
-       <button type="button" @click="checkEmail">Continue</button>
+       <p v-if="showErrorMsg">Opps!  We already have an account under that email.  Please continue to Log in.</p>
+       <button v-else type="button" @click="checkEmail">Continue</button>
      </div>
     
     
-     <div class="form-input-group" v-if="showSecond">
-      Choose an Avatar Icon and Display Name:
+     <div class="form-input-group" v-if="showSecond" id="second-register">
+      <div id="register-second-form"> 
+        <p>Choose an Avatar Icon and Display Name.  These may be changed later.</p>
 
-      These may be changed later.
-
-      <label for="displayName" class="bold-label">Your Displayed Username:</label>
+      <label for="displayName" class="bold-label">Your Display Name:</label>
+      <p></p>
       <input type="text" id="displayName" v-model="user.displayName" required />
- <p></p>
-   <select v-model="user.avatarId">
+      <p></p>
+      <label for="register-avatar-select">Avatar:</label>
+
+   <select v-model="user.avatarId" id="register-avatar-select">
      <option v-for="avatar in avatars" :key="avatar.avatarId" :value="avatar.avatarId">
        {{avatar.avatarId}}: {{ avatar.altText }}
      </option>
    </select>
-   <p></p>
+  
    <button type="button" @click="showSecond = false; showThird = true">Continue</button>
-   <p></p>
-     <a v-for="avatar in avatars" :key="avatar.avatarId">
-     <img id="avatar" :src="avatar.avatarSrc" loading="lazy"/>{{ avatar.avatarId }}: {{ avatar.altText }}</a>
-     </div>
+  
+  </div>
+  <div id="avatar-register" class="avatar-display">
+      <a v-for="avatar in avatars" :key="avatar.avatarId" class="avatar-individual-flex">
+      <img class="avatar" :src="avatar.avatarSrc" loading="lazy" />#{{ avatar.avatarId }}</a>
+  </div>
+</div>
 
-     <div v-if="showThird">
+     <div v-if="showThird" id="third-register">
       <CodeConduct />
       Do you agree to the terms of our Code of Conduct? 
       <button type="button" @click="register">Agree and Create Account</button>
-
+     </div>
      </div>
 
 
      
- </div>
+
  
 
 </template>
@@ -158,14 +164,4 @@ checkEmail() {
 };
 </script>
 
-<style scoped>
-#avatar{
- width: 100px;
- height: 100px;
- border-radius: 50%;
- border-color:antiquewhite;
- border-width: 4px;
- border-style: double;
-}
 
-</style>

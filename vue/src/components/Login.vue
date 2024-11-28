@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="login" class="login-container">
+    <div id="login-full" class="login-container">
       <form class="login-form" v-on:submit.prevent="login">
         <h1 class="login-title">Please Log In</h1>
 
@@ -12,19 +12,22 @@
           Thank you for registering, please sign in.
         </div>
 
-        <div class="form-input-group">
-          <label for="username" class="bold-label">EMAIL:</label>
+     
+          <label for="username" class="bold-label">Email:</label>
           <input type="text" id="username" v-model="user.username" required autofocus />
-        </div>
+    
 
-        <div class="form-input-group">
-          <label for="password" class="bold-label">PASSWORD:</label>
+       
+          <label for="password" class="bold-label">Password:</label>
           <input type="password" id="password" v-model="user.password" required />
+      
+        <div id="login-button-flex">
+          <button type="button" @click="routeToReset">Reset Password</button>
+          <button type="submit">Sign In</button>
         </div>
+  
 
-        <button type="submit">SIGN IN</button>
-
-        <button type="button" @click="routeToReset">Reset Password</button>
+       
       </form>
     </div>
   </div>

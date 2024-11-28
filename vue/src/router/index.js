@@ -78,26 +78,19 @@ const routes = [
     path: "/user/:userId/:displayName",
     name: "user",
     component: UserByIdView,
-    
+
   },
   
   {
     path: "/my-recipes",
     name: "my-recipes",
     component: MyRecipesView,
-    meta: {
-      requiresAuth: true
-    }
-    
   },
   {
     path: "/settings",
     name: "settings",
     component: UserSettingsView,
-    meta: {
-      requiresAuth: true
-    }
-    
+ 
   },
   {
     path: "/admin-tools/:userId",

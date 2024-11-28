@@ -4,7 +4,8 @@
  
     <div v-if="isLoading">Loading...</div>
     
-    <div v-else id="settings-grid">
+    <div v-else>
+      <div v-if="isAuthenticated" id="settings-grid">
 
       <h1 id="settings-header">Your Account</h1>
 
@@ -40,28 +41,30 @@
           <label for="displayname" id="displayname-label"> Display Name: </label>
           <input type="text" id="displayname" v-model="editUser.displayName"/>
           <label for="email" id="email-answer-label">  Email: </label>
-          <input type="email" id="email-answer" v-model="editUser.username"/>      
-    <select v-model="editUser.avatarId">
+          <input type="email" id="email-answer" v-model="editUser.username"/>   
+          <label for="avatar-select">Avatar Image: </label>   
+    <select v-model="editUser.avatarId" id="avatar-select">
       <option v-for="avatar in avatars" :key="avatar.avatarId" :value="avatar.avatarId">
         {{avatar.avatarId}}: {{ avatar.altText }}
       </option>
     </select>
     <button>Save Changes and Return to LogIn</button>
   </form>
-    <div id="avatar-display">
-      <a v-for="avatar in avatars" :key="avatar.avatarId">
-      <img id="avatar" :src="avatar.avatarSrc" loading="lazy" />{{ avatar.avatarId }}: {{ avatar.altText }}</a>
+    <div class="avatar-display">
+      <a v-for="avatar in avatars" :key="avatar.avatarId" class="avatar-individual-flex">
+      <img class="avatar" :src="avatar.avatarSrc" loading="lazy" />#{{ avatar.avatarId }}</a>
   </div>
 
            
        
-       </div>
-      </div>
-</div>
+       </div></div>
+       <div v-else id="not-signed-in"> You must be signed in to make changes to your account.</div>
+      </div></div>
     </template>
     
     <script>
   
+    import { mapGetters } from 'vuex/dist/vuex.cjs.js';
     import AuthService from '../services/AuthService';
     import Avatar from '../components/Avatar.vue';
     import {avatars} from '../AvatarsArray.js';
@@ -105,6 +108,10 @@
       };
     },
   
+    computed: {
+    ...mapGetters(['isAuthenticated']) // Maps `isAuthenticated` to a computed property  
+  },
+
     methods: {
       toggleUpdate(){
         if(this.update){
@@ -172,6 +179,7 @@ async verifyPassword() {
         },
     
       async retrieveUser(){
+        if(this.isAuthenticated){
         try {
           this.isLoading = true;
           const response = await AuthService.getUser();
@@ -184,6 +192,8 @@ async verifyPassword() {
           this.editUser.username = this.user.username;
           this.editUser.id = this.user.id;
           this.editUser.avatarId = this.user.avatarId;
+          this.isLoading = false;
+        }}else {
           this.isLoading = false;
         }
         }, 

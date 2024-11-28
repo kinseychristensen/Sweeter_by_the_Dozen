@@ -1,37 +1,40 @@
 <template>
   <div>
-  <div id="login" class = login-container>
-    <form class="login-form" v-on:submit.prevent="login">
+    <div id="login-full" class="login-container">
+      <form class="login-form" v-on:submit.prevent="login">
+        <h1 class="login-title">Please Log In</h1>
+
+        <div class="alert alert-danger" role="alert" v-if="invalidCredentials">
+          Invalid username and password!
+        </div>
+
+        <div class="alert alert-success" role="alert" v-if="this.$route.query.registration">
+          Thank you for registering, please sign in.
+        </div>
+
      
-      <h1 class="login-title">Please Log In </h1>
-      <div class="alert alert-danger" role="alert" v-if="invalidCredentials">
-        Invalid username and password!
-      </div>
-      <div class="alert alert-success" role="alert" v-if="this.$route.query.registration">
-        Thank you for registering, please sign in.
-      </div>
-      <div class="form-input-group">
-        <label for="username" class="bold-label">EMAIL:</label>
-        <input type="text" id="username" v-model="user.username" required autofocus />
-      </div>
-      <div class="form-input-group">
-        <label for="password" class="bold-label">PASSWORD:</label>
-        <input type="password" id="password" v-model="user.password" required />
-      </div>
-      <button class="btn btn-primary" type="submit">SIGN IN</button>
-  
-     
-      <p>
-          <router-link v-bind:to="{ name: 'password' }">Reset Password</router-link></p>
-        
+          <label for="username" class="bold-label">Email:</label>
+          <input type="text" id="username" v-model="user.username" required autofocus />
+    
+
+       
+          <label for="password" class="bold-label">Password:</label>
+          <input type="password" id="password" v-model="user.password" required />
       
-    </form>
-  </div>
-</div>
+        <div id="login-button-flex">
+          <button type="button"><RouterLink v-bind:to="{ name: 'password-reset' }" class="button-text">Reset Password</RouterLink></button>
+          <button type="submit">Sign In</button>
+        </div>
   
+
+       
+      </form>
+    </div>
+  </div>
 </template>
 
 <script>
+import { RouterLink } from "vue-router";
 import authService from "../services/AuthService";
 
 export default {
@@ -46,6 +49,8 @@ export default {
     };
   },
   methods: {
+
+    
     login() {
       authService
         .login(this.user)

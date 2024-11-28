@@ -1,35 +1,40 @@
 <template>
 
-     
-       <form  v-on:submit.prevent="checkEmail" v-if="starting">
-         <label for="username" >Email Address:  </label>  <input type="text" id="username" v-model="userEmail" required/>
+     <div id="reset-password">
+      <h1>Password Reset</h1>
+       <form  v-on:submit.prevent="checkEmail" v-if="starting" id="email-confirm">
+         <label for="username" >Please enter your email address to recieve a secure code.</label> 
+         <p></p>
+          <input type="text" id="username" v-model="userEmail" required/>
          <p></p>
          <button>Send Reset Code</button>
        
      </form>
-     <p></p><p></p>
-       <form v-on:submit.prevent="verifyCode" v-if="emailSent">
-         <label for="con-code">Confirmation Code</label>
+    
+       <form v-on:submit.prevent="verifyCode" v-if="emailSent" id="code-enter">
+        <p></p>
+         <label for="con-code">A code has been sent to your email.  <p></p>Please wait for it to arrive. <p></p>
+           Do not leave this page or the code will expire.</label><p></p>
          <input type="text" id="con-code" v-model="confirmationCode" required />
       
-       
-         <p></p><p></p>
+         <p></p>
        <button>Verify</button>
        </form>
      
- <p></p><p></p>
-       <form v-on:submit.prevent="updatePassword" v-if="confirmationPassed">
+       <form v-on:submit.prevent="updatePassword" v-if="confirmationPassed" id="new-password-enter">
          <label for="password" >New Password:</label>
          <input type="password" id="password" v-model="user.password" required />
       
          <label for="confirmPassword" >Confirm Password:</label>
          <input type="password" id="confirmPassword" v-model="confirmPassword" required />
-         <p></p><p></p>
+         
+         <p></p>
+         <p v-if="this.user.password != this.confirmPassword">Passwords must match.</p>
        <button >Save New Password</button>
        </form>
        <p>{{ errorMessage }}</p>
-       <button  v-if="showLogin" ><router-link id="loginlink" v-bind:to="{ name: 'login' }">Proceed to Log in.</router-link></button>
-       
+       <button  v-if="showLogin" ><router-link id="loginlink" v-bind:to="{ name: 'login' }" class="button-text">Proceed to Log In</router-link></button>
+      </div>
        
  
  </template>
