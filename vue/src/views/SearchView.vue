@@ -1,36 +1,41 @@
 <template>
    
       <div v-if="isLoading">Loading...</div>
-    <div v-else>
-<h1>Search</h1>
-<form v-on:submit.prevent="newSearch">
-  <input text v-model="keyword"/>
-  <p></p>
-
+    <div v-else id="search-flex">
+<h1 id="search-title">Search</h1>
+<form v-on:submit.prevent="newSearch" id="search-form">
+  
+  
+<div class="tags-flex">
   <a v-for="tag in tags" :key="tag.tagId">
     <input type="checkbox" :id="tag.tagId" v-model="tagsList" :value="tag.tagId">
     <label :for="tag.tagId">{{ tag.tag }}</label>
-  </a>
+  </a></div>
 
 
 
+  <div id="search-bar-flex">
+  <input text v-model="keyword" id="search-bar"/>
 
-<button @click="clearTags">Clear Tags</button>
-  <button>search</button>
+  <button id="search-button">Search</button>
+  <button @click="clearTags" class="tag-button">Clear Tags</button></div>
 </form>
 
 
   
 
-
+<div id="search-results">
       <div v-for="recipe in recipes" :key="recipe.recipeId">
         <RecipeCard :recipe="recipe"/>
       </div>
-<p v-if="recipes.length < 5">Sorry, there are no more recipes that meet that criteria.  Please try again.</p>
+<p v-if="recipes.length < 24">Sorry, there are no more recipes that meet that criteria.  Please try again.</p>
     </div>
-    <button v-if="pageNum != 0" @click="prevPage">Previous </button>
-   Page Number: {{ displayPageNum }} 
-    <button v-if="recipes.length == 5" @click="nextPage"> Next</button>
+  <div>
+  <div id="page-buttons">
+    <button v-if="pageNum != 0" @click="prevPage" id="prev-button">Previous </button>
+   <a class="tab-text" id="page-num">Page Number: {{ displayPageNum }} </a>
+    <button v-if="recipes.length >= 24" @click="nextPage" id="next-button"> Next</button>
+    </div></div></div>
   </template>
   
   

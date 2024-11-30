@@ -146,6 +146,7 @@ h1{
     " ingredient ingredient save"
     " step step step"
     " description writer writer"
+    "attribution . ."
     ;
   }
 
@@ -157,6 +158,10 @@ h1{
     text-align: right;
     margin-right: 5px;
 
+}
+
+.attribution{
+grid-area: attribution;
 }
 
 .ingredient-list {
@@ -636,11 +641,139 @@ button.icon-button{
 
 #not-signed-in{
     text-align: center;
-    background-color: antiquewhite;
+    background-color: white;
     font-size: large;
     width: 400px;
     height:50px;
     border-radius: 20px;
     margin: auto;
     padding: 5px;
+    justify-content: center;
+}
+
+#search-flex{
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    background-color: antiquewhite;
+    border-radius: 20px;
+    padding: 15px;
+    margin: auto;
+    align-items: center;
+    gap: 15px;
+    justify-content: space-around;
+
+}
+
+.tags-flex{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 800px;
+    justify-content: space-between;
+    gap: 5px;
+}
+.tags-flex a{
+    background-color: #ffffff;
+    padding: 2px;
+}
+
+.tags-flex :nth-child(odd){
+    background-color: #dffefd;
+    padding: 2px;
+}
+
+#search-bar{
+    width: 400px;
+    height: 30px;
+}
+#search-bar-flex{
+    display: flex;
+    flex-direction:row;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#search-results{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+#page-buttons{
+    display: grid;
+    grid-template-columns: 130px 130px 130px;
+    grid-template-areas: 
+    "prev page next"
+    ;
+    justify-self: center;
+}
+#prev-button{
+    grid-area: prev;
+}
+#page-num{
+    grid-area: page;
+    text-align: center;
+    margin: auto;
+    font-size: larger;
+}
+#next-button{
+    grid-area: next;
+}
+
+#grow-page{
+display: flex;
+flex-direction: column;
+max-width: 800px;
+background-color: antiquewhite;
+border-radius: 20px;
+padding: 15px;
+margin: auto;
+align-items: center;
+gap: 15px;
+justify-content: space-around;
+}
+
+#grow-button-flex{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+#grow-sections {
+    padding: 20px;
+    background-color: white;
+    border-radius: 20px;
+}
+
+#submit-recipe-form{
+    display: flex;
+    flex-direction: column;
+
+}
+#recipe-description-form{
+    height: 40px;
+}
+
+#recipe-instructions-form{
+    height: 200px;
+}
+
+#submit-recipe-buttons{
+    display: flex;
+    justify-content: space-around;
+}
+
+#tips_temps_flex{
+    display: flex;
+flex-direction: column;
+max-width: 800px;
+background-color: antiquewhite;
+border-radius: 20px;
+padding: 15px;
+margin: auto;
+align-items: center;
+gap: 15px;
+justify-content: space-around;
 }

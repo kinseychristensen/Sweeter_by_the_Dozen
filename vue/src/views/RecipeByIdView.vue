@@ -34,6 +34,7 @@
 
 
       <p class="description">{{ recipe.description }}</p>
+      <p class="attribution">Attribution: {{ recipe.attribution }}</p>
     </div>
 
 <div v-if="showComments">

@@ -21,7 +21,7 @@ public class JdbcRecipeDao implements RecipeDao{
 
     private final JdbcTemplate jdbcTemplate;
     private final UserDao userDao;
-    private final int RECIPES_PER_PAGE = 25;
+    private final int RECIPES_PER_PAGE = 24;
 
     public JdbcRecipeDao(JdbcTemplate jdbcTemplate, UserDao userDao) {this.jdbcTemplate = jdbcTemplate;
         this.userDao = userDao;
@@ -247,7 +247,7 @@ public Recipe getRecipeDetails (int recipeId){
                sql = "SELECT recipe_to_tags.recipe_id, tags.tag, tags.tag_id " +
                        "FROM recipe_to_tags " +
                        "LEFT JOIN tags ON tags.tag_id = recipe_to_tags.tag_id " +
-                       "WHERE recipe_to_tags.recipe_id = ?;";
+                       "WHERE recipe_to_tags.recipe_id = ? ORDER BY tags.tag;";
                rs = jdbcTemplate.queryForRowSet(sql, recipeId);
                List<Tag> tags = new ArrayList<>();
                while(rs.next()){
@@ -327,7 +327,7 @@ public Recipe getRecipeDetails (int recipeId){
    public List<Tag> getAllTags(){
        List<Tag> tags = new ArrayList<>();
         try{
-            String sql = "SELECT * from tags";
+            String sql = "SELECT * from tags ORDER BY tag";
             SqlRowSet rs = jdbcTemplate.queryForRowSet(sql);
 
             while(rs.next()){

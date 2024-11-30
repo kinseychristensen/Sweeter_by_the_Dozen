@@ -1,16 +1,19 @@
 <template>
-    <div>
+    <div id="grow-page">
 <h1>Help Us Grow</h1>
 <p>Thank you for your interest in contributing to our site!  Everything we do is to help share the love of food and cooking.</p>
+<div id="grow-button-flex">
 <button @click="toggleSuggestions">{{ suggestionsMsg }}</button>
 <button @click="toggleAdminApply">{{ adminMsg }}</button>
 <button @click="toggleSubmitRecipe">{{submitRecipeMsg}}</button>
 <button @click="toggleDonate">{{ donateMsg }}</button>
-
+</div>
+<div id="grow-sections" v-if="showAdmin || showDonate  || showSubmitRecipe || showSuggestions">
 <Donate v-if="showDonate"/>
 <SubmitRecipe v-if="showSubmitRecipe"/>
 <AdminApply v-if="showAdmin"/>
 <Suggestion v-if="showSuggestions"/>
+</div>
 
     </div>
   </template>
@@ -20,7 +23,6 @@
   <script>
   import Suggestion from '../components/Suggestion.vue';
   import AdminApply from '../components/AdminApply.vue';
-import { RouterLink } from 'vue-router';
 import SubmitRecipe from '../components/SubmitRecipe.vue';
 import Donate from '../components/Donate.vue';
 

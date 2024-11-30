@@ -5,8 +5,8 @@
      donate to our website costs, you can contribute via venmo or contact us for other options.  
      Thank you for your support!  Happy cooking!</p>
 
-     <button><a href="https://account.venmo.com/u/kittheavenger">Venmo</a></button>
-     <button><a href="mailto:sweeter.by.the.dozen.cookbook@gmail.com">Contact Us</a></button>
+     <button><a href="https://account.venmo.com/u/kittheavenger" class="button-text">Venmo</a></button>
+     <button><a href="mailto:sweeter.by.the.dozen.cookbook@gmail.com" class="button-text">Contact Us</a></button>
     </div>
   </template>
   

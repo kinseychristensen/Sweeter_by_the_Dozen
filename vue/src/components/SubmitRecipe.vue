@@ -6,18 +6,15 @@
   <div v-if="user.restricted"> Sorry.  Your account is restricted.  You are not able to contribute recipes. </div>
 <div v-else>
 
-<form v-on:submit.prevent="submitRecipe">
+<form v-on:submit.prevent="submitRecipe" id="submit-recipe-form">
   <label for="recipe-title-form">Recipe Title:</label>
   <input text id="recipe-title-form" v-model="recipe.title"/>
   <label for="recipe-description-form">Recipe Description: </label>
   <input textarea id="recipe-description-form" v-model="recipe.description"/>
-  <label for="recipe-attribute-form">Attribution:</label>
+  <label for="recipe-attribute-form">Attribution: (If you know the original source or creator name, please share it!)</label>
   <input text id="recipe-attribute-form" v-model="recipe.attribute"/>
   <label for="recipe-instructions-form">Ingredients and Instructions:</label>
   <input text-area id="recipe-instructions-form" v-model="recipe.recipeText"/>
-
-
-
 
   <div>
   <a v-for="tag in tags" :key="tag.tagId">
@@ -25,10 +22,12 @@
     <label :for="tag.tagId">{{ tag.tag }}</label>
   </a>
 </div>
+
+<div id="submit-recipe-buttons">
 <button  type="button" @click="clearTags">Clear Tags</button>
 
 
-<button v-on:click="upload">Upload Image</button><br>
+<button v-on:click="upload">{{ uploadImageMsg }}</button></div>
 
     <div v-if="addImage">
       <!-- Show image upload section -->
@@ -41,7 +40,7 @@
     <div v-if="showPreview">
       <p>Image Uploaded: </p>
       <a v-for="pic, index in pictures" v-bind:key="index">
-        <img :src="pic.picture"/> Yoooo {{ index }}{{ pic.picture }}
+        <img :src="pic.picture"/> 
         </a>
       
     </div>
@@ -61,7 +60,7 @@
 </div>
     </div>
 
-    {{ pictures }}
+
    
   </template>
   
@@ -98,6 +97,7 @@ import AuthService from '../services/AuthService';
       user: {},
       addImage: false,  // Controls whether the image upload form is shown
       showPreview: false,
+      uploadImageMsg: 'Upload Image',
     };
   },
   methods: {
@@ -105,6 +105,7 @@ import AuthService from '../services/AuthService';
 
       this.myWidget.open();  // Open the Cloudinary upload widget
       this.addImage = false;
+      this.uploadImageMsg = "Upload Another Image";
       this.showPreview = true;  // Hide upload form after opening widget
     },
     cancelUpload() {
@@ -134,6 +135,8 @@ import AuthService from '../services/AuthService';
 
 
     submitRecipe(){
+      const shouldSubmit = confirm("Are you ready to submit this recipe?  An admin will review and format your recipe soon!");
+      if(shouldSubmit){
       this.recipe.tags = this.tagsList.toString();
       this.pictures.forEach((pic) => {
         if(pic.picture != ''){
@@ -155,7 +158,10 @@ import AuthService from '../services/AuthService';
               this.registrationErrorMsg = 'Bad Request: Please try again.';
             }
           });
+        }
       },
+
+
     clearErrors() {
       this.registrationErrors = false;
       this.registrationErrorMsg = 'There were problems saving this recipe.';
