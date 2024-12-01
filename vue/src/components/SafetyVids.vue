@@ -1,0 +1,28 @@
+<template>
+    safety vids
+  </template>
+  
+  
+  
+  <script>
+
+
+
+export default {
+ 
+data() {
+    return {
+      
+
+    }
+  }, 
+ 
+  }
+  </script>
+  
+  
+  
+  <style scoped>
+  
+  
+  </style>

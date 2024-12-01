@@ -765,15 +765,65 @@ justify-content: space-around;
     justify-content: space-around;
 }
 
-#tips_temps_flex{
-    display: flex;
-flex-direction: column;
-max-width: 800px;
-background-color: antiquewhite;
-border-radius: 20px;
-padding: 15px;
-margin: auto;
-align-items: center;
-gap: 15px;
-justify-content: space-around;
+#tips-grid{
+    display: grid;
+    width: 75vw;
+    max-width: 1000px;
+    grid-template-columns: 1fr;
 }
+
+
+#tips_temps_flex{
+    background-color: #fffaed;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-color: antiquewhite;
+    border-width: 2px;
+    border-style: ridge;
+    border-top: none;
+    padding: 15px;
+    margin: 0px;
+    min-height: 400px;
+}
+
+#tips-tabs{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.tip-tab-button {
+    height: 40px;
+    background-color: #fffaed;
+    border-color: antiquewhite;
+    border-width: 3px;
+   align-items: center;
+   border-top-right-radius: 20px;
+   border-top-left-radius: 20px;
+   border-bottom-right-radius: 0px;
+   border-bottom-left-radius: 0px;
+   border-style: ridge;
+   margin: 0px;
+   padding: 0px;
+   font-size: medium;
+}
+
+.active-tab-tip{
+    border-bottom: none;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  #temp-table{
+    width: 100%;
+
+  }
+  th, td{
+    padding: 5px;
+    text-align: left;
+    border-bottom: 1px solid;
+    border-color: black;
+  }
+  #convert{
+   align-items: center;
+  }
+  
