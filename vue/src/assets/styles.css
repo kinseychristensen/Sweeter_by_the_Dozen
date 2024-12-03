@@ -825,5 +825,14 @@ justify-content: space-around;
   }
   #convert{
    align-items: center;
+   display: flex;
+   flex-direction: column;
   }
-  
+   #safety-vid-flex{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 20px;
+    align-items: center;
+  }
+ 
