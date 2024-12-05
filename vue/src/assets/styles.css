@@ -1,8 +1,4 @@
-#body {
-    background-color: #dffefd;
-    min-height: 100vh;
-    min-width: 100vw;
-}
+
 
 button {
     text-decoration: none;
@@ -30,7 +26,7 @@ button {
     padding: 0px;
     width: 75vw;
     max-width: 800px;
-    margin: 20px;
+    margin: auto;
     grid-template-columns: "200px 200px 200px 1fr";
     grid-template-areas: 
     "first second third spacing"
@@ -130,7 +126,7 @@ h1{
 }
 .tab-text{
     font-family: "Caveat", cursive;
-    font-size: 15px;
+    font-size: large;
     font-style: bold;
 }
 
@@ -197,6 +193,7 @@ grid-area: attribution;
 #avatar-text{
     text-align: center;
     align-items: center;
+    text-decoration: none;
 }
 
 #avatar {
@@ -836,3 +833,124 @@ justify-content: space-around;
     align-items: center;
   }
  
+  #top-row-flex {
+    display: flex; /* Enables horizontal layout */
+    justify-content: center; /* Centers content */
+    align-items: flex-end; /* Aligns items to the bottom */
+    position: relative; /* Allows precise placement of child elements */
+    width: 90%; /* Scales to viewport width */
+    margin: 0 auto; /* Centers the row */
+    overflow: visible; /* Ensures overlaps are not clipped */
+    gap: 0; /* No gap between flex items */
+    margin-bottom: -27px;
+  }
+  
+  #nav-bar-container > router-link {
+    position: relative; /* Ensures overlap adjustments work */
+    width: 20%; /* Relative size of each item */
+    aspect-ratio: 1 / 1; /* Maintains square proportions */
+    flex-shrink: 1; /* Allows scaling on smaller screens */
+    z-index: 2; /* Default stacking */
+  }
+  
+  /* Adjustments for overlap */
+  #grow-flower {
+    z-index: 4; /* Bring this item to the front */
+    margin-left: -35px; /* Overlap with the previous item */
+    margin-right: -35px; /* Overlap with the next item */
+
+  }
+  
+  #search-books {
+    z-index: 2; /* Keep normal stacking */
+  }
+  
+  #my-recipes-jar {
+    z-index: 3;
+  }
+  
+  #settings-bowl {
+    z-index: 2;
+  }
+  
+  #temps-spoon {
+    z-index: 3;
+    margin-left: -10px;
+  }
+  
+  /* Home Shelf */
+  #home-shelf {
+    position: relative; /* Make it independent of the flexbox layout */
+    top: 100%; /* Position it below the top row */
+    left: 0; /* Align to the left */
+    width: 90%; /* Span full width */
+    margin-top: -30%; /* Adjust vertical position for overlap */
+    z-index: 1; /* Send to the back */
+  }
+  
+  /* Image Styling */
+  .nav-image {
+    width: 100%; /* Scale proportionally with parent */
+    height: 100%; /* Maintain aspect ratio */
+    object-fit: contain; /* Prevent distortion */
+  }
+  
+
+
+
+  #body {
+    background-color: #dffefd;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+    "login-button"
+    "login-display"
+    "router"
+    "shelf"
+    ;
+    gap: 10px;
+}
+
+#register-login-buttons{
+    grid-area: login-button;
+    display: flex;
+    justify-content: space-around;
+}
+
+#register-login-display{
+    grid-area: login-display;
+}
+#register-login-buttons button{
+    background-color: antiquewhite;
+    width: 100%;
+}
+
+#nav-bar-parent{
+    width: 65vw;
+    margin: auto;
+    grid-area: shelf;
+  }
+
+
+
+  #router-view-container{
+
+  
+    width: 90vw;
+    max-width: 1200px;
+    grid-area: router;
+    padding: 20px;
+    background-color: #fef2ee;
+    border-radius: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 5px double #f5caca;
+    margin: auto;
+  }
+
+  #app-footer{
+    grid-area: footer;
+    display: flex;
+   
+
+  }

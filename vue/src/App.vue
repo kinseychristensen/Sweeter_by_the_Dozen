@@ -1,15 +1,18 @@
 <template>
 
   <div id="body">
-    <div id="nav">
+
       
-     
+     <div id="register-login-buttons">
       <button v-if="$store.state.token != ''"><router-link class="button-text" v-bind:to="{ name: 'logout' }" >Logout</router-link></button>
-      <div v-else>
-      <button @click="toggleRegister">Register</button>
-      <button @click="toggleLogin">Login</button>
+      <button @click="toggleRegister"  v-if="$store.state.token == ''">Register</button>
+      <button @click="toggleLogin"  v-if="$store.state.token == ''">Login</button>
+      <button><Router-Link v-bind:to="{name: 'about'}" class="button-text">About Us</Router-Link></button>           
+      <button ><a href="mailto:sweeter.by.the.dozen.cookbook@gmail.com" class="button-text">Contact Us</a></button>
       </div>
 
+
+      <div id="register-login-display">
       <div v-if="showLogIn">
         <Login />
         <button @click="cancel">Cancel</button>
@@ -21,14 +24,22 @@
         <button @click="cancel">Cancel</button>
         <button @click="toggleLogin">Login to Your Account</button>
       </div>
-      
     </div>
-    <div v-if="!showRegister && !showLogIn">
-      <NavBar/>
-    <router-view /><p></p></div>
-    <footer>
-      <Router-Link v-bind:to="{name: 'about'}">About Us</Router-Link>    |       
-      <a href="mailto:sweeter.by.the.dozen.cookbook@gmail.com">Contact Us</a>
+
+
+
+      <NavBar id="nav-bar-parent"  v-if="!showRegister && !showLogIn" /> 
+    
+    
+    
+    
+      <router-view id="router-view-container"   v-if="!showRegister && !showLogIn" />
+    
+    
+    
+    
+      <footer id="app-footer">
+     
     </footer>
   
 </div>

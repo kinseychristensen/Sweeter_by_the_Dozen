@@ -37,7 +37,7 @@
     userName.value = user.displayName; // Assuming user object has a 'name' field
     const avatar = avatars.find(avatar => avatar.avatarId === user.avatarId);
 
-    avatarPath.value = avatar ? avatar.avatarSrc : '/assets/avatars/default.png';
+    avatarPath.value = avatar ? avatar.avatarSrc : '/assets/avatars/1.png';
     avatarAlt.value = avatar ? avatar.altText : 'Default Avatar';
   } catch (error) {
     console.error('Error fetching user info:', error);
