@@ -34,8 +34,8 @@
   cursor: pointer;
 }
 
-.nav-image img:hover {
-  animation: shake 0.5s infinite;
+.nav-image:hover {
+  animation: shake 1s infinite;
 }
 
 @keyframes shake {

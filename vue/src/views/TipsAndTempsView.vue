@@ -39,7 +39,7 @@
    />
    <button type="submit">Convert</button>
   </form>
-  <img src="/assets/icons/conversion.png"/>
+  <img src="/assets/icons/conversion.png" id="conversion-chart"/>
   
   
   </div>

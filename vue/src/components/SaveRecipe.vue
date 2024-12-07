@@ -104,7 +104,7 @@
 }
 
 .save-button img:hover {
-  animation: shake 0.5s infinite;
+  animation: shake 1s infinite;
 }
 
 @keyframes shake {
