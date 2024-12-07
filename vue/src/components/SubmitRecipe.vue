@@ -27,12 +27,12 @@
 <button  type="button" @click="clearTags">Clear Tags</button>
 
 
-<button v-on:click="upload">{{ uploadImageMsg }}</button></div>
+<button type="button" v-on:click="upload">{{ uploadImageMsg }}</button></div>
 
     <div v-if="addImage">
       <!-- Show image upload section -->
       <p>Upload Image Section</p>
-      <button v-on:click="upload">Open Upload Widget</button>
+      <button type="button" v-on:click="upload">Open Upload Widget</button>
       
     </div>
 
@@ -40,7 +40,7 @@
     <div v-if="showPreview">
       <p>Image Uploaded: </p>
       <a v-for="pic, index in pictures" v-bind:key="index">
-        <img :src="pic.picture"/> 
+        <img :src="pic.picture" class="submitting-recipe-photo"/> 
         </a>
       
     </div>

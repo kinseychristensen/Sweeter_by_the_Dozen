@@ -1,7 +1,8 @@
 <template>
   <div id="tips-grid">
-  <div id="tips-tabs">
   
+  
+   <div id="tips-tabs">
   
   <button id="showTempsBtn" @click="toggleTemps" :class="{'active-tab-tip': showTemps}" class="tip-tab-button">Cooking Temperatures</button>
   <button id="showConvertBtn" @click="toggleConvert" :class="{'active-tab-tip': showConvert}" class="tip-tab-button">Measurement Conversion</button>
@@ -13,7 +14,7 @@
   </div>
   
   
-  <div id="tips_temps_flex">
+  <div id="tips-temps-flex">
   
   
   <Temps id="temps" v-if="showTemps"/>

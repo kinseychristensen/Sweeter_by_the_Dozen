@@ -10,7 +10,6 @@
 
 <img id="recipe-photo" :src="photos[currentImgIndex].picUrl" :altText="photos[currentImgIndex].altText"/>
 <p id="photo-caption">{{ photos[currentImgIndex].altText }}</p>
-
 <button @click="nextPhoto" id="next-photo">Next Photo</button>
 </div>
 

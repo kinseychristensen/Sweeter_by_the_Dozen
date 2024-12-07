@@ -15,6 +15,7 @@ import UpdatePasswordView from '../views/UpdatePasswordView.vue';
 import TipsAndTempsView from '../views/TipsAndTempsView.vue';
 import UserByIdView from '../views/UserByIdView.vue';
 import AboutUsView from '../views/AboutUsView.vue';
+import RegisterView from '../views/RegisterView.vue';
 
 
 
@@ -29,6 +30,13 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginView,
+    
+  },
+
+  {
+    path: '/register',
+    name: 'register',
+    component: RegisterView,
     
   },
   
@@ -121,7 +129,7 @@ router.beforeEach((to) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth);
 
   // If it does and they are not logged in, send the user to "/login"
-  if (requiresAuth && store.state.token === '') {
+  if (requiresAuth && store.state.token == '') {
     return {name: "login"};
   }
   // Otherwise, do nothing and they'll go to their next destination

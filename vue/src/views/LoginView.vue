@@ -22,7 +22,7 @@
           <input type="password" id="password" v-model="user.password" required />
       
         <div id="login-button-flex">
-          <button type="button"><RouterLink v-bind:to="{ name: 'password-reset' }" class="button-text">Reset Password</RouterLink></button>
+          <button type="button"><RouterLink v-bind:to="{ name: 'password' }" class="button-text">Reset Password</RouterLink></button>
           <button type="submit">Sign In</button>
         </div>
   
@@ -66,6 +66,7 @@ export default {
 
           if (response.status === 401) {
             this.invalidCredentials = true;
+
           }
         });
     }

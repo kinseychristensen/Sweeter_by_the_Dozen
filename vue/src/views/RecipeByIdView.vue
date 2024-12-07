@@ -1,5 +1,5 @@
 <template>
-    <div>
+  
 <div class="card">
 
 <button @click="nowShowRecipe" :class="{'active-tab': showRecipe}" class="card-tab-first tab-text">{{recipe.title}}</button>
@@ -44,7 +44,7 @@
 </div>
 </div>
 </div>
-</div>
+
 
   </template>
   
