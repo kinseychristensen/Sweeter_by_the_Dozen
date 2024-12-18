@@ -207,7 +207,9 @@ h1{
     font-size: medium;
     font-style: bold;
 }
-
+.tab-text-small{
+    font-size: small;
+}
 .active-tab{
   border-bottom: none;
   margin: 0px;
@@ -281,6 +283,10 @@ grid-area: attribution;
     border: 4px double rgb(244, 177, 90);
   }
 
+  #search-end{
+    width: 300px;
+    padding: 20px;
+  }
  .save-icon {
    height: 30px;
  }

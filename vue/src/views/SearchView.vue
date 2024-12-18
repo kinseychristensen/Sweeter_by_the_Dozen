@@ -28,7 +28,7 @@
       <div v-for="recipe in recipes" :key="recipe.recipeId">
         <RecipeCard :recipe="recipe"/>
       </div>
-<p v-if="recipes.length < 24">Sorry, there are no more recipes that meet that criteria.  Please try again.</p>
+<p v-if="recipes.length < 24" id="search-end">Sorry, there are no more recipes that meet that criteria.  Please try again.</p>
     </div>
   <div>
   <div id="page-buttons">
