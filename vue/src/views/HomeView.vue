@@ -59,21 +59,44 @@ data() {
   }
 },
 methods: {
-  getRandomRecipe() {
-      RecipeService.getRandomRecipe()
-      .then(response => {
-        this.recipe = response.data;
-        this.isLoading = false;
-      })
-    },
+  async getRandomRecipe() {
+  this.isLoading = true;
+
+  try {
+    let recipe = null;
+
+    // Loop until a valid recipe with a title is retrieved
+    while (!recipe || !recipe.title) {
+    
+      const response = await RecipeService.getRandomRecipe();
+
+      if (response && response.data) {
+        recipe = response.data;
+      } else {
+        console.log('No data in response, retrying...');
+      }
+    }
+
+    // Assign the valid recipe to the component's data
+    this.recipe = recipe;
+  
+
+  } catch (error) {
+    console.error('Error fetching recipe:', error);
+  } finally {
+    this.isLoading = false;
+  }
+}
+
 },
+
 created() {
 
 this.isLoading = true;
 this.getRandomRecipe();
 
 
-}
+},
 }
 
 
