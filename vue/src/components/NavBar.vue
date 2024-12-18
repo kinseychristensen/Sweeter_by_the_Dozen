@@ -35,7 +35,7 @@
 }
 
 .nav-image:hover {
-  animation: shake 1s infinite;
+  animation: shake 1.5s infinite;
 }
 
 @keyframes shake {
