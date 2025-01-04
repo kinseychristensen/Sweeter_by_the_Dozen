@@ -1,6 +1,7 @@
 <template>
     <div>
 <h1>Approve Recipes</h1>
+userid: {{ userId }}
 
 <p>There are {{ pendingRecipes.length }} recipes to approve.</p>
 
@@ -137,7 +138,7 @@ PHOTOS
     components: {
      
   },
-  props: ['userid'],
+  props: ['userId'],
 
 data() {
   return {
@@ -252,7 +253,29 @@ methods: {
 
     newBlankRecipe(){
       this.showRecipeBuilder = true;
-      this.recipe.userId = 1;
+      this.recipe = {
+        title: '',
+        description: '',
+        userId: this.userId,
+        attribute: '',
+        recipeStepList: [{
+          stepNum: 1,
+          instructions: '',
+
+          },],
+          recipePicList: [],
+          recipeTagList: [],
+          ingredientList: [{
+            amountNumerator: 0,
+            amountDenominator: 1,
+            ingredientNum: 1,
+            quantifier: '',
+            ingredientText: '',
+            unitType: '',
+
+          }],
+
+      };
       this.isNew = true;
     },
 
@@ -314,6 +337,7 @@ methods: {
 
   verifyRecipe(isNew){
     this.isLoading = true;
+    console.log(this.recipe);
 RecipeService.createRecipe(this.recipe)
 .then((response) => {
   if(response.status === 200){
@@ -326,8 +350,8 @@ RecipeService.createRecipe(this.recipe)
       }
     })
     }else {
-      this.pullPendingRecipes();
-      this.isNew = false;
+      console.log("HERE");
+      this.newBlankRecipe();
 
     }
   }
